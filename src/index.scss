@@ -1,0 +1,58 @@
+
+$primary: #e8be3b;
+$secondary: #cd8b18;
+$text: #5e4239;
+$white: #ffffff;
+$black: #140907;
+
+$info: #2D72D2;
+$success: #238551;
+$warning: #C87619;
+$danger: #CD4246;
+
+
+
+
+@font-face {
+  font-family: 'FontTitles';
+  src: url('../public/fonts/MonumentExtended-Regular.woff') format('woff'), /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('../public/fonts/MonumentExtended-Regular.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}  
+
+@font-face {
+  font-family: 'FontSubTitles';
+  src: url('../public/fonts/OpenSans-Semibold.woff') format('woff'), /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('../public/fonts/OpenSans-Semibold.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}  
+
+@font-face {
+  font-family: 'FontText';
+  src: url('../public/fonts/Acumin-Variable-Concept.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+       // url('myfont.woff') format('woff'), /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}  
+
+body {
+  margin: 0;
+  font-family: 'FontText'
+}
+
+h1, h2 {
+  font-family: 'FontTitles';
+  color: $primary;
+}
+
+h3, h4 {
+  font-family: 'FontSubTitles';
+  color: $text;
+}
+
+h5, h6, label, p, span {
+  font-family: 'FontText';
+  color: $text;
+}
+
+
+@import url("styles/app.styles.scss");
+@import url("styles/loging.styles.scss");
+@import url("styles/layouts.scss");
+@import url("styles/sidebar.scss");

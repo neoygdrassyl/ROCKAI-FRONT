@@ -1,0 +1,71 @@
+.app-login {
+    background-image: url("../../public/img/bg-2.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+
+    height: 100vh;
+
+}
+
+.main-content{
+    border: 1px solid #e8be3b;
+	border-radius: 20px;
+	box-shadow: 0 5px 5px rgba(0,0,0,.4);
+    margin-top: 25%;
+    margin-right: auto;
+    margin-left: auto;
+    
+}
+.company__info{
+	background-color: #fff;
+	border-top-left-radius: 20px;
+	border-bottom-left-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	color: #fff;
+}
+
+.login_form{
+	background-color: #fff;
+	border-top-right-radius:20px;
+	border-bottom-right-radius:20px;
+	border-top:1px solid #fff;
+	border-right:1px solid #fff;
+}
+form{
+	padding: 0 2em;
+}
+.form__input{
+	width: 100%;
+	border:0px solid transparent;
+	border-radius: 0;
+	border-bottom: 1px solid #aaa;
+	padding: 1em .5em .5em;
+	padding-left: 2em;
+	outline:none;
+	margin:1.5em auto;
+	transition: all .5s ease;
+}
+.form__input:focus{
+	border-bottom-color: #e8be3b;
+	box-shadow: 0 0 5px rgba(80, 68, 0, 0.4); 
+	border-radius: 4px;
+}
+.btn-login{
+	transition: all .5s ease;
+	width: 70%;
+	border-radius: 30px;
+	color:#e8be3b;
+	font-weight: 600;
+	background-color: #fff;
+	border: 1px solid #e8be3b;
+	margin-top: 1.5em;
+	margin-bottom: 1em;
+    
+}
+.btn:hover, .btn:focus{
+	background-color: #e8be3b;
+	color:#fff;
+}

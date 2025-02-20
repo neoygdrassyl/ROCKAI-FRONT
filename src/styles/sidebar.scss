@@ -1,0 +1,106 @@
+.app-icon {
+  cursor: pointer;
+}
+
+ /* The sidebar menu */
+ .app-sidebar {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+   /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  overflow-x: hidden; /* Disable horizontal scroll */
+
+}
+
+/* The navigation menu links */
+.app-sidebar a {
+  padding: 2px 2px 2px 2px;
+  text-decoration: none;
+  color: #ffffff;
+  display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.app-sidebar a:hover {
+  color: #ffffff;
+}
+
+/* Style page content */
+.app-content {
+  /* Same as the width of the sidebar */
+  padding: 0px 15px;
+ 
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .app-sidebar {padding-top: 15px;}
+  .app-sidebar a {font-size: 18px;}
+} 
+
+
+//Color Variables
+$sidebar-background-color: #5e4239;
+$active-sidebar-link-color: #140907;
+$hover-sidebar-link-color: #e8be3b;
+$active-link-color: #cd8b18;
+$tooltip-background-color: #ffffff;
+
+.app-sidebar {
+  list-style: none;
+	line-height: 1;
+  min-height: 100vh;
+	background-color: $sidebar-background-color;
+	float: left;
+	
+	ul {
+		text-align: left;
+		color: $hover-sidebar-link-color;
+		
+		li {
+			padding: 12px 12px;
+			cursor: pointer;
+			transition: all ease-out 120ms;
+			
+			.bp5-icon {
+        fill: $tooltip-background-color;
+      
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+			}
+			
+      .nav-text {
+        margin-left: 8px;
+        color: $hover-sidebar-link-color !important;
+      }	
+
+			&:hover {
+				background-color: $hover-sidebar-link-color;
+        
+				
+				.tooltip {
+					visibility: visible;
+					opacity: 1;
+				}
+			}
+			
+			&.active {
+				background-color: $active-sidebar-link-color;
+        
+        .bp5-icon {
+          fill: $active-link-color;
+        }
+
+        .nav-text {
+          color: $active-link-color !important;
+        }	
+			}		
+      
+     
+		}
+	}
+}
