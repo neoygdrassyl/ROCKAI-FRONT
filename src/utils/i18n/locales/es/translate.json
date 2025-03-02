@@ -1,0 +1,64 @@
+{
+    "login": {
+        "title": "Log In de Aplicación",
+        "user": "Usuario",
+        "pass": "Contraseña",
+        "btn": "Ingresar",
+        "loading": "Cargando...",
+        "error": "Ha ocurrido un error, verifique las credenciales e intente nuevamente."
+    },
+    "sidebar": {
+        "title": "ROCKAI",
+        "exit": "Salir",
+        "menu": {
+            "cot": "Cotizaciones",
+            "pro": "Proyectos",
+            "con": "Contabilidad y Registros",
+            "hr": "Recursos Humanos"
+        }
+      
+    },
+    "users": {
+        "role": {
+            "SAD": "SUPER ADMIN",
+            "ADM": "ADMINISTRADOR",
+            "MAG": "SOPORTE",
+            "EMP": "EMPLEADO",
+            "CLI": "USUARIO",
+            "NA": "OTRO"
+        },
+        "contract": {
+            "I": "INDEFINIDO",
+            "P": "PRESTACIONES",
+            "F": "FIJO",
+            "O": "OBRA LABOR",
+            "A": "APRENDIZAJE",
+            "R": "REEMPLAZO",
+            "NA": "OTRO"
+        }
+    },
+    "table": {
+        "rowsPerPageText": "Filas por página:",
+        "rangeSeparatorText": "de",
+        "selectAllRowsItemText": "Todos",
+        "search": "Buscar...",
+        "nodata": "No hay información",
+        "nodatast": "No se encontró ninguna información referente a esta consulta."
+    },
+    "actions": {
+        "new": "Añadir",
+        "edit": "Actualizar",
+        "delete": "Eliminar",
+        "close": "Cerrar",
+        "next": "Siguiente",
+        "required": "(Requerido)",
+        "validate": "Este capo debe ser validado",
+        "nodata": "No hay datos",
+        "hidepass": "Ocultar contraseña",
+        "showpass": "Mostrar contraseña"
+    },
+    "auth": {
+        "nopermit": "Este usuario no posee los derechos suficientes.",
+        "error_generic": "Un problema a ocurrido, intente nuevamente."
+    }
+}

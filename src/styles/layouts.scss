@@ -1,0 +1,12 @@
+.app-container {
+    background-image: url("../../public/img/bg-2.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    height: 100vh;
+} 
+
+.app-overlay {
+    background-color: rgba(255,255,255,0.8);
+    height: 100vh;
+} 

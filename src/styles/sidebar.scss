@@ -1,3 +1,33 @@
+@import "./variables";
+
+.navbar {
+  height: 50px;
+}
+
+.nav-logout {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.nav-item {
+  height: 50px;
+}
+
+.nav-text {
+  visibility: hidden;
+  margin-right: 0px;
+  width: 0px;
+}
+
+.expand {
+  .nav-text{
+    visibility: initial;
+    margin-right: initial;
+    width: initial;
+  }
+}
+
 .app-icon {
   cursor: pointer;
 }
@@ -5,67 +35,129 @@
  /* The sidebar menu */
  .app-sidebar {
   height: 100%; /* Full-height: remove this if you want "auto" height */
+  min-height: 100vh;
    /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
   left: 0;
   overflow-x: hidden; /* Disable horizontal scroll */
+  width: 50px;
+  overflow-y: hidden;
+  &.expand {
+    width: 250px;
+    
+  }
 
+  transition-property: width;
+  transition-duration: 0.15s;
+  transition-timing-function: linear;
 }
+
 
 /* The navigation menu links */
 .app-sidebar a {
   padding: 2px 2px 2px 2px;
   text-decoration: none;
-  color: #ffffff;
+  color: $white;
   display: block;
 }
 
 /* When you mouse over the navigation links, change their color */
 .app-sidebar a:hover {
-  color: #ffffff;
+  color: $white;
 }
 
 /* Style page content */
 .app-content {
   /* Same as the width of the sidebar */
   padding: 0px 15px;
- 
+  margin-left: 50px;
+  &.expand {
+    margin-left: 250px;
+  }
 }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .app-sidebar {padding-top: 15px;}
-  .app-sidebar a {font-size: 18px;}
+@media screen and (max-width: $maxWidth) {
+  .app-sidebar {
+    width: 100% !important; 
+    height: 50px !important;
+    min-height: 50px !important;
+    overflow-y: hidden;
+
+    &.expand {
+      min-height: 200px !important;
+      min-height: 200px !important;
+      overflow-y: initial;
+    }
+  }
+
+  .nav-text{
+    visibility: visible;
+  }
+  .app-content {
+    width: 100% !important; 
+    margin-left: 0px !important;
+    margin-top: 50px !important;
+
+    &.expand {
+      margin-top: 200px !important;
+    }
+  }
+
+  .nav-logout {
+    position: initial;
+    bottom: initial;
+  }
+
 } 
 
+.nav-title {
+  .nav-item{
+    height: 65px;
+  }
+  .nav-text {
+    display: inline-table;
+    width: 80%;
 
-//Color Variables
-$sidebar-background-color: #5e4239;
-$active-sidebar-link-color: #140907;
-$hover-sidebar-link-color: #e8be3b;
-$active-link-color: #cd8b18;
-$tooltip-background-color: #ffffff;
+    &.subtitle{
+      font-size: 0.8em;
+      padding-left: 15%;
+    }
+  }
+  .app-icon {
+    display: inline-table;
+    width: 15%;
+  }
+}
+
+// ===================
+// COLOR CONFIGURATION
+// ===================
+$sidebar-background-color: $text; // Light Brown
+$active-sidebar-link-color: $black; // Black
+$hover-sidebar-link-color: $primary; // Yellow
+$active-link-color: $secondary; // Orange
+$tooltip-background-color: $white; // White
 
 .app-sidebar {
   list-style: none;
 	line-height: 1;
-  min-height: 100vh;
 	background-color: $sidebar-background-color;
 	float: left;
 	
 	ul {
 		text-align: left;
-		color: $hover-sidebar-link-color;
+	
 		
 		li {
 			padding: 12px 12px;
 			cursor: pointer;
 			transition: all ease-out 120ms;
+      color: $active-link-color;
 			
 			.bp5-icon {
-        fill: $tooltip-background-color;
+        fill: $active-link-color;
       
         svg {
           width: 20px;
@@ -75,17 +167,26 @@ $tooltip-background-color: #ffffff;
 			
       .nav-text {
         margin-left: 8px;
-        color: $hover-sidebar-link-color !important;
+        color: $hover-sidebar-link-color;
       }	
 
 			&:hover {
 				background-color: $hover-sidebar-link-color;
         
-				
+
+        .nav-text{
+          color: $tooltip-background-color;
+        }
+        
 				.tooltip {
 					visibility: visible;
 					opacity: 1;
 				}
+
+        .bp5-icon {
+          fill: $tooltip-background-color;
+        }
+        
 			}
 			
 			&.active {
@@ -103,4 +204,27 @@ $tooltip-background-color: #ffffff;
      
 		}
 	}
+
+  .nav-title {
+    .nav-item{
+      background-color: $secondary;
+    }
+    .nav-text {
+      color: $white;
+  
+      &.subtitle{
+        color: $text;
+      }
+    }
+    .app-icon {
+      fill: $white;
+    }
+  }
+
+  .nav-logout {
+    .nav-item{
+      background-color: $black;
+    }
+  }
+
 }

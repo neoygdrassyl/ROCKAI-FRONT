@@ -1,0 +1,26 @@
+{
+    "mod_map": {
+        "COT": {
+            "t": "sidebar.menu.cot",
+            "url": "/cot",
+            "icon": "dollar"
+        },
+        "PRO": {
+            "t": "sidebar.menu.pro",
+            "url": "/pro",
+            "icon": "projects"
+        },
+        "CON": {
+            "t": "sidebar.menu.con",
+            "url": "/con",
+            "icon": "dollar"
+        },
+        "HRS": {
+            "t": "sidebar.menu.hr",
+            "url": "/hr",
+            "icon": "people"
+        }
+    },
+    "roles": [ "SAD", "ADM", "MAG", "EMP", "CLI" ],
+    "formRoles": ["MAG", "EMP"]
+}

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { User } from "./user.hook";
+import { User } from "./user.interface";
 
 interface AuthContext {
   user: User | null;

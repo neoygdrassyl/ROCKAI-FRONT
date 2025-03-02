@@ -1,16 +1,11 @@
-
-$primary: #e8be3b;
-$secondary: #cd8b18;
-$text: #5e4239;
-$white: #ffffff;
-$black: #140907;
-
-$info: #2D72D2;
-$success: #238551;
-$warning: #C87619;
-$danger: #CD4246;
-
-
+@import "@blueprintjs/core/lib/css/blueprint.css";
+@import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+@import "@blueprintjs/table/lib/css/table.css";
+@import "~@blueprintjs/datetime2/lib/css/blueprint-datetime2.css";
+@import "~@blueprintjs/datetime/lib/css/blueprint-datetime.css";
+@import "~@blueprintjs/select/lib/css/blueprint-select.css";
+@import "@blueprintjs/select/lib/css/blueprint-select.css";
+@import "./styles/variables";
 
 
 @font-face {
@@ -51,8 +46,19 @@ h5, h6, label, p, span {
   color: $text;
 }
 
+.Toastify__toast {
+  font-family:  'FontText' !important;
+}
 
-@import url("styles/app.styles.scss");
+.Toastify__toast--warning {
+  background: $primary !important;
+  color: $text !important;
+}
+
 @import url("styles/loging.styles.scss");
 @import url("styles/layouts.scss");
 @import url("styles/sidebar.scss");
+@import url("styles/blueprint.styles.scss");
+@import url("styles/app.styles.scss");
+
+
