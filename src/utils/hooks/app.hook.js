@@ -15,6 +15,10 @@ export const useApp = () => {
         return id.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
+    function formatNit(nit){
+       
+    }
+
     function formatPhone(phoneNumberString) {
         var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
         var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
@@ -32,8 +36,15 @@ export const useApp = () => {
         return value
     }
 
-    const emailPattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    const emailPattern = /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/gm;
 
-    return { getCityList, formatId, formatPhone, formatCurrency, emailPattern };
+    function errorHandler(error, toast, t){
+        console.error(error);
+        toast.dismiss();
+        if (error.status === 403) toast.warning(t('auth.nopermit'))
+        else toast.error(t('auth.error_generic'))
+    }
+
+    return { getCityList, formatId, formatPhone, formatCurrency, emailPattern, errorHandler };
 };
 

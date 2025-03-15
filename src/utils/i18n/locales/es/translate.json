@@ -7,6 +7,123 @@
         "loading": "Cargando...",
         "error": "Ha ocurrido un error, verifique las credenciales e intente nuevamente."
     },
+    "hr": {
+        "title": "Recursos Humanos",
+        "table": {
+            "title": "Empleados",
+            "name": "Nombre",
+            "role": "Cargo",
+            "date_start": "Fecha Inicio",
+            "date_end": "Fecha Fin",
+            "action": "Acción"
+        },
+        "form": {
+            "new": "Añadir Empleado",
+            "edit": "Actualizar Empleado: %VAR%",
+            "section_1": "Datos Personales",
+            "section_2": "Datos Empleados",
+            "nombre": "Nombre",
+            "cedula_nit": "Cédula",
+            "ciudad": "Ciudad",
+            "direccion": "Dirección",
+            "telefono": "Teléfono",
+            "correo": "Correo",
+            "rut": "RUT",
+            "cv": "Hoja de vida / Experiencia",
+            "cargo": "Rol",
+            "salario": "Valor Hora",
+            "contrato": "Contrato",
+            "fecha_inicio": "Fecha Inicio",
+            "fecha_fin": "Fecha Fin",
+            "login": "Nombre de Usuario",
+            "pass": "Contraseña"
+        }
+    },
+    "pro": {
+        "title": "Proyectos",
+        "table": {
+            "title": "",
+            "codigo": "Código",
+            "nombre": "Nombre",
+            "municipio": "Municipio",
+            "fecha_inicio": "Fecha Inicio",
+            "fecha_entrega": "Fecha Entrega",
+            "estado": "Estado",
+            "action": "Acción",
+            "active": "En Proceso...",
+            "close": "Finalizado"
+        },
+        "form": {
+            "new": "Añadir Proyecto",
+            "edit": "Actualizar Proyecto: %VAR%",
+            "section_1": "Datos Proyecto",
+            "codigo": "Código",
+            "nombre": "Nombre",
+            "municipio": "Municipio",
+            "direccion": "Dirección",
+            "fecha_inicio": "Fecha Inicio",
+            "fecha_entrega": "Fecha Entrega",
+            "estado": "Estado",
+            "open": "En Proceso",
+            "close": "Finalizado"
+        }
+    },
+    "personas": {
+        "title": "Terceros",
+        "table": {
+            "title": "Terceros",
+            "nombre": "Nombre",
+            "cedula_nit": "Cédula / NIT",
+            "telefono": "Nr. Contacto",
+            "correo": "Correo Electrónico",
+            "action": "Acción",
+            "N": "Natural",
+            "J": "Jurídico"
+        },
+        "form": {
+            "new": "Añadir Tercero",
+            "edit": "Actualizar Tercero: %VAR%",
+            "section_1": "Datos Tercero",
+            "nombre": "Nombre",
+            "cedula_nit": "Cédula / NIT",
+            "telefono": "Nr. Contacto",
+            "correo": "Correo Electrónico",
+            "tipo": "Tipo",
+            "N": "Natural",
+            "J": "Jurídico",
+            "ciudad": "Ciudad",
+            "rut": "RUT",
+            "cv": "Hoja de vida / Experiencia",
+            "direccion": "Dirección"
+        }
+    },
+    "cotizacion": {
+        "title": "Cotizaciones",
+        "table": {
+            "title": "Cotizaciones",
+            "descripcion": "Descripción",
+            "nombre": "Cotizador",
+            "monto": "Monto Base",
+            "monto_2": "Monto Final",
+            "action": "Acción",
+            "approved": "Aprobado",
+            "notapproved": "No Aprobado",
+            "approve": "Aprobadar"
+        },
+        "form": {
+            "section_1": "Cotizacipon",
+            "new": "Nueva Cotización",
+            "edit": "Actualizar Cotización: %VAR%",
+            "descripcion": "Descripción",
+            "fecha": "Fecha",
+            "id_persona": "Cotizador",
+            "monto": "Monto Base",
+            "iva": "IVA",
+            "adm": "Costo Administración",
+            "uti": "Costo Utilidad",
+            "imp": "Cost Impuesto"
+        }
+    },
     "sidebar": {
         "title": "ROCKAI",
         "exit": "Salir",
@@ -14,15 +131,15 @@
             "cot": "Cotizaciones",
             "pro": "Proyectos",
             "con": "Contabilidad y Registros",
-            "hr": "Recursos Humanos"
+            "hr": "Recursos Humanos",
+            "home": "Inicio"
         }
-      
     },
     "users": {
         "role": {
             "SAD": "SUPER ADMIN",
             "ADM": "ADMINISTRADOR",
-            "MAG": "SOPORTE",
+            "EXT": "EXTERIOR",
             "EMP": "EMPLEADO",
             "CLI": "USUARIO",
             "NA": "OTRO"
@@ -42,6 +159,7 @@
         "rangeSeparatorText": "de",
         "selectAllRowsItemText": "Todos",
         "search": "Buscar...",
+        "filter": "Filtrar",
         "nodata": "No hay información",
         "nodatast": "No se encontró ninguna información referente a esta consulta."
     },
@@ -50,12 +168,21 @@
         "edit": "Actualizar",
         "delete": "Eliminar",
         "close": "Cerrar",
+        "cancel": "Cancelar",
         "next": "Siguiente",
         "required": "(Requerido)",
         "validate": "Este capo debe ser validado",
         "nodata": "No hay datos",
         "hidepass": "Ocultar contraseña",
-        "showpass": "Mostrar contraseña"
+        "showpass": "Mostrar contraseña",
+        "reload": "Volver a cargar",
+        "active": "Activado",
+        "deactive": "Desactivado",
+        "procesing": "Procesando...",
+        "creaated": "Entrada creada exitosamente.",
+        "edited": "Entrada actualizada exitosamente.",
+        "deleted": "Entrada eliminada exitosamente.",
+        "bodyDelete": "¿Esta seguro de eliminar de formar permanente la entrada: %VAR%?"
     },
     "auth": {
         "nopermit": "Este usuario no posee los derechos suficientes.",

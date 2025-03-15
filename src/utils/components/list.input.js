@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function ListInput(props) {
@@ -5,6 +6,7 @@ export default function ListInput(props) {
         id,  // REQUIRED
         value,
         defaultValue,
+        defaultText,
         disabled,
         list, // Array[{value, text}]
         placeholder,
@@ -16,36 +18,79 @@ export default function ListInput(props) {
         onBlur,
         onFocus,
         onChange,
+        onSelect,
         icon,
         right,
+        api,
     } = props
     const { t } = useTranslation();
+    const [apiList, setList] = useState([])
+
+    const onChangeHandler = async (e) => {
+        if (api) {
+            const search = e.target.value;
+            console.log('Change: ', search)
+            for (let i = 0; i < apiList.length; i++) {
+                const item = apiList[i];
+                if (item.value === Number(search)) {
+                    document.getElementById(id).value = item.value;
+                    document.getElementById(id + '-ignore').value = item.text;
+                    break;
+                }
+                document.getElementById(id).value = null;
+            }
+        }
+
+        if (onChange) onChange(e)
+    }
+
+    const handleKeyDown = async (e) => {
+        if (api) {
+            const search = document.getElementById(id + '-ignore').value;
+            console.log('key: ', search)
+            if (!search) {
+                setList([]);
+                document.getElementById(id).value = null;
+            }
+            if (search.length > 2) {
+                const newList = await api(search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase());
+                setList(newList);
+            }
+        }
+
+    }
 
 
-    return <div class={`bp5-form-group bp5-fill ${intent ? 'intent-' + intent : null} ${disabled ? 'disabled' : null}`}>
-        {title ? <label class="bp5-label" for={id}>
+
+    return <div className={`bp5-form-group bp5-fill ${intent ? 'bp5-intent-' + intent : null} ${disabled ? 'disabled' : null}`}>
+        {title ? <label className="bp5-label" for={id}>
             {title}
-            {required ? <span class="bp5-text-muted">{t('actions.required')}</span> : null}
+            {required ? <span className="bp5-text-muted">{t('actions.required')}</span> : null}
         </label> : null}
-        <div class="bp5-form-content">
-            <div class={`bp5-input-group bp5-fill ${intent ? 'intent-' + intent : null}`}>
-                {icon ? <span class={`bp5-icon bp5-icon-${icon}`}></span> : null}
-                <input id={id} list={"list-" + id} class="bp5-input" placeholder={placeholder} dir="auto" value={value} defaultValue={defaultValue}
-                    onclick={onclick} onBlur={onBlur} onFocus={onFocus} onChange={onChange} disabled={disabled}
+        <div className="bp5-form-content">
+            <div className={`bp5-input-group bp5-fill ${intent ? 'bp5-intent-' + intent : null}`}>
+                {icon ? <span className={`bp5-icon bp5-icon-${icon}`}></span> : null}
+                {api ? <input id={id} type="hidden" defaultValue={defaultValue} /> : null}
+                <input id={api ? id + '-ignore' : id} list={"list-" + id} className="bp5-input" placeholder={placeholder} dir="auto" value={value} defaultValue={api ? defaultText : defaultValue}
+                    onclick={onclick} onBlur={onBlur} onFocus={onFocus} onChange={onChangeHandler} disabled={disabled} onKeyDown={handleKeyDown}
+
                 />
-                {right ? <span class={`bp5-icon bp5-icon-${icon}`}></span> : null}
+                {right ? <span className={`bp5-icon bp5-icon-${icon}`}></span> : null}
                 <datalist id={"list-" + id}>
-                    {
-                        list.map(item => {
+                    {api
+                        ?
+                        apiList.map(item => <option value={item.value}>{item.text}</option>)
+                        : list.map(item => {
                             if (typeof item === 'string' || item instanceof String)
                                 return <option value={item} />
                             else return <option value={item.value}>{item.text}</option>
                         })
+
                     }
 
                 </datalist>
             </div>
-            {helpText ? <div class="bp5-form-helper-text">{helpText}</div> : null}
+            {helpText ? <div className="bp5-form-helper-text">{helpText}</div> : null}
         </div>
     </div>
 }

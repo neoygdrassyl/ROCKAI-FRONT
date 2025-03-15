@@ -22,6 +22,7 @@ export default function TextInput(props) {
         format,
         pattern,
         max,
+        read,
     } = props
     const { t } = useTranslation();
     const [localValidate, setLocalValidate] = useState(false)
@@ -42,6 +43,12 @@ export default function TextInput(props) {
         if (onFocus) onBlur(e)
     }
 
+    const getDefaultValue = () => {
+        if (defaultValue && format) return format(defaultValue)
+        else if (defaultValue) return defaultValue
+        else return ''
+    }
+
     return <FormGroup
         helperText={helpText || localValidate ? (helpText || t('actions.validate')) : null}
         label={title}
@@ -50,13 +57,13 @@ export default function TextInput(props) {
         intent={localValidate ? 'danger' : intent}
         disabled={disabled}
         fill
-        >
+    >
         <InputGroup
             intent={localValidate ? 'danger' : intent}
             id={id}
             placeholder={placeholder}
             value={value}
-            defaultValue={defaultValue || ''}
+            defaultValue={getDefaultValue()}
             onclick={onclick}
             onBlur={onBlurHandler}
             onFocus={onFocusHandler}
@@ -65,6 +72,7 @@ export default function TextInput(props) {
             rightElement={right}
             disabled={disabled}
             maxlength={max || 127}
+            readOnly={read}
         />
     </FormGroup>
 }

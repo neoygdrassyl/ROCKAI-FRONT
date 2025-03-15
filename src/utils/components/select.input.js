@@ -21,18 +21,18 @@ export default function SelectInput(props) {
     const { t } = useTranslation();
 
 
-    return <div class={`bp5-form-group bp5-fill ${intent ? 'intent-' + intent : null}`}>
-        {title ? <label class="bp5-label" for={id}>
+    return <div className={`bp5-form-group bp5-fill ${intent ? 'intent-' + intent : null}`}>
+        {title ? <label className="bp5-label" for={id}>
             {title}
-            {required ? <span class="bp5-text-muted">{t('actions.required')}</span> : null}
+            {required ? <span className="bp5-text-muted">{t('actions.required')}</span> : null}
         </label> : null}
-        <div class="bp5-form-content bp5-fill">
-            <div class={`bp5-input-group bp5-fill ${intent ? 'intent-' + intent : null}`}>
-                {icon ? <span class={`bp5-icon bp5-icon-${icon}`}></span> : null}
-                <select id={id} class="bp5-select" placeholder={placeholder} dir="auto" value={value} defaultValue={defaultValue}
+        <div className="bp5-form-content bp5-fill">
+            <div className={`bp5-input-group bp5-fill ${intent ? 'intent-' + intent : null}`}>
+                {icon ? <span className={`bp5-icon bp5-icon-${icon}`}></span> : null}
+                <select id={id} className="bp5-select" placeholder={placeholder} dir="auto" value={value} defaultValue={defaultValue}
                     onclick={onclick} onBlur={onBlur} onFocus={onFocus} onChange={onChange}
                 >
-                 <span class={`bp5-icon bp5-icon-chevron-down`}></span>
+                 <span className={`bp5-icon bp5-icon-chevron-down`}></span>
 
                     {
                         list.map(item => {
@@ -44,7 +44,7 @@ export default function SelectInput(props) {
 
                 </select >
             </div>
-            {helpText ? <div class="bp5-form-helper-text">{helpText}</div> : null}
+            {helpText ? <div className="bp5-form-helper-text">{helpText}</div> : null}
         </div>
     </div>
 }

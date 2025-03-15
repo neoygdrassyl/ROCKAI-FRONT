@@ -1,5 +1,5 @@
 
-import { Button, InputGroup, NonIdealState } from '@blueprintjs/core';
+import { Button, InputGroup, NonIdealState, Tooltip } from '@blueprintjs/core';
 import { useTranslation } from 'react-i18next';
 import DataTable from 'react-data-table-component';
 import { useEffect, useState } from 'react';
@@ -11,10 +11,13 @@ export default function TableApp(props) {
         columns,    // REQUIRED
         loading,
         title,
+        id,
 
         // ACTIONS
         search,
         btn,
+        reload,
+        reloadPag,
 
         // PAGINATION
         onChangePage,
@@ -22,6 +25,28 @@ export default function TableApp(props) {
     } = props
     const { t } = useTranslation();
     const [baseData, setBaseData] = useState(data);
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(20);
+    const [field, setField] = useState(null);
+    const [filter, setFilter] = useState(null);
+
+    const changePageHandler = (page, totalRows) => {
+        setPage(page);
+        if (onChangePage) onChangePage(page);
+        if (reloadPag && reload) reload(page, size, field, filter);
+    }
+
+    const changeRowsPerPageHandler = (size, page) => {
+        setSize(size);
+        setPage(page);
+        if (onChangeRowsPerPage) onChangeRowsPerPage(size);
+        if (reloadPag && reload) reload(page, size, field, filter);
+    }
+
+    const onReloadHandler = () => {
+        if (reloadPag && reload) reload(page, size, field, filter);
+        else reload();
+    }
 
     useEffect(() => {
         setBaseData(data)
@@ -47,30 +72,46 @@ export default function TableApp(props) {
     </div>
 
     function filter_data() {
-        let to_search = document.getElementById("search-btn").value;
-        to_search = to_search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        if(to_search.trim()) {
-            let new_data = data.filter(d => {
-                let match = false
-                columns.map(c => {
-                    if(c.text){
-                        let text_to_match = c.text(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                        if(text_to_match.includes(to_search)) match = true;
-                    }
-                })
-
-                return match
-            });
-            setBaseData(new_data);
+        if (reloadPag) {
+            if (document.getElementById(`${id}-search-options`).selectedIndex) {
+                const value = document.getElementById(`${id}-search-btn`).value;
+                const field = document.getElementById(`${id}-search-options`).value;
+                setField(field);
+                setFilter(value);
+                reload(page, size, field, value)
+            }
+            else {
+                setField(null);
+                setFilter(null);
+            }
         }
-        else setBaseData(data);
+        else {
+            let to_search = document.getElementById(`${id}-search-btn`).value;
+            to_search = to_search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            if (to_search.trim()) {
+                let new_data = data.filter(d => {
+                    let match = false
+                    columns.map(c => {
+                        if (c.text && c.text(d)) {
+                            let text_to_match = c.text(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                            if (text_to_match.includes(to_search)) match = true;
+                        }
+                    })
+
+                    return match
+                });
+                setBaseData(new_data);
+            }
+            else setBaseData(data);
+        }
+
     }
 
     return (<div className='table-container'>
         <DataTable
             columns={columns.map(c => ({
                 name: <h5>{c.name}</h5>,
-                selector: c.text || c.component,
+                selector: c.component || c.text,
             }))}
             data={baseData}
             title={title}
@@ -81,14 +122,33 @@ export default function TableApp(props) {
             pointerOnHover
             dense
 
-            actions={search && data.length ? <>
+            actions={search ? <>
+                {reload
+                    ? <Tooltip content={t('actions.reload')} placement="top">
+                        <Button icon="repeat" intent='primary' onClick={onReloadHandler} />
+                    </Tooltip>
+                    : null}
+                {reloadPag
+                    ? <div className={`bp5-form-group mt-3 table-select`}>
+                        <div className="bp5-form-content">
+                            <div className={`bp5-input-group`}>
+                                <span className={`bp5-icon bp5-icon-filter`}></span>
+                                <select id={`${id}-search-options`} className="bp5-select" placeholder={t('table.filter')} dir="auto">
+                                    <span className={`bp5-icon bp5-icon-chevron-down`}></span>
+                                    <option value={null} disabled selected>{t('table.filter')}</option>
+                                    {columns.filter(c => c.value).map(c => <option value={c.value}>{c.name}</option>)}
+                                </select >
+                            </div>
+                        </div>
+                    </div>
+                    : null}
                 <InputGroup
-                    id="search-btn"
+                    id={`${id}-search-btn`}
                     placeholder={t('table.search')}
                     size={22}
                     leftIcon="search"
-                    rightElement={<Button intent="warning" icon="arrow-right" onClick={() => filter_data()} />}
-                    onKeyDown={(event) => { if (event.key == 'Enter') filter_data() }}
+                    rightElement={<Button intent="primary" icon="arrow-right" onClick={() => filter_data()} />}
+                    onKeyDown={(event) => { if (event.key === 'Enter') filter_data() }}
                 />
             </> : null}
 
@@ -97,11 +157,16 @@ export default function TableApp(props) {
             subHeaderAlign="right"
 
             pagination
+            paginationServer={reloadPag}
             paginationRowsPerPageOptions={[20, 40, 80]}
-            paginationPerPage={20}
+            paginationTotalRows={reloadPag ? baseData[0]?.n : baseData.length}
+            paginationPerPage={size}
+            paginationDefaultPage={page}
+            onChangeRowsPerPage={changeRowsPerPageHandler}
+            onChangePage={changePageHandler}
             paginationComponentOptions={PAGINATION_LOCALE}
-            onChangePage={onChangePage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
+
+
         />
     </div>
     );

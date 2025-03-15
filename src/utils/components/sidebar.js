@@ -1,6 +1,6 @@
 import { Icon } from "@blueprintjs/core";
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router";
+import { useContext } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../context/auth.context.ts";
 import { useTranslation } from "react-i18next";
 import vars from "../json/variables.json"
@@ -11,8 +11,7 @@ export default function SideBar(props) {
   const { t } = useTranslation();
   const userContext = useContext(AuthContext);
   const { user } = userContext;
-  const [index, setIndex] = useState(-1)
-
+  const location = useLocation();
 
   const menu = {
     COT: { option: t(vars.mod_map.COT.t), value: vars.mod_map.COT.url, icon: vars.mod_map.COT.icon, },
@@ -22,12 +21,10 @@ export default function SideBar(props) {
   };
 
   const handleLogout = () => {
-    userContext.logout()
     navigate('/login')
   }
 
-  const handleMenu = (i, path) => {
-    setIndex(i)
+  const handleMenu = (path) => {
     navigate(path)
   }
 
@@ -60,35 +57,50 @@ export default function SideBar(props) {
 
         </div>
       </div>
+      {user ? <>
+        <ul className="nav nav-title flex-column">
+          <li key={`li-k-user`} className={"nav-item"} onClick={() => { }}>
 
-      <ul className="nav nav-title flex-column">
-        <li key={`li-k-user`} className={"nav-item"} onClick={() => { }}>
+            <a className="nav-link" aria-current="page">
+              <Icon className="app-icon" icon={"user"} />
+              <span className="nav-text title">{user.name}</span>
+              <span className="nav-text subtitle">{t(`users.role.${user.cargo}`)} </span>
+            </a>
+          </li>
+        </ul>
 
-          <a className="nav-link" aria-current="page">
-            <Icon className="app-icon" icon={"user"} />
-            <span className="nav-text title">{user.name}</span>
-            <span className="nav-text subtitle">{t(`users.role.${user.cargo}`)} </span>
-          </a>
-        </li>
-      </ul>
+        <ul className="nav flex-column">
 
-      <ul className="nav flex-column">
-        {menuOptions(user.access).map((obj, i) => <>
-          <li key={`li-k-${i}`} className={"nav-item " + (i === index ? "active" : "")} onClick={() => handleMenu(i, obj.value)}>
+          <li key={`li-k-home`} className={"nav-item " + (location.pathname === '/home' ? "active" : "")} onClick={() => handleMenu("/home")}>
 
             <div className="app-tooltip">
               <a className="nav-link" aria-current="page">
-                <Icon icon={obj.icon} />
-                <span className="nav-text">{obj.option}</span>
+                <Icon icon={'home'} />
+                <span className="nav-text">{t('sidebar.menu.home')}</span>
               </a>
-
-              {isExpand ? null : <span className="app-tooltiptext">{obj.option}</span>}
-
+              {isExpand ? null : <span className="app-tooltiptext">{t('sidebar.menu.home')}</span>}
             </div>
-
           </li>
-        </>)}
-      </ul>
+
+          {menuOptions(user.access).map((obj, i) => <>
+            <li key={`li-k-${i}`} className={"nav-item " + (location.pathname === obj.value ? "active" : "")} onClick={() => handleMenu(obj.value)}>
+
+              <div className="app-tooltip">
+                <a className="nav-link" aria-current="page">
+                  <Icon icon={obj.icon} />
+                  <span className="nav-text">{obj.option}</span>
+                </a>
+
+                {isExpand ? null : <span className="app-tooltiptext">{obj.option}</span>}
+
+              </div>
+
+            </li>
+          </>)}
+        </ul>
+
+      </> : null}
+
 
       <ul className="nav nav-logout flex-column">
         <li key={`li-k-logout`} className={"nav-item"} onClick={() => handleLogout()}>

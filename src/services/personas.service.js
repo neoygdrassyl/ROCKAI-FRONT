@@ -1,30 +1,27 @@
 import http, { cb } from "../http-common";
 
-const route = "empleados"
+const route = "personas"
 
-class EmpleadosService {
+class PersonasService {
     list(limit, offset) {
         return http().get(`/${route}/${limit}&${offset}`).then(cb);
     }
-    /*
     search(limit, offset, field, value) {
-        return http.get(`/${route}/search/${limit}&${offset}&${field}&${value}`);
+        return http().get(`/${route}/${limit}&${offset}&${field}&${value}`).then(cb);
     }
-    */
     get(id) {
-        return http().get(`/${route}/get/${id}`).then(cb);
+        return http().get(`/${route}/${id}`).then(cb);
+    }
+    getAll() {
+        return http().get(`/${route}/`).then(cb);
     }
 
     create(data) {
         return http().post(`/${route}/`, data).then(cb);
     }
-
+    
     update(data, id) {
         return http().put(`/${route}/${id}`, data).then(cb);
-    }
-
-    activate(data, id) {
-        return http().put(`/${route}/activate/${id}`, data).then(cb);
     }
 
     delete(id) {
@@ -33,4 +30,4 @@ class EmpleadosService {
 
 }
 
-export default new EmpleadosService();
+export default new PersonasService();

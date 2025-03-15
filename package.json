@@ -1,5 +1,6 @@
 {
   "name": "rockai-front",
+  "homepage": "https://rockai.co",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

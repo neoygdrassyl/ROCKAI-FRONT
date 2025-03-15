@@ -3,7 +3,7 @@
         "COT": {
             "t": "sidebar.menu.cot",
             "url": "/cot",
-            "icon": "dollar"
+            "icon": "list-detail-view"
         },
         "PRO": {
             "t": "sidebar.menu.pro",
@@ -21,6 +21,8 @@
             "icon": "people"
         }
     },
-    "roles": [ "SAD", "ADM", "MAG", "EMP", "CLI" ],
-    "formRoles": ["MAG", "EMP"]
+    "roles": [ "SAD", "ADM", "EXT", "EMP", "CLI" ],
+    "formRoles": ["EMP", "ADM"],
+    "personType":["N", "J"],
+    "contracts": [ "I", "P", "F", "O", "A", "R"]
 }

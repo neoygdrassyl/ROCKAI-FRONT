@@ -11,23 +11,25 @@ import { AppContext } from "./utils/context/app.context.js";
 import { useAuth } from "./utils/hooks/auth.hook.js";
 import { useApp } from "./utils/hooks/app.hook.js";
 
-import Login from './pages/login/login.page';
-import Home from './pages/home/home.page';
-import HRS from "./pages/hr/hr.page.js";
-import NotFound from "./pages/notfoud/notfound.page.js";
-
+import NotFound from "./pages/notfoud";
+import Login from './pages/login';
+import Home from './pages/home';
+import HRS from "./pages/hr";
+import PRO from "./pages/pro";
+import CON from "./pages/cont";
+import COT from "./pages/cot";
 
 export default function App() {
-    const auth = useAuth()
-    const app = useApp()
+    const auth = useAuth();
+    const app = useApp();
 
     return (
         <GoogleReCaptchaProvider
             reCaptchaKey={process.env.REACT_APP_RECAPTCHA_KEY}
             language="es"
         >
-            <AuthContext.Provider value={{ user: auth.user, login: auth.login, logout: auth.logout, verify: auth.verify }}>
-                <AppContext.Provider value={{...app}}>
+            <AuthContext.Provider value={{ ...auth }}>
+                <AppContext.Provider value={{...app }}>
                     <BrowserRouter>
                         <Routes>
                             <Route element={<LayoutPage />}>
@@ -40,6 +42,9 @@ export default function App() {
                                     <Route element={<LayoutApp />}>
                                         <Route path="home" element={<Home />} />
                                         <Route path="hr" element={<HRS />} />
+                                        <Route path="pro" element={<PRO />} />
+                                        <Route path="con" element={<CON />} />
+                                        <Route path="cot" element={<COT />} />
                                     </Route>
 
                                 </Route>
