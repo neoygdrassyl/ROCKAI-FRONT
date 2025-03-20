@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 import { Alert, Button, ButtonGroup, Dialog, DialogBody, Tooltip } from '@blueprintjs/core';
@@ -162,6 +162,7 @@ export default function Personas() {
         },
         {
             name: t("personas.table.action"),
+            width: '120px',
             component: row => <>
                 <ButtonGroup>
                     {authContext.verify(location, "PUT") ? <>
@@ -246,7 +247,6 @@ export default function Personas() {
     return (
         <div>
             <hr />
-            <ToastContainer theme="colored" />
             {ALERT()}
             {MODAL(item)}
             <TableApp

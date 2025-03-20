@@ -24,5 +24,9 @@
     "roles": [ "SAD", "ADM", "EXT", "EMP", "CLI" ],
     "formRoles": ["EMP", "ADM"],
     "personType":["N", "J"],
-    "contracts": [ "I", "P", "F", "O", "A", "R"]
+    "contracts": [ "I", "P", "F", "O", "A", "R"],
+    "bank_account_type": [ "S", "N", "C"],
+    "trax_type": [ "I", "O"],
+    "payment_type": [ "C", "D", "K"]
+
 }

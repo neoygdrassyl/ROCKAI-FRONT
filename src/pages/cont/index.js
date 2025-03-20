@@ -1,29 +1,28 @@
-import { useContext } from "react";
-import { AuthContext } from "../../utils/context/auth.context.ts";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Cuentas from "./cuentas.component.js";
+import Transacciones from "./trax.component.js";
+import Balance from "./balance.component.js";
+import { ToastContainer } from "react-toastify";
+import Wallet from "./wallet.component.js";
 
 export default function Contabilidad() {
-
   const { t } = useTranslation();
-  const authContext = useContext(AuthContext)
-  const { user, verify } = authContext
+  const [refresh, serRefresh] = useState(false)
 
   return (
     <div>
-      <h2>Contabilidad y Registros</h2>
+      <ToastContainer theme="colored" />
+      <h2>{t('con.title')}</h2>
 
+      <Balance refresh={refresh} />
 
-      <h3>Saldo Disponible</h3>
-      <hr/>
+      <Transacciones refresh={refresh} serRefresh={serRefresh} />
 
-      <h3>Ingresos / Egresos</h3>
-      <hr/>
-      
-      <Cuentas />
+      <Cuentas refresh={refresh} serRefresh={serRefresh} />
 
-      <h3>Estado de cartera</h3>
-      <hr/>
+      <Wallet refresh={refresh} />
+
     </div>
   );
 }

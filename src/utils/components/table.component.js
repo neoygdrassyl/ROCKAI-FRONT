@@ -22,6 +22,7 @@ export default function TableApp(props) {
         // PAGINATION
         onChangePage,
         onChangeRowsPerPage,
+        noPag,
     } = props
     const { t } = useTranslation();
     const [baseData, setBaseData] = useState(data);
@@ -112,6 +113,8 @@ export default function TableApp(props) {
             columns={columns.map(c => ({
                 name: <h5>{c.name}</h5>,
                 selector: c.component || c.text,
+                omit: c.omit,
+                width: c.width
             }))}
             data={baseData}
             title={title}
@@ -136,7 +139,7 @@ export default function TableApp(props) {
                                 <select id={`${id}-search-options`} className="bp5-select" placeholder={t('table.filter')} dir="auto">
                                     <span className={`bp5-icon bp5-icon-chevron-down`}></span>
                                     <option value={null} disabled selected>{t('table.filter')}</option>
-                                    {columns.filter(c => c.value).map(c => <option value={c.value}>{c.name}</option>)}
+                                    {columns.filter(c => c.value).map(c => <option value={c.value}>{c.name_search || c.name}</option>)}
                                 </select >
                             </div>
                         </div>
@@ -156,7 +159,7 @@ export default function TableApp(props) {
             subHeaderComponent={btn}
             subHeaderAlign="right"
 
-            pagination
+            pagination={!noPag}
             paginationServer={reloadPag}
             paginationRowsPerPageOptions={[20, 40, 80]}
             paginationTotalRows={reloadPag ? baseData[0]?.n : baseData.length}

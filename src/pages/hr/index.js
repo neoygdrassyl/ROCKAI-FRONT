@@ -170,6 +170,7 @@ export default function HRS() {
         },
         {
             name: t("hr.table.action"),
+            width: '120px',
             component: row => <>
                 <ButtonGroup>
                     {authContext.verify(location, "PUT") ? <>

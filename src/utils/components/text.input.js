@@ -73,6 +73,7 @@ export default function TextInput(props) {
             disabled={disabled}
             maxlength={max || 127}
             readOnly={read}
+            fill
         />
     </FormGroup>
 }

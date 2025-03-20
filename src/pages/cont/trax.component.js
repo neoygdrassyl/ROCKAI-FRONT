@@ -1,33 +1,32 @@
 import { useContext, useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 import { Alert, Button, ButtonGroup, Dialog, DialogBody, Tooltip } from '@blueprintjs/core';
 import { AuthContext } from "../../utils/context/auth.context.ts";
 import { AppContext } from "../../utils/context/app.context.js";
-import cotizacionesService from "../../services/cotizaciones.service.js";
-import proyectosService from "../../services/proyectos.service.js";
+import transaccionesoService from "../../services/transacciones.service..js";
 import TableApp from "../../utils/components/table.component.js";
 import FormComponent from "../../utils/components/form.component.js";
+import Vars from "../../utils/json/variables.json"
 
-
-export default function Cotizacion() {
+export default function Transacciones(props) {
+    const { refresh, serRefresh } = props
     const [data, setData] = useState([])
     const [item, setItem] = useState(null)
     const [isLoading, setLoading] = useState(false)
     const [alert, setAlert] = useState(false)
     const [modal, setModal] = useState(false)
-    const [modaP, setModalP] = useState(false)
     const authContext = useContext(AuthContext)
     const appContext = useContext(AppContext)
     const location = useLocation()
     const { t } = useTranslation();
     const toastInfo = (msg) => toast.info(msg, { autoClose: 1500, theme: "light", });
 
-    function list(page = 1, pageSize = 20, field = null, value = null, aprobado = null) {
+    function list(page = 1, pageSize = 20, field = null, value = null) {
         if (authContext.verify(location, "GET")) {
             setLoading(true);
-            if (field && value) cotizacionesService.search(page, pageSize, field, value, aprobado)
+            if (field && value) transaccionesoService.search(page, pageSize, field, value)
                 .then(res => {
                     setData(res.data);
                 })
@@ -35,7 +34,7 @@ export default function Cotizacion() {
                 .finally(() => {
                     setLoading(false);
                 })
-            else cotizacionesService.list(page, pageSize, aprobado)
+            else transaccionesoService.list(page, pageSize)
                 .then(res => {
                     setData(res.data);
                 })
@@ -51,7 +50,7 @@ export default function Cotizacion() {
 
     function get(i) {
         if (authContext.verify(location, "GET")) {
-            cotizacionesService.get(i.id)
+            transaccionesoService.get(i.id)
                 .then(res => {
                     setItem(res.data);
                     setModal(true);
@@ -70,7 +69,7 @@ export default function Cotizacion() {
         if (authContext.verify(location, "POST")) {
             setModal(false);
             toastInfo(t('actions.procesing'));
-            cotizacionesService.create(form)
+            transaccionesoService.create(form)
                 .then(res => {
                     if (res.data) {
                         toast.dismiss();
@@ -79,28 +78,7 @@ export default function Cotizacion() {
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
-                    list();
-                })
-        } else {
-            toast.warning(t('auth.nopermit'));
-        }
-
-    }
-
-    function create_proyect(form) {
-        if (authContext.verify({pathname: '/pro'}, "POST")) {
-            setModalP(false);
-            toastInfo(t('actions.procesing'));
-            proyectosService.create(form)
-                .then(res => {
-                    if (res.data) {
-                        toast.dismiss();
-                        toast.success(t('actions.creaated'));
-                    }
-                })
-                .catch(error => appContext.errorHandler(error, toast, t))
-                .finally(() => {
-                    list();
+                    serRefresh(!refresh);
                 })
         } else {
             toast.warning(t('auth.nopermit'));
@@ -112,7 +90,7 @@ export default function Cotizacion() {
         if (authContext.verify(location, "PUT")) {
             setModal(false);
             toastInfo(t('actions.procesing'))
-            cotizacionesService.update(form, id)
+            transaccionesoService.update(form, id)
                 .then(res => {
                     if (res.data) {
                         toast.dismiss();
@@ -121,7 +99,7 @@ export default function Cotizacion() {
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
-                    list();
+                    serRefresh(!refresh);
                 })
         } else {
             toast.warning(t('auth.nopermit'))
@@ -133,7 +111,7 @@ export default function Cotizacion() {
         if (authContext.verify(location, "DELETE")) {
             setModal(false);
             toastInfo(t('actions.procesing'))
-            cotizacionesService.delete(id)
+            transaccionesoService.delete(id)
                 .then(res => {
                     if (res.data) {
                         toast.dismiss();
@@ -142,7 +120,7 @@ export default function Cotizacion() {
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
-                    list();
+                    serRefresh(!refresh);
                 })
         } else {
             toast.warning(t('auth.nopermit'))
@@ -150,9 +128,9 @@ export default function Cotizacion() {
 
     }
 
-    async function getPair(search) {
+    async function getPairCuentas(search, apiExt) {
         if (authContext.verify(location, "GET")) {
-            return cotizacionesService.getPersonas(search)
+            return transaccionesoService.get_cuentas(search, apiExt.origin)
                 .then(res => {
                     return res.data;
                 })
@@ -167,65 +145,83 @@ export default function Cotizacion() {
 
     }
 
-    function getFinalPrice(row) {
-        let sum = Number(0);
-        sum += Number(row.monto || 0);
-        sum += (sum * Number(row.iva || 0)) / 100.0;
-        sum += (sum * Number(row.adm || 0)) / 100.0;
-        sum += (sum * Number(row.imp || 0)) / 100.0;
-        sum += (sum * Number(row.uti || 0)) / 100.0;
-        return appContext.formatCurrency(sum)
+    async function getPairProyectos(search) {
+        if (authContext.verify(location, "GET")) {
+            return transaccionesoService.get_proyectos(search)
+                .then(res => {
+                    return res.data;
+                })
+                .catch(error => {
+                    appContext.errorHandler(error, toast, t);
+                    return []
+                })
+        } else {
+            toast.warning(t('auth.nopermit'));
+            return []
+        }
+
     }
 
     useEffect(() => {
         list();
     }, []);
 
+    useEffect(() => {
+        list()
+    }, [refresh]);
+
     const columns = [
         {
-            name: t("cotizacion.table.descripcion"),
-            value: "descripcion",
-            text: row => row.descripcion,
+            name: t("trax.table.cuenta_1"),
+            name_search: t("trax.table.cuenta"),
+            value: "cuenta",
             component: row => <>
-                <Tooltip content={row.aprobado ? t("cotizacion.table.approved") : t("cotizacion.table.notapproved")} placement="top">
-                    <><span className={`bp5-icon bp5-icon-folder-open text-${row.aprobado ? 'success' : 'danger'}`} /></>
+                <Tooltip content={t("general.trax_type." + row.tipo_trax)} placement="top">
+                    <><span className={`bp5-icon bp5-icon-${row.tipo_trax === 'I' ? 'input' : 'output'} text-${row.tipo_trax === 'I' ? 'success' : 'danger'}`} /></>
                 </Tooltip>
-                {` ${row.descripcion}`}
+                {` ${row.cuenta_1}`}
             </>
         },
         {
-            name: t("cotizacion.table.nombre"),
+            name: t("trax.table.cuenta_2"),
+            text: row => row.cuenta_2
+        },
+        {
+            name: t("trax.table.proyecto"),
+            value: "proyecto",
+            text: row => row.proyecto,
+        },
+        {
+            name: t("trax.table.descripcion"),
+            value: "descripcion",
+            text: row => row.descripcion,
+        },
+        {
+            name: t("trax.table.nombre"),
             value: "nombre",
-            text: row => row.nombre,
+            omit: true,
         },
         {
-            name: t("cotizacion.table.fecha"),
+            name: t("trax.table.monto"),
+            component: row => <>
+              <Tooltip content={t("general.payment_type." + row.tipo_pago)} placement="top">
+                    <span className={`fw-bold`} >{t('general.payment_type_symnbol.' + row.tipo_pago)}</span>
+                </Tooltip>
+                {` ${appContext.formatCurrency(row.monto)}`}
+            </>
+
+        },
+        {
+            name: t("trax.table.fecha"),
             value: "fecha",
-            text: row => row.fecha,
+            text: row => row.fecha
         },
         {
-            name: t("cotizacion.table.monto"),
-            component: row => appContext.formatCurrency(row.monto)
-        },
-        {
-            name: t("cotizacion.table.monto_2"),
-            component: row => getFinalPrice(row)
-        },
-        {
-            name: t("cotizacion.table.action"),
+            name: t("actions.action"),
             width: '120px',
             component: row => <>
                 <ButtonGroup>
                     {authContext.verify(location, "PUT") ? <>
-                        {row.aprobado === 0
-                            ? <Tooltip content={t('cotizacion.table.approve')} placement="top">
-                                <Button icon="thumbs-up" intent='primary' onClick={() => {
-                                    setItem(row);
-                                    setModalP(true);
-                                }} />
-                            </Tooltip>
-                            : null
-                        }
                         <Tooltip content={t('actions.edit')} placement="top">
                             <Button icon="edit" intent='warning' onClick={() => get(row)} />
                         </Tooltip>
@@ -244,48 +240,29 @@ export default function Cotizacion() {
         },
     ];
 
-
     const FORM = (i) => [
         {
-            title: t('cotizacion.form.section_1'),
+            title: t('trax.form.section_1'),
             inputs: [
                 [
-                    { id: "descripcion", required: true, defaultValue: i?.descripcion, title: t('cotizacion.form.descripcion'), placeholder: t('cotizacion.form.descripcion'), icon: "tag", },
-                    { id: "fecha", defaultValue: i?.fecha, title: t('cotizacion.form.fecha'), placeholder: t('cotizacion.form.fecha'), type: "date", },
-                    { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.nombre, title: t('cotizacion.form.id_persona'), placeholder: t('cotizacion.form.id_persona'), icon: "person", type: 'list', api: getPair },
+                    { id: "monto", required: true, defaultValue: i?.monto, title: t('trax.form.monto'), placeholder: t('trax.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, },
+                    { id: "tipo_pago", required: true, defaultValue: i?.tipo_pago, title: t('trax.form.tipo_pago'), placeholder: t('trax.form.tipo_pago'), icon: "dollar", type: 'select', list: Vars.payment_type.map(i => ({ value: i, text: t(`general.payment_type.${i}`) })) },
+                    { id: "descripcion", defaultValue: i?.descripcion, title: t('trax.form.descripcion'), placeholder: t('trax.form.descripcion'), icon: "font", },
+                    { id: "fecha", required: true, defaultValue: i?.fecha, title: t('trax.form.fecha'), placeholder: t('trax.form.fecha'), type: 'date', },
+                    { id: "id_proyecto", defaultValue: i?.id_proyecto, defaultText: i?.proyecto, title: t('trax.form.id_proyecto'), placeholder: t('trax.form.id_proyecto'), icon: "projects", type: 'list', api: getPairProyectos },
                 ],
                 [
-                    { id: "monto", required: true, defaultValue: i?.monto, title: t('cotizacion.form.monto'), placeholder: t('cotizacion.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, },
-                    { id: "iva", defaultValue: i?.iva, title: t('cotizacion.form.iva'), placeholder: t('cotizacion.form.iva'), icon: "percentage", type: 'percent', },
-                    { id: "adm", defaultValue: i?.adm, title: t('cotizacion.form.adm'), placeholder: t('cotizacion.form.adm'), icon: "percentage", type: 'percent', },
-                    { id: "imp", defaultValue: i?.imp, title: t('cotizacion.form.imp'), placeholder: t('cotizacion.form.imp'), icon: "percentage", type: 'percent', },
-                    { id: "uti", defaultValue: i?.uti, title: t('cotizacion.form.uti'), placeholder: t('cotizacion.form.uti'), icon: "percentage", type: 'percent', },
+                    { id: "id_cuenta_1", required: true, defaultValue: i?.id_cuenta_1, defaultText: i?.cuenta_1, title: t('trax.form.id_cuenta_1'), placeholder: t('trax.form.id_cuenta_1'), icon: "bank-account", type: 'list', api: getPairCuentas, apiExt: { origin: 1 }, },
+                    { id: "tipo_trax", required: true, defaultValue: i?.tipo_trax, title: t('trax.form.tipo_trax'), placeholder: t('trax.form.tipo_trax'), icon: "tag", type: 'select', list: Vars.trax_type.map(i => ({ value: i, text: t(`general.trax_type.${i}`) })) },
+                    { id: "id_cuenta_2", required: true, defaultValue: i?.id_cuenta_2, defaultText: i?.cuenta_2, title: t('trax.form.id_cuenta_2'), placeholder: t('trax.form.id_cuenta_2'), icon: "bank-account", type: 'list', api: getPairCuentas, apiExt: { origin: null }, },
                 ],
             ]
         },
     ]
 
-    const FORM_PROYECT = (i) => [
-        {
-            title: t('pro.form.section_1'),
-            inputs: [
-                [
-                    { id: "codigo", required: true, title: t('pro.form.codigo'), placeholder: t('pro.form.codigo'), icon: "tag", },
-                    { id: "nombre", required: true, defaultValue: i?.descripcion, title: t('pro.form.nombre'), placeholder: t('pro.form.nombre'), icon: "tag", },
-                    { id: "id_cotizacion", defaultValue: i?.id, type: 'hidden' },
-                ],
-                [
-                    { id: "municipio", title: t('pro.form.municipio'), placeholder: t('pro.form.municipio'), icon: "map-marker", type: "list", list: appContext.getCityList() },
-                    { id: "direccion", title: t('pro.form.direccion'), placeholder: t('pro.form.direccion'), icon: "home", },
-                    { id: "fecha_inicio", title: t('pro.form.fecha_inicio'), placeholder: t('pro.form.fecha_inicio'), type: "date" },
-                    { id: "fecha_entrega", title: t('pro.form.fecha_entrega'), placeholder: t('pro.form.fecha_entrega'), type: "date" },
-                ],
-            ]
-        },
-    ]
 
     const MODAL = (i) => <Dialog
-        title={i ? t('cotizacion.form.edit').replace('%VAR%', i.descripcion) : t('cotizacion.form.new')}
+        title={i ? t('trax.form.edit').replace('%VAR%', i.descripcion) : t('trax.form.new')}
         icon={i ? "edit" : "add"}
         isOpen={modal} onClose={() => setModal(false)}
         className='modal-app'>
@@ -298,24 +275,6 @@ export default function Cotizacion() {
                 onSecondary={() => setModal(false)}
                 onSubmit={(data) => i ? edit(i.id, data) : create(data)}
                 groups={FORM(i)}
-            />
-        </DialogBody>
-    </Dialog>
-
-    const MODA_PROYECTL = (i) => <Dialog
-        title={t('pro.form.new')}
-        icon={"add"}
-        isOpen={modaP} onClose={() => setModalP(false)}
-        className='modal-app'>
-        <DialogBody useOverflowScrollContainer={true} >
-            <FormComponent
-                actions={{
-                    primary: { icon: "add", text: t('actions.new') },
-                    secondary: { icon: "cross", text: t('actions.close') }
-                }}
-                onSecondary={() => setModalP(false)}
-                onSubmit={(data) => create_proyect(data)}
-                groups={FORM_PROYECT(i)}
             />
         </DialogBody>
     </Dialog>
@@ -338,22 +297,21 @@ export default function Cotizacion() {
             remove(item?.id);
         }}
     >
-        <p>{t('actions.bodyDelete').replace('%VAR%', item?.descripcion)}</p>
+        <p>{t('actions.bodyDelete').replace('%VAR%', item?.descripcion || '')}</p>
 
     </Alert>
+
     return (
         <div>
             <hr />
-            <ToastContainer theme="colored" />
             {ALERT()}
             {MODAL(item)}
-            {MODA_PROYECTL(item)}
             <TableApp
                 data={data}
                 columns={columns}
                 loading={isLoading}
-                title={null}
-                id="cotizacion"
+                title={t('trax.table.title')}
+                id="trax"
                 search
                 btn={authContext.verify(location, "POST") ? <Button icon="add" text={t('actions.new')} intent="primary" onClick={() => {
                     setItem(null);
@@ -362,7 +320,6 @@ export default function Cotizacion() {
                 reload={list}
                 reloadPag
             />
-
 
         </div>
     );

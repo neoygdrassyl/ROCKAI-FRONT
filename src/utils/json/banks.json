@@ -1,0 +1,61 @@
+[{"id":"1","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"1","nombre_superfinanciera_entidad":"BANCO DE BOGOTA"}
+,{"id":"2","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"2","nombre_superfinanciera_entidad":"BANCO POPULAR S. A."}
+,{"id":"3","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"6","nombre_superfinanciera_entidad":"BANCO ITAU CORPBANCA COLOMBIA S.A."}
+,{"id":"4","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"7","nombre_superfinanciera_entidad":"BANCOLOMBIA S. A."}
+,{"id":"5","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"53","nombre_superfinanciera_entidad":"BANCO W S. A."}
+,{"id":"6","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"23","nombre_superfinanciera_entidad":"BANCO DE OCCIDENTE"}
+,{"id":"7","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"63","nombre_superfinanciera_entidad":"BANCO SERFINANSA"}
+,{"id":"8","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"26","nombre_superfinanciera_entidad":"TUYA S. A. "}
+,{"id":"9","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"46","nombre_superfinanciera_entidad":"COLTEFINANCIERA S. A."}
+,{"id":"10","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"49","nombre_superfinanciera_entidad":"BANCO COMERCIAL AV VILLAS S. A."}
+,{"id":"11","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"8914","nombre_superfinanciera_entidad":"LULO BANK S.A."}
+,{"id":"12","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"52","nombre_superfinanciera_entidad":"BANCAMIA S. A."}
+,{"id":"13","codigo_superfinanciera_sector":"087","sector":"SOCIEDADES ESPECIALIZADAS EN DEPOSITOS ELECTRONICOS","codigo_superfinanciera_entidad":"10133","nombre_superfinanciera_entidad":"GLOBAL COLOMBIA 81 S.A."}
+,{"id":"14","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"13542","nombre_superfinanciera_entidad":"NU COLOMBIA COMPAÑIA DE FINANCIAMIENTO S.A."}
+,{"id":"15","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"58","nombre_superfinanciera_entidad":"BANCO COOPCENTRAL"}
+,{"id":"16","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"120","nombre_superfinanciera_entidad":"LA HIPOTECARIA COMPAÑIA DE FINANCIAMIENTO S. A."}
+,{"id":"17","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"67","nombre_superfinanciera_entidad":"BANCO UNION"}
+,{"id":"18","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"9","nombre_superfinanciera_entidad":"CITIBANK "}
+,{"id":"19","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"121","nombre_superfinanciera_entidad":"FINANCIERA JURISCOOP COOPERATIVA FINANCIERA"}
+,{"id":"20","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"60","nombre_superfinanciera_entidad":"BANCO MUNDO MUJER"}
+,{"id":"21","codigo_superfinanciera_sector":"002","sector":"CORPORACIONES FINANCIERAS","codigo_superfinanciera_entidad":"11","nombre_superfinanciera_entidad":"CORPORACION FINANCIERA COLOMBIANA S. A."}
+,{"id":"22","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"12","nombre_superfinanciera_entidad":"BANCO GNB SUDAMERIS S. A."}
+,{"id":"23","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"13","nombre_superfinanciera_entidad":"BBVA COLOMBIA S. A."}
+,{"id":"24","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"30","nombre_superfinanciera_entidad":"BCSC S. A."}
+,{"id":"25","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"31","nombre_superfinanciera_entidad":"GM FINANCIAL COLOMBIA S.A. COMPAÑIA DE FINANCIAMIENTO "}
+,{"id":"26","codigo_superfinanciera_sector":"002","sector":"CORPORACIONES FINANCIERAS","codigo_superfinanciera_entidad":"37","nombre_superfinanciera_entidad":"BANCA DE INVERSION BANCOLOMBIA"}
+,{"id":"27","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"39","nombre_superfinanciera_entidad":"BANCO DAVIVIENDA S. A."}
+,{"id":"28","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"41","nombre_superfinanciera_entidad":"BANCO JP MORGAN"}
+,{"id":"29","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"42","nombre_superfinanciera_entidad":"SCOTIABANK COLPATRIA S.A."}
+,{"id":"30","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"43","nombre_superfinanciera_entidad":"BANCO AGRARIO DE COLOMBIA S. A."}
+,{"id":"31","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"10999","nombre_superfinanciera_entidad":"BANCA TECNOLOGIA CO S.A. COMPAÑIA DE FINANCIAMIENTO"}
+,{"id":"32","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"108","nombre_superfinanciera_entidad":"IRIS CF - COMPAÑIA DE FINANCIAMIENTO S.A."}
+,{"id":"33","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"111","nombre_superfinanciera_entidad":"BANCO CREDIFINANCIERA S.A."}
+,{"id":"34","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"54","nombre_superfinanciera_entidad":"BANCO COOMEVA S. A."}
+,{"id":"35","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"55","nombre_superfinanciera_entidad":"BANCO FINANDINA S. A."}
+,{"id":"36","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"117","nombre_superfinanciera_entidad":"CREDIFAMILIA COMPAÑIA DE FINANCIAMIENTO S. A. "}
+,{"id":"37","codigo_superfinanciera_sector":"002","sector":"CORPORACIONES FINANCIERAS","codigo_superfinanciera_entidad":"42","nombre_superfinanciera_entidad":"BNP PARIBAS COLOMBIA CORPORACION FINANCIERA"}
+,{"id":"38","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"56","nombre_superfinanciera_entidad":"BANCO FALABELLA S. A."}
+,{"id":"39","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"57","nombre_superfinanciera_entidad":"BANCO PICHINCHA S. A."}
+,{"id":"40","codigo_superfinanciera_sector":"002","sector":"CORPORACIONES FINANCIERAS","codigo_superfinanciera_entidad":"49","nombre_superfinanciera_entidad":"CORPORACION FINANCIERA DAVIVIENDA S. A."}
+,{"id":"41","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"62","nombre_superfinanciera_entidad":"BANCO MIBANCO"}
+,{"id":"42","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"118","nombre_superfinanciera_entidad":"CREZCAMOS S.A COMPAÑIA DE FINANCIAMIENTO"}
+,{"id":"43","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"59","nombre_superfinanciera_entidad":"BANCO SANTANDER DE NEGOCIOS COLOMBIA S. A."}
+,{"id":"44","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"122","nombre_superfinanciera_entidad":"RCI COLOMBIA S.A. COMPAÑIA DE FINANCIAMIENTO"}
+,{"id":"45","codigo_superfinanciera_sector":"002","sector":"CORPORACIONES FINANCIERAS","codigo_superfinanciera_entidad":"48","nombre_superfinanciera_entidad":"CORPORACION FINANCIERA GNB SUDAMERIS S. A."}
+,{"id":"46","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"10851","nombre_superfinanciera_entidad":"BANCO BTG PACTUAL COLOMBIA S.A."}
+,{"id":"47","codigo_superfinanciera_sector":"087","sector":"SOCIEDADES ESPECIALIZADAS EN DEPOSITOS ELECTRONICOS","codigo_superfinanciera_entidad":"5987","nombre_superfinanciera_entidad":"PAGOS GDE S. A. "}
+,{"id":"48","codigo_superfinanciera_sector":"087","sector":"SOCIEDADES ESPECIALIZADAS EN DEPOSITOS ELECTRONICOS","codigo_superfinanciera_entidad":"6873","nombre_superfinanciera_entidad":"AVAL SOLUCIONES DIGITALES S. A."}
+,{"id":"49","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"11630","nombre_superfinanciera_entidad":"RAPPIPAY COMPAÑIA DE FINANCIAMIENTO S.A."}
+,{"id":"50","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"12003","nombre_superfinanciera_entidad":"BOLD COMPAÑIA DE FINANCIAMIENTO S.A."}
+,{"id":"51","codigo_superfinanciera_sector":"087","sector":"SOCIEDADES ESPECIALIZADAS EN DEPOSITOS ELECTRONICOS","codigo_superfinanciera_entidad":"6024","nombre_superfinanciera_entidad":"MOVII S.A SEDPE"}
+,{"id":"52","codigo_superfinanciera_sector":"087","sector":"SOCIEDADES ESPECIALIZADAS EN DEPOSITOS ELECTRONICOS","codigo_superfinanciera_entidad":"12141","nombre_superfinanciera_entidad":"STONEX GLOBAL PAYMENTS COLOMBIA S.A"}
+,{"id":"53","codigo_superfinanciera_sector":"087","sector":"SOCIEDADES ESPECIALIZADAS EN DEPOSITOS ELECTRONICOS","codigo_superfinanciera_entidad":"7265","nombre_superfinanciera_entidad":"TECNIPAGOS SA"}
+,{"id":"54","codigo_superfinanciera_sector":"087","sector":"SOCIEDADES ESPECIALIZADAS EN DEPOSITOS ELECTRONICOS","codigo_superfinanciera_entidad":"7662","nombre_superfinanciera_entidad":"COINK S.A"}
+,{"id":"55","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"12136","nombre_superfinanciera_entidad":"MERCADOPAGO S.A COMPAÑIA DE FINANCIAMIENTO "}
+,{"id":"56","codigo_superfinanciera_sector":"001","sector":"BANCOS","codigo_superfinanciera_entidad":"13696","nombre_superfinanciera_entidad":"BANCO CONTACTAR S.A"}
+,{"id":"57","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"13807","nombre_superfinanciera_entidad":"NEQUI S.A. COMPAÑIA DE FINANCIAMIENTO"}
+,{"id":"58","codigo_superfinanciera_sector":"004","sector":"COMPAÑIAS DE FINANCIAMIENTO COMERCIAL","codigo_superfinanciera_entidad":"13916","nombre_superfinanciera_entidad":"KOA COMPAÑIA DE FINANCIAMIENTO S.A."}
+,{"id":"59","codigo_superfinanciera_sector":"087","sector":"SOCIEDADES ESPECIALIZADAS EN DEPOSITOS ELECTRONICOS","codigo_superfinanciera_entidad":"13912","nombre_superfinanciera_entidad":"RIA MONEY TRANSFER COLOMBIA S.A."}
+,{"id":"60","codigo_superfinanciera_sector":"002","sector":"CORPORACIONES FINANCIERAS","codigo_superfinanciera_entidad":"13626","nombre_superfinanciera_entidad":"CREDICORP CAPITAL CORPORACION FINANCIERA SA"}
+,{"id":"61","codigo_superfinanciera_sector":"087","sector":"SOCIEDADES ESPECIALIZADAS EN DEPOSITOS ELECTRONICOS","codigo_superfinanciera_entidad":"0","nombre_superfinanciera_entidad":"OH! PAY"}]

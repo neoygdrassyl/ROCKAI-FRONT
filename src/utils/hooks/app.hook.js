@@ -15,8 +15,8 @@ export const useApp = () => {
         return id.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
-    function formatNit(nit){
-       
+    function formatNit(nit) {
+
     }
 
     function formatPhone(phoneNumberString) {
@@ -38,13 +38,18 @@ export const useApp = () => {
 
     const emailPattern = /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/gm;
 
-    function errorHandler(error, toast, t){
+    function errorHandler(error, toast, t) {
         console.error(error);
         toast.dismiss();
         if (error.status === 403) toast.warning(t('auth.nopermit'))
         else toast.error(t('auth.error_generic'))
     }
 
-    return { getCityList, formatId, formatPhone, formatCurrency, emailPattern, errorHandler };
+    function getBanksList() {
+        const banks = require('../json/banks.json');
+        return banks.map(i => i.nombre_superfinanciera_entidad)
+    }
+
+    return { getCityList, formatId, formatPhone, formatCurrency, emailPattern, errorHandler, getBanksList };
 };
 

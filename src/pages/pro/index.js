@@ -166,6 +166,7 @@ export default function PRO() {
         },
         {
             name: t("pro.table.action"),
+            width: '120px',
             component: row => <>
                 <ButtonGroup>
                     {authContext.verify(location, "PUT") ? <>

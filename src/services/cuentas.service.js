@@ -3,17 +3,20 @@ import http, { cb } from "../http-common";
 const route = "cuentas"
 
 class CuentasService {
-    list(limit, offset) {
-        return http().get(`/${route}/${limit}&${offset}`).then(cb);
+    list(limit, offset, es_propia) {
+        return http().get(`/${route}/${limit}&${offset}${es_propia ? `&${es_propia}` : ''}`).then(cb);
     }
-    search(limit, offset, field, value) {
-        return http().get(`/${route}/${limit}&${offset}&${field}&${value}`).then(cb);
+    search(limit, offset, field, value, es_propia) {
+        return http().get(`/${route}/${limit}&${offset}&${field}&${value}${es_propia ? `&${es_propia}` : ''}`).then(cb);
     }
     get(id) {
         return http().get(`/${route}/${id}`).then(cb);
     }
     getAll() {
         return http().get(`/${route}/`).then(cb);
+    }
+    getPersonas(search) {
+        return http().get(`/${route}/personas/${search}`).then(cb);
     }
 
     create(data) {

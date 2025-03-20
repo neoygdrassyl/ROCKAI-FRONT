@@ -108,7 +108,8 @@
             "action": "Acción",
             "approved": "Aprobado",
             "notapproved": "No Aprobado",
-            "approve": "Aprobadar"
+            "approve": "Aprobadar",
+            "fecha": "Fecha"
         },
         "form": {
             "section_1": "Cotizacipon",
@@ -122,6 +123,71 @@
             "adm": "Costo Administración",
             "uti": "Costo Utilidad",
             "imp": "Cost Impuesto"
+        }
+    },
+    "cuentas": {
+        "title": "Cuentas de Cobro",
+        "table": {
+            "title": "Cuentas de Cobro",
+            "descripcion": "Nombre",
+            "is_owned": "Propia",
+            "not_owned": "Externa",
+            "nombre": "Tercero",
+            "nr_cuenta": "N° Cuenta",
+            "banco": "Banco",
+            "action": "Acci",
+            "approve": "Aprobadar"
+        },
+        "form": {
+            "section_1": "Información General",
+            "new": "Añadir nueva Cuenta de Cobro",
+            "edit": "Actualizar Cuenta: %VAR%",
+            "tipo": "Tipo de Cuenta",
+            "nr_cuenta": "N° Cuenta",
+            "descripcion": "Nombre",
+            "id_persona": "Tercero",
+            "banco": "Banco",
+            "es_propia": "Propia",
+            "yes": "Si",
+            "no": "No"
+        }
+    },
+    "trax": {
+        "title": "Ingresos / Egresos",
+        "table": {
+            "title": "Ingresos / Egresos",
+            "cuenta": "Cuenta",
+            "cuenta_1": "Cuenta Propia",
+            "cuenta_2": "Cuenta Transacción",
+            "proyecto": "Proyecto",
+            "descripcion": "Descripción",
+            "monto": "Monto",
+            "fecha": "Fecha",
+            "nombre": "Tercero"
+        },
+        "form": {
+            "section_1": "Información Transacción",
+            "new": "Añadir nueva Transacción",
+            "edit": "Actualizar Transacción: %VAR%",
+            "monto": "Monto",
+            "tipo_pago": "Tipo de Pago",
+            "descripcion": "Descripción",
+            "fecha": "Fecha",
+            "id_proyecto": "Proyecto",
+            "id_cuenta_1": "Cuenta Propia",
+            "id_cuenta_2": "Cuenta Externa",
+            "tipo_trax": "Tipo de Transacción"
+        }
+    },
+    "con": {
+        "title": "Contabilidad y Registros"
+    },
+    "balance": {
+        "title": "Saldos Disponibles",
+        "table": {
+            "title": "Saldos Disponibles",
+            "cuenta": "Cuenta",
+            "balance": "Saldo"
         }
     },
     "sidebar": {
@@ -164,6 +230,7 @@
         "nodatast": "No se encontró ninguna información referente a esta consulta."
     },
     "actions": {
+        "action": "Acción",
         "new": "Añadir",
         "edit": "Actualizar",
         "delete": "Eliminar",
@@ -187,5 +254,31 @@
     "auth": {
         "nopermit": "Este usuario no posee los derechos suficientes.",
         "error_generic": "Un problema a ocurrido, intente nuevamente."
+    },
+    "general":{
+        "bank_account_type": {
+            "S": "Ahorro",
+            "N": "Nomina",
+            "C": "Corriente"
+        },
+        "bank_account_type_synbol": {
+            "S": "(A)",
+            "N": "(N)",
+            "C": "(C)"
+        },
+        "trax_type" : {
+            "I": "INGRESO",
+            "O": "EGRESO"
+        },
+        "payment_type" : {
+            "C": "EFECTIVO",
+            "D": "DÉBITO",
+            "K": "CHEQUE"
+        },
+        "payment_type_symnbol" : {
+            "C": "(E)",
+            "D": "(D)",
+            "K": "(C)"
+        }
     }
 }
