@@ -16,7 +16,7 @@ class TransaccionesoService {
         return http().get(`/${route}/`).then(cb);
     }
     get_cuentas(search, origin) {
-        return http().get(`/${route}/cuentas/${search}${origin ? `&${origin}`: ''}`).then(cb);
+        return http().get(`/${route}/cuentas/${search}${origin ? `&${origin}` : ''}`).then(cb);
     }
     get_proyectos(search) {
         return http().get(`/${route}/proyectos/${search}`).then(cb);
@@ -24,11 +24,17 @@ class TransaccionesoService {
     get_balance() {
         return http().get(`/${route}/balance/1`).then(cb);
     }
+    get_wallet(field, value) {
+        return http().get(`/${route}/wallet/${field}&${value}`).then(cb);
+    }
+    getPersonas(search) {
+        return http().get(`/${route}/personas/${search}`).then(cb);
+    }
 
     create(data) {
         return http().post(`/${route}/`, data).then(cb);
     }
-    
+
     update(data, id) {
         return http().put(`/${route}/${id}`, data).then(cb);
     }

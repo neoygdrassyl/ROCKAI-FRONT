@@ -15,6 +15,9 @@ class ProyectoService {
     getAll() {
         return http().get(`/${route}/`).then(cb);
     }
+    view(id) {
+        return http().get(`/${route}/view/${id}`).then(cb);
+    }
 
     create(data) {
         return http().post(`/${route}/`, data).then(cb);

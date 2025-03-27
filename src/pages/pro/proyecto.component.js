@@ -1,32 +1,32 @@
-import { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router";
+import { useEffect, useState, useContext } from 'react';
+import { useLocation } from 'react-router';
+import { toast } from 'react-toastify';
 import { Alert, Button, ButtonGroup, Dialog, DialogBody, Tooltip } from '@blueprintjs/core';
-import { AuthContext } from "../../utils/context/auth.context.ts";
-import { AppContext } from "../../utils/context/app.context.js";
-import cuentasService from "../../services/cuentas.service.js";
-import TableApp from "../../utils/components/table.component.js";
-import FormComponent from "../../utils/components/form.component.js";
-import Vars from "../../utils/json/variables.json"
+import { useTranslation } from 'react-i18next';
+import proyectosService from '../../services/proyectos.service.js';
+import TableApp from '../../utils/components/table.component.js';
+import { AuthContext } from '../../utils/context/auth.context.ts';
+import FormComponent from '../../utils/components/form.component.js';
+import { AppContext } from '../../utils/context/app.context.js';
+import ProyectoShowMore from './proyectoShow.component.js';
 
-export default function Cuentas(props) {
-    const { refresh, serRefresh } = props
+export default function Proyectos(props) {
     const [data, setData] = useState([])
     const [item, setItem] = useState(null)
     const [isLoading, setLoading] = useState(false)
     const [alert, setAlert] = useState(false)
     const [modal, setModal] = useState(false)
+    const [canCreate] = useState(false)
     const authContext = useContext(AuthContext)
     const appContext = useContext(AppContext)
     const location = useLocation()
     const { t } = useTranslation();
     const toastInfo = (msg) => toast.info(msg, { autoClose: 1500, theme: "light", });
 
-    function list(page = 1, pageSize = 20, field = null, value = null, es_propia = null) {
+    function list(page = 1, pageSize = 20, field, value) {
         if (authContext.verify(location, "GET")) {
             setLoading(true);
-            if (field && value) cuentasService.search(page, pageSize, field, value, es_propia)
+            if (field && value) proyectosService.search(page, pageSize, field, value)
                 .then(res => {
                     setData(res.data);
                 })
@@ -34,7 +34,7 @@ export default function Cuentas(props) {
                 .finally(() => {
                     setLoading(false);
                 })
-            else cuentasService.list(page, pageSize, es_propia)
+            else proyectosService.list(page, pageSize)
                 .then(res => {
                     setData(res.data);
                 })
@@ -50,7 +50,7 @@ export default function Cuentas(props) {
 
     function get(i) {
         if (authContext.verify(location, "GET")) {
-            cuentasService.get(i.id)
+            proyectosService.get(i.id)
                 .then(res => {
                     setItem(res.data);
                     setModal(true);
@@ -62,14 +62,13 @@ export default function Cuentas(props) {
         } else {
             toast.warning(t('auth.nopermit'))
         }
-
     }
 
     function create(form) {
         if (authContext.verify(location, "POST")) {
             setModal(false);
             toastInfo(t('actions.procesing'));
-            cuentasService.create(form)
+            proyectosService.create(form)
                 .then(res => {
                     if (res.data) {
                         toast.dismiss();
@@ -78,7 +77,7 @@ export default function Cuentas(props) {
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
-                    serRefresh(!refresh);
+                    list();
                 })
         } else {
             toast.warning(t('auth.nopermit'));
@@ -90,7 +89,7 @@ export default function Cuentas(props) {
         if (authContext.verify(location, "PUT")) {
             setModal(false);
             toastInfo(t('actions.procesing'))
-            cuentasService.update(form, id)
+            proyectosService.update(form, id)
                 .then(res => {
                     if (res.data) {
                         toast.dismiss();
@@ -99,7 +98,7 @@ export default function Cuentas(props) {
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
-                    serRefresh(!refresh);
+                    list();
                 })
         } else {
             toast.warning(t('auth.nopermit'))
@@ -111,7 +110,7 @@ export default function Cuentas(props) {
         if (authContext.verify(location, "DELETE")) {
             setModal(false);
             toastInfo(t('actions.procesing'))
-            cuentasService.delete(id)
+            proyectosService.delete(id)
                 .then(res => {
                     if (res.data) {
                         toast.dismiss();
@@ -120,7 +119,7 @@ export default function Cuentas(props) {
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
-                    serRefresh(!refresh);
+                    list();
                 })
         } else {
             toast.warning(t('auth.nopermit'))
@@ -128,33 +127,16 @@ export default function Cuentas(props) {
 
     }
 
-    async function getPair(search) {
-        if (authContext.verify(location, "GET")) {
-            return cuentasService.getPersonas(search)
-                .then(res => {
-                    return res.data;
-                })
-                .catch(error => {
-                    appContext.errorHandler(error, toast, t);
-                    return []
-                })
-        } else {
-            toast.warning(t('auth.nopermit'));
-            return []
-        }
-
-    }
-
     async function list_csv(field = null, value = null) {
             if (authContext.verify(location, "GET")) {
                 toastInfo(t('actions.procesing'));
-                if (field && value) return cuentasService.search(1, 9999999, field, value)
+                if (field && value) return proyectosService.search(1, 9999999, field, value)
                     .then(res => (
                         res.data
                     ))
                     .catch(error => appContext.errorHandler(error, toast, t))
                     .finally(() =>  toast.dismiss())
-                else return cuentasService.list(1, 9999999)
+                else return proyectosService.list(1, 9999999)
                     .then(res => (
                         res.data
                     ))
@@ -167,59 +149,89 @@ export default function Cuentas(props) {
         }
 
     useEffect(() => {
-        list();
+        list()
     }, []);
-
-    useEffect(() => {
-        if(refresh){
-            list();
-            serRefresh(false);
-        }
-    }, [refresh]);
 
 
     const columns = [
         {
-            name: t("cuentas.table.descripcion"),
-            value: "descripcion",
-            text: row => row.descripcion,
+            name: t("pro.table.codigo"),
+            value: "codigo",
+            text: row => row.codigo,
             component: row => <>
-                <Tooltip content={row.es_propia ? t("cuentas.table.is_owned") : t("cuentas.table.not_owned")} placement="top">
-                    <><span className={`bp5-icon bp5-icon-${row.es_propia ? 'input' : 'output'} text-${row.es_propia ? 'success' : 'danger'}`} /></>
-                </Tooltip>
-                {` ${row.descripcion || ''}`}
+                {row.estado === 1
+                    ? <Tooltip content={t("pro.table.shiped")} placement="top">
+                        <><span className={`bp5-icon bp5-icon-thumbs-up text-success`} /></>
+                    </Tooltip>
+                    : null}
+                {row.estado === 0
+                    ? <Tooltip content={t("pro.table.in_progress")} placement="top">
+                        <><span className={`bp5-icon bp5-icon-build text-danger`} /></>
+                    </Tooltip>
+                    : null}
+                {` ${row.codigo}`}
             </>
         },
         {
-            name: t("cuentas.table.nombre"),
+            name: t("pro.table.estado"),
+            csvText: row => row.estado === 1 ? t("pro.table.shiped") : t("pro.table.in_progress"),
+        },
+        {
+            name: t("pro.table.nombre"),
             value: "nombre",
-            text: row => row.nombre
+            text: row => row.nombre,
         },
         {
-            name: t("cuentas.table.nr_cuenta"),
-            value: "nr_cuenta",
-            text: row => row.nr_cuenta,
-            component: row => <>
-                <Tooltip content={t("general.bank_account_type." + row.tipo)} placement="top">
-                    <span className={`fw-bold`} >{t('general.bank_account_type_synbol.' + row.tipo)}</span>
-                </Tooltip>
-                {` ${row.nr_cuenta}`}
-            </>
+            name: t("pro.table.location"),
+            text: row => `${row.municipio ? row.municipio + ',' : ''} ${row.direccion || ''}`,
         },
         {
-            name: t("cuentas.table.bank_account_type"),
-            csvText: row => t("general.bank_account_type." + row.tipo),
+            name: t("pro.table.municipio"),
+            value: "municipio",
+            omit: true
         },
         {
-            name: t("cuentas.table.banco"),
-            text: row => row.banco
+            name: t("pro.table.direccion"),
+            value: "direccion",
+            omit: true
         },
         {
-            name: t("actions.action"),
+            name: t("pro.table.fecha_inicio"),
+            value: "fecha_inicio",
+            text: row => row.fecha_inicio,
+        },
+        {
+            name: t("pro.table.fecha_entrega"),
+            value: "fecha_entrega",
+            text: row => row.fecha_entrega,
+        },
+        {
+            name: t("pro.table.cliente"),
+            csvText: row => row.cliente,
+        },
+        {
+            name: t("pro.table.cliente_tipo"),
+            csvText: row => t("general.doc_type."+ row.cliente_tipo),
+        },
+        {
+            name: t("pro.table.cliente_documento"),
+            csvText: row =>  row.cliente_tipo === 'N' ? appContext.formatId(row.cliente_documento):  appContext.formatNit(row.cliente_documento),
+        },
+        {
+            name: t("pro.table.base"), 
+            csvText: row => appContext.formatCurrency(row.base),
+        },
+        {
+            name: t("pro.table.valor"),
+            csvText: row => appContext.formatCurrency(row.valor),
+        },
+        {
+            name: t("pro.table.action"),
             width: '120px',
             omitCsv: true,
             component: row => <>
                 <ButtonGroup>
+                    {authContext.verify(location, "GET") ? <ProyectoShowMore id={row.id} /> : null}
                     {authContext.verify(location, "PUT") ? <>
                         <Tooltip content={t('actions.edit')} placement="top">
                             <Button icon="edit" intent='warning' onClick={() => get(row)} />
@@ -241,25 +253,25 @@ export default function Cuentas(props) {
 
     const FORM = (i) => [
         {
-            title: t('cuentas.form.section_1'),
+            title: t('pro.form.section_1'),
             inputs: [
                 [
-                    { id: "tipo", required: true, defaultValue: i?.tipo, title: t('cuentas.form.tipo'), placeholder: t('cuentas.form.tipo'), icon: "tag", type: "select", list: Vars.bank_account_type.map(i => ({ value: i, text: t(`general.bank_account_type.${i}`) })) },
-                    { id: "nr_cuenta", required: true, defaultValue: i?.nr_cuenta, title: t('cuentas.form.nr_cuenta'), placeholder: t('cuentas.form.nr_cuenta'), icon: "grid", },
-                    { id: "descripcion", required: true, defaultValue: i?.descripcion, title: t('cuentas.form.descripcion'), placeholder: t('cuentas.form.descripcion'), icon: "font", },
-                    { id: "banco", defaultValue: i?.banco, title: t('cuentas.form.banco'), placeholder: t('cuentas.form.banco'), icon: "bank-account", type: 'list', list: appContext.getBanksList() },
+                    { id: "codigo", required: true, defaultValue: i?.codigo, title: t('pro.form.codigo'), placeholder: t('pro.form.codigo'), icon: "tag", },
+                    { id: "nombre", required: true, defaultValue: i?.nombre, title: t('pro.form.nombre'), placeholder: t('pro.form.nombre'), icon: "tag", },
+                    { id: "municipio", defaultValue: i?.municipio, title: t('pro.form.municipio'), placeholder: t('pro.form.municipio'), icon: "map-marker", type: "list", list: appContext.getCityList() },
+                    { id: "direccion", defaultValue: i?.direccion, title: t('pro.form.direccion'), placeholder: t('pro.form.direccion'), icon: "home", },
                 ],
                 [
-                    { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.nombre, title: t('cuentas.form.id_persona'), placeholder: t('cuentas.form.id_persona'), icon: "person", type: 'list', api: getPair },
-                    { id: "es_propia", required: true, defaultValue: i?.es_propia, title: t('cuentas.form.es_propia'), placeholder: t('cuentas.form.es_propia'), icon: "tick", type: "select", list: [{ value: 0, text: t('cuentas.form.no') }, { value: 1, text: t('cuentas.form.yes') }] },
+                    { id: "fecha_inicio", defaultValue: i?.fecha_inicio, title: t('pro.form.fecha_inicio'), placeholder: t('pro.form.fecha_inicio'), type: "date" },
+                    { id: "fecha_entrega", defaultValue: i?.fecha_entrega, title: t('pro.form.fecha_entrega'), placeholder: t('pro.form.fecha_entrega'), type: "date" },
+                    { id: "estado", defaultValue: i?.estado, title: t('pro.form.estado'), placeholder: t('pro.form.estado'), icon: "folder-open", hide: !i, type: "select", list: [{ value: 0, text: t('pro.form.open') }, { value: 1, text: t('pro.form.close') }] },
                 ],
             ]
         },
     ]
 
-
     const MODAL = (i) => <Dialog
-        title={i ? t('cuentas.form.edit').replace('%VAR%', i.descripcion) : t('cuentas.form.new')}
+        title={i ? t('pro.form.edit').replace('%VAR%', i.nombre) : t('pro.form.new')}
         icon={i ? "edit" : "add"}
         isOpen={modal} onClose={() => setModal(false)}
         className='modal-app'>
@@ -294,33 +306,33 @@ export default function Cuentas(props) {
             remove(item?.id);
         }}
     >
-        <p>{t('actions.bodyDelete').replace('%VAR%', item?.descripcion || '')}</p>
+        <p>{t('actions.bodyDelete').replace('%VAR%', item?.nombre)}</p>
 
     </Alert>
-
     return (
         <div>
-            <hr />
             {ALERT()}
             {MODAL(item)}
             <TableApp
                 data={data}
                 columns={columns}
                 loading={isLoading}
-                title={t('cuentas.table.title')}
-                id="cuentas"
+                title={t("pro.table.title")}
                 search
-                btn={authContext.verify(location, "POST") ? <Button icon="add" text={t('actions.new')} intent="primary" onClick={() => {
-                    setItem(null);
-                    setModal(true);
-                }} /> : null}
+                btn={canCreate && authContext.verify(location, "POST")
+                    ? <Button icon="add" text={t('actions.new')} intent="primary" onClick={() => {
+                        setItem(null);
+                        setModal(true);
+                    }} />
+                    : null}
                 reload={list}
                 reloadPag
                 csv
-                csvName={ t("cuentas.table.csv")}
+                csvName={ t("pro.table.csv")}
                 csvApi={list_csv}
             />
 
         </div>
+
     );
 }

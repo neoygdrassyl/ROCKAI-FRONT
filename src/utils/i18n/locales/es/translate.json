@@ -46,12 +46,21 @@
             "codigo": "Código",
             "nombre": "Nombre",
             "municipio": "Municipio",
+            "direccion": "Dirección",
             "fecha_inicio": "Fecha Inicio",
             "fecha_entrega": "Fecha Entrega",
             "estado": "Estado",
             "action": "Acción",
-            "active": "En Proceso...",
-            "close": "Finalizado"
+            "shiped": "Finalizado",
+            "in_progress": "En Proceso",
+            "close": "Finalizado",
+            "location": "localización",
+            "csv": "Proyectos",
+            "cliente": "Cliente",
+            "cliente_tipo": "Tipo Documento",
+            "cliente_documento": "Documento",
+            "base": "Valor Base",
+            "valor": "Valor Total"
         },
         "form": {
             "new": "Añadir Proyecto",
@@ -66,6 +75,23 @@
             "estado": "Estado",
             "open": "En Proceso",
             "close": "Finalizado"
+        },
+        "more":{
+            "title": "Mas información",
+            "title_proyecto": "Proyecto: %VAR%",
+            "title_cotizacion": "Cotización",
+            "nombre": "Nombre:",
+            "localizacion": "localización:",
+            "fecha_inicio": "Fecha de Inicio:",
+            "fecha_entrega": "Fecha de Entrega:",
+            "cotizacion": "Cotización:",
+            "fecha_cotizacion": "Fecha de Cotización:",
+            "base": "Valor Base:",
+            "valor": "Valor Total:",
+            "cotizador": "Cliente:",
+            "contacto": "Contacto:",
+            "shiped": "Finalizado",
+            "in_progress": "En Proceso"
         }
     },
     "personas": {
@@ -136,7 +162,9 @@
             "nr_cuenta": "N° Cuenta",
             "banco": "Banco",
             "action": "Acci",
-            "approve": "Aprobadar"
+            "approve": "Aprobadar",
+            "bank_account_type": "Tipo de Cuenta",
+            "csv": "Cuentas de Cobro"
         },
         "form": {
             "section_1": "Información General",
@@ -157,13 +185,16 @@
         "table": {
             "title": "Ingresos / Egresos",
             "cuenta": "Cuenta",
-            "cuenta_1": "Cuenta Propia",
-            "cuenta_2": "Cuenta Transacción",
+            "cuenta_1": "Cuenta A",
+            "cuenta_2": "Cuenta B",
             "proyecto": "Proyecto",
             "descripcion": "Descripción",
             "monto": "Monto",
             "fecha": "Fecha",
-            "nombre": "Tercero"
+            "nombre": "Tercero",
+            "tipo_trax": "Tipo de Transacción",
+            "tipo_pago": "Tipo de Pago",
+            "csv": "Ingresos & Egresos"
         },
         "form": {
             "section_1": "Información Transacción",
@@ -174,8 +205,8 @@
             "descripcion": "Descripción",
             "fecha": "Fecha",
             "id_proyecto": "Proyecto",
-            "id_cuenta_1": "Cuenta Propia",
-            "id_cuenta_2": "Cuenta Externa",
+            "id_cuenta_1": "Cuenta A",
+            "id_cuenta_2": "Cuenta B",
             "tipo_trax": "Tipo de Transacción"
         }
     },
@@ -187,7 +218,27 @@
         "table": {
             "title": "Saldos Disponibles",
             "cuenta": "Cuenta",
-            "balance": "Saldo"
+            "balance": "Saldo",
+            "csv": "Balance"
+        }
+    },
+    "wallet": {
+        "title": "Estado de Cartera",
+        "table": {
+            "title": "Estado de Cartera",
+            "fecha": "Fecha",
+            "codigo": "Código",
+            "descriccion": "Descripción",
+            "valor": "Valor",
+            "abono": "Abono / Anticipo",
+            "balance": "Saldo",
+            "persona": "Tercero",
+            "proyecto": "Proyecto",
+            "shiped": "Finalizado",
+            "in_progress": "En Progreso",
+            "balance_total": "SALDO TOTAL",
+            "balance_shiped": "SALDO PROYECTOS ENTREGADOS",
+            "csv": "Estado de Cartera %VAR%"
         }
     },
     "sidebar": {
@@ -249,10 +300,13 @@
         "creaated": "Entrada creada exitosamente.",
         "edited": "Entrada actualizada exitosamente.",
         "deleted": "Entrada eliminada exitosamente.",
-        "bodyDelete": "¿Esta seguro de eliminar de formar permanente la entrada: %VAR%?"
+        "bodyDelete": "¿Esta seguro de eliminar de formar permanente la entrada: %VAR%?",
+        "see_more": "Ver mas",
+        "csv": "Descargar CSV",
+        "csv_doc_name": "Documento"
     },
     "auth": {
-        "nopermit": "Este usuario no posee los derechos suficientes.",
+        "nopermit": "La sesión de usuario ha caducado, por favor inicie sesión nuevamente.",
         "error_generic": "Un problema a ocurrido, intente nuevamente."
     },
     "general":{
@@ -279,6 +333,10 @@
             "C": "(E)",
             "D": "(D)",
             "K": "(C)"
+        },
+        "doc_type": {
+            "N": "Cédula",
+            "J": "NIT"
         }
     }
 }

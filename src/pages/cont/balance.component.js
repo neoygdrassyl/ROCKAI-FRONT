@@ -39,7 +39,7 @@ export default function Balance(props) {
     }, []);
 
     useEffect(() => {
-        get_balance()
+        if(refresh) get_balance()
     }, [refresh]);
 
     const columns = [
@@ -62,6 +62,8 @@ export default function Balance(props) {
             id="balance"
             reload={get_balance}
             noPag
+            csv
+            csvName={t("balance.table.csv")}
         />
 
     </div>

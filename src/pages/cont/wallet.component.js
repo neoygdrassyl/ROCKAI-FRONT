@@ -6,65 +6,167 @@ import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../utils/context/auth.context.ts";
 import { AppContext } from "../../utils/context/app.context.js";
 import { useLocation } from "react-router";
+import { Button, Tooltip } from "@blueprintjs/core";
+import ListInput from "../../utils/components/list.input.js";
 
 export default function Wallet(props) {
     const { refresh } = props
     const [data, setData] = useState([])
+    const [find, setFind] = useState('persona')
     const [isLoading, setLoading] = useState(false)
     const authContext = useContext(AuthContext)
     const appContext = useContext(AppContext)
     const { t } = useTranslation();
     const location = useLocation();
 
-    function get_balance() {
+    function get_wallet() {
         if (authContext.verify(location, "GET")) {
-            setLoading(true);
-            transaccionesoService.get_balance()
+            const field = document.getElementById('Wallet-options').value;
+            const value = document.getElementById('Wallet-list-input').value;
+            if(value != null && value !== '') {
+                setLoading(true);
+                transaccionesoService.get_wallet(field, value)
                 .then(res => {
-                    setData([]);
+                    setData(res.data);
 
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
                     setLoading(false);
                 })
+            }
         } else {
             toast.warning(t('auth.nopermit'))
         }
 
     }
 
-    useEffect(() => {
-        get_balance()
-    }, []);
+    async function getPairProyectos(search) {
+        if (authContext.verify(location, "GET")) {
+            return transaccionesoService.get_proyectos(search)
+                .then(res => {
+                    return res.data;
+                })
+                .catch(error => {
+                    appContext.errorHandler(error, toast, t);
+                    return []
+                })
+        } else {
+            toast.warning(t('auth.nopermit'));
+            return []
+        }
+
+    }
+
+    async function getPairPersonas(search) {
+        if (authContext.verify(location, "GET")) {
+            return transaccionesoService.getPersonas(search)
+                .then(res => {
+                    return res.data;
+                })
+                .catch(error => {
+                    appContext.errorHandler(error, toast, t);
+                    return []
+                })
+        } else {
+            toast.warning(t('auth.nopermit'));
+            return []
+        }
+
+    };
+
+    const onChangeSelect = (e) => {
+        setFind(e.target.value)
+    }
 
     useEffect(() => {
-        get_balance()
+        if(refresh) get_wallet()
     }, [refresh]);
+
 
     const columns = [
         {
-            name: t("Wallet.table.cuenta"),
-            text: row => row.descripcion,
+            name: t("wallet.table.fecha"),
+            text: row => row.fecha,
         },
         {
-            name: t("Wallet.table.balance"),
-            text: row => appContext.formatCurrency(row.balance),
+            name: t("wallet.table.codigo"),
+            text: row => row.codigo,
+            component: row => <>
+                {row.estado === 1
+                    ? <Tooltip content={t("wallet.table.shiped")} placement="top">
+                        <><span className={`bp5-icon bp5-icon-thumbs-up text-success`} /></>
+                    </Tooltip>
+                    : null}
+                {row.estado === 0
+                    ? <Tooltip content={t("wallet.table.in_progress")} placement="top">
+                        <><span className={`bp5-icon bp5-icon-build text-danger`} /></>
+                    </Tooltip>
+                    : null}
+
+                {` ${row.codigo || ''}`}
+            </>,
+        },
+        {
+            name: t("wallet.table.descriccion"),
+            text: row => row.fecha ? row.descriccion : t(`wallet.table.${row.descriccion}`),
+        },
+        {
+            name: t("wallet.table.valor"),
+            text: row => row.valor ? appContext.formatCurrency(row.valor) : null,
+        },
+        {
+            name: t("wallet.table.abono"),
+            text: row => row.abono ? appContext.formatCurrency(row.abono) : null,
+        },
+        {
+            name: t("wallet.table.balance"),
+            text: row => row.balance ? appContext.formatCurrency(row.balance) : null,
         },
     ];
 
+
+    const findComponent = () => {
+        return <>
+            <div className={`bp5-form-group mt-3 table-select pb-3 me-2`}>
+                <div className="bp5-form-content">
+                    <div className={`bp5-input-group`}>
+                        <span className={`bp5-icon bp5-icon-filter`}></span>
+                        <select id={`Wallet-options`} className="bp5-select" placeholder={t('table.filter')} dir="auto" onChange={onChangeSelect}>
+                            <span className={`bp5-icon bp5-icon-chevron-down`}></span>
+                            <option value={'persona'}>{t('wallet.table.persona')}</option>
+                            <option value={'proyecto'}>{t('wallet.table.proyecto')}</option>
+                        </select >
+                    </div>
+                </div>
+            </div>
+            <div className="me-2">
+                <ListInput
+                    api={find === 'persona' ? getPairPersonas : getPairProyectos}
+                    id={`Wallet-list-input`}
+                    placeholder={t('table.search')}
+                    icon="search"
+                    right={<Button intent="primary" icon="arrow-right" onClick={() => get_wallet()} />}
+                    onKeyDown={(event) => { if (event.key === 'Enter') get_wallet() }}
+                    useFill={false}
+                />
+            </div>
+        </>
+    }
+
     return <div>
-            <h3>{t("Wallet.table.title")}</h3>
-        {data.length
-            ? <TableApp
-                data={data}
-                columns={columns}
-                loading={isLoading}
-                title={t("Wallet.table.title")}
-                id="Wallet"
-                reload={get_balance}
-                noPag
-            />
-            : null}
+        <TableApp
+            data={data}
+            columns={columns}
+            loading={isLoading}
+            title={t("wallet.table.title")}
+            id="wallet"
+            reload={get_wallet}
+            noPag
+            btn={findComponent()}
+            csv
+            csvName={t("wallet.table.csv").replace('%VAR%', document.getElementById(`Wallet-list-input-ignore`)?.value || '')}
+        />
+
     </div>
 }

@@ -147,7 +147,7 @@ export default function Personas() {
             name: t("personas.table.cedula_nit"),
             value: "cedula_nit",
             text: row => row.cedula_nit,
-            component: row => appContext.formatId(row.cedula_nit)
+            component: row => row.tipo === 'N' ? appContext.formatId(row.cedula_nit):  appContext.formatNit(row.cedula_nit),
         },
         {
             name: t("personas.table.telefono"),

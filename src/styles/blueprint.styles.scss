@@ -1,9 +1,13 @@
 @import "./variables";
 
-.bp5-intent-primary{
-    .bp5-button-text{
-      color: $white;
-    }
+.bp5-intent-primary {
+  .bp5-button-text {
+    color: $white;
   }
-  
-  
+}
+
+.bp5-intent-success {
+  .bp5-button-text {
+    color: $white;
+  }
+}

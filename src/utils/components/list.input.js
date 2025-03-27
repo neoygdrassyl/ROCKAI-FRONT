@@ -19,13 +19,16 @@ export default function ListInput(props) {
         onFocus,
         onChange,
         onSelect,
+        onKeyDown,
         icon,
         right,
         api,
         apiExt,
+        useFill,
     } = props
     const { t } = useTranslation();
     const [apiList, setList] = useState([])
+    const [fill] = useState(useFill === true || useFill === false ? useFill : true)
 
     useEffect(() => {
         document.getElementById(id).value = defaultValue || '';
@@ -61,25 +64,26 @@ export default function ListInput(props) {
                 setList(newList);
             }
         }
+        if(onKeyDown) onKeyDown(e)
 
     }
 
 
 
-    return <div className={`bp5-form-group bp5-fill ${intent ? 'bp5-intent-' + intent : null} ${disabled ? 'disabled' : null}`}>
+    return <div className={`bp5-form-group bp5-${fill ? 'fill': ''} ${intent ? 'bp5-intent-' + intent : null} ${disabled ? 'disabled' : null}`}>
         {title ? <label className="bp5-label" for={id}>
             {title}
             {required ? <span className="bp5-text-muted">{t('actions.required')}</span> : null}
         </label> : null}
         <div className="bp5-form-content">
-            <div className={`bp5-input-group bp5-fill ${intent ? 'bp5-intent-' + intent : null}`}>
+            <div className={`bp5-input-group bp5-${fill ? 'fill': ''} ${intent ? 'bp5-intent-' + intent : null}`}>
                 {icon ? <span className={`bp5-icon bp5-icon-${icon}`}></span> : null}
                 {api ? <input id={id} type="hidden" /> : null}
                 <input id={api ? id + '-ignore' : id} list={"list-" + id} className="bp5-input" placeholder={placeholder} dir="auto" value={value} defaultValue={api ? defaultText : defaultValue}
                     onclick={onclick} onBlur={onBlur} onFocus={onFocus} onChange={onChangeHandler} disabled={disabled} onKeyDown={handleKeyDown}
 
                 />
-                {right ? <span className={`bp5-icon bp5-icon-${icon}`}></span> : null}
+                {right || null}
                 <datalist id={"list-" + id}>
                     {api
                         ?

@@ -174,10 +174,10 @@ export default function HRS() {
             component: row => <>
                 <ButtonGroup>
                     {authContext.verify(location, "PUT") ? <>
-                        <Tooltip content={t('actions.active')} placement="top">
+                        <Tooltip content={row.active ? t('actions.active'): t('actions.deactive')} placement="top">
                             {row.active
-                                ? <Button icon="lightbulb" intent='primary' onClick={() => activateEmpleado(row.id, false)} />
-                                : <Button icon="lightbulb" onClick={() => activateEmpleado(row.id, true)} />
+                                ? <Button icon="tick" intent='primary' onClick={() => activateEmpleado(row.id, false)} />
+                                : <Button icon="cross" onClick={() => activateEmpleado(row.id, true)} />
                             }
                         </Tooltip>
                         <Tooltip content={t('actions.edit')} placement="top">

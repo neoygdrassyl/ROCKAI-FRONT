@@ -128,6 +128,27 @@ export default function Transacciones(props) {
 
     }
 
+    async function list_csv(field = null, value = null) {
+        if (authContext.verify(location, "GET")) {
+            toastInfo(t('actions.procesing'));
+            if (field && value) return transaccionesoService.search(1, 9999999, field, value)
+                .then(res => (
+                    res.data
+                ))
+                .catch(error => appContext.errorHandler(error, toast, t))
+                .finally(() =>  toast.dismiss())
+            else return transaccionesoService.list(1, 9999999)
+                .then(res => (
+                    res.data
+                ))
+                .catch(error => appContext.errorHandler(error, toast, t))
+                .finally(() =>  toast.dismiss())
+        } else {
+            toast.warning(t('auth.nopermit'))
+        }
+
+    }
+
     async function getPairCuentas(search, apiExt) {
         if (authContext.verify(location, "GET")) {
             return transaccionesoService.get_cuentas(search, apiExt.origin)
@@ -167,7 +188,7 @@ export default function Transacciones(props) {
     }, []);
 
     useEffect(() => {
-        list()
+        if (refresh) list()
     }, [refresh]);
 
     const columns = [
@@ -175,12 +196,7 @@ export default function Transacciones(props) {
             name: t("trax.table.cuenta_1"),
             name_search: t("trax.table.cuenta"),
             value: "cuenta",
-            component: row => <>
-                <Tooltip content={t("general.trax_type." + row.tipo_trax)} placement="top">
-                    <><span className={`bp5-icon bp5-icon-${row.tipo_trax === 'I' ? 'input' : 'output'} text-${row.tipo_trax === 'I' ? 'success' : 'danger'}`} /></>
-                </Tooltip>
-                {` ${row.cuenta_1}`}
-            </>
+            text: row => row.cuenta_1
         },
         {
             name: t("trax.table.cuenta_2"),
@@ -203,13 +219,26 @@ export default function Transacciones(props) {
         },
         {
             name: t("trax.table.monto"),
+            text: row => appContext.formatCurrency(row.monto),
             component: row => <>
-              <Tooltip content={t("general.payment_type." + row.tipo_pago)} placement="top">
+                <Tooltip content={t("general.trax_type." + row.tipo_trax)} placement="top">
+                    <><span className={`me-1 bp5-icon bp5-icon-${row.tipo_trax === 'I' ? 'input' : 'output'} text-${row.tipo_trax === 'I' ? 'success' : 'danger'}`} /></>
+                </Tooltip>
+                <Tooltip content={t("general.payment_type." + row.tipo_pago)} placement="top">
                     <span className={`fw-bold`} >{t('general.payment_type_symnbol.' + row.tipo_pago)}</span>
                 </Tooltip>
+
                 {` ${appContext.formatCurrency(row.monto)}`}
             </>
 
+        },
+        {
+            name: t("trax.table.tipo_trax"),
+            csvText: row => t("general.trax_type." + row.tipo_trax),
+        },
+        {
+            name: t("trax.table.tipo_pago"),
+            csvText: row => t("general.payment_type." + row.tipo_pago),
         },
         {
             name: t("trax.table.fecha"),
@@ -219,6 +248,7 @@ export default function Transacciones(props) {
         {
             name: t("actions.action"),
             width: '120px',
+            omitCsv: true,
             component: row => <>
                 <ButtonGroup>
                     {authContext.verify(location, "PUT") ? <>
@@ -319,6 +349,9 @@ export default function Transacciones(props) {
                 }} /> : null}
                 reload={list}
                 reloadPag
+                csv
+                csvName={ t("trax.table.csv")}
+                csvApi={list_csv}
             />
 
         </div>

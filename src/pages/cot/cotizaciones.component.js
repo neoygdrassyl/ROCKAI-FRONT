@@ -170,10 +170,10 @@ export default function Cotizacion() {
     function getFinalPrice(row) {
         let sum = Number(0);
         sum += Number(row.monto || 0);
-        sum += (sum * Number(row.iva || 0)) / 100.0;
-        sum += (sum * Number(row.adm || 0)) / 100.0;
-        sum += (sum * Number(row.imp || 0)) / 100.0;
-        sum += (sum * Number(row.uti || 0)) / 100.0;
+        sum += (row.monto * Number(row.iva || 0)) / 100.0;
+        sum += (row.monto * Number(row.adm || 0)) / 100.0;
+        sum += (row.monto * Number(row.imp || 0)) / 100.0;
+        sum += (row.monto * Number(row.uti || 0)) / 100.0;
         return appContext.formatCurrency(sum)
     }
 
@@ -188,7 +188,7 @@ export default function Cotizacion() {
             text: row => row.descripcion,
             component: row => <>
                 <Tooltip content={row.aprobado ? t("cotizacion.table.approved") : t("cotizacion.table.notapproved")} placement="top">
-                    <><span className={`bp5-icon bp5-icon-folder-open text-${row.aprobado ? 'success' : 'danger'}`} /></>
+                    <><span className={`bp5-icon bp5-icon-${row.aprobado ? 'thumbs-up' : 'remove'} text-${row.aprobado ? 'success' : 'danger'}`} /></>
                 </Tooltip>
                 {` ${row.descripcion}`}
             </>
@@ -251,7 +251,7 @@ export default function Cotizacion() {
             inputs: [
                 [
                     { id: "descripcion", required: true, defaultValue: i?.descripcion, title: t('cotizacion.form.descripcion'), placeholder: t('cotizacion.form.descripcion'), icon: "tag", },
-                    { id: "fecha", defaultValue: i?.fecha, title: t('cotizacion.form.fecha'), placeholder: t('cotizacion.form.fecha'), type: "date", },
+                    { id: "fecha", required: true, defaultValue: i?.fecha, title: t('cotizacion.form.fecha'), placeholder: t('cotizacion.form.fecha'), type: "date", },
                     { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.nombre, title: t('cotizacion.form.id_persona'), placeholder: t('cotizacion.form.id_persona'), icon: "person", type: 'list', api: getPair },
                 ],
                 [
