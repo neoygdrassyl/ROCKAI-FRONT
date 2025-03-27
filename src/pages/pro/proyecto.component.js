@@ -9,6 +9,7 @@ import { AuthContext } from '../../utils/context/auth.context.ts';
 import FormComponent from '../../utils/components/form.component.js';
 import { AppContext } from '../../utils/context/app.context.js';
 import ProyectoShowMore from './proyectoShow.component.js';
+import Facturas from './facturas.component.js';
 
 export default function Proyectos(props) {
     const [data, setData] = useState([])
@@ -227,11 +228,12 @@ export default function Proyectos(props) {
         },
         {
             name: t("pro.table.action"),
-            width: '120px',
+            width: '160px',
             omitCsv: true,
             component: row => <>
                 <ButtonGroup>
                     {authContext.verify(location, "GET") ? <ProyectoShowMore id={row.id} /> : null}
+                    {false ? <Facturas id={row.id} /> : null}
                     {authContext.verify(location, "PUT") ? <>
                         <Tooltip content={t('actions.edit')} placement="top">
                             <Button icon="edit" intent='warning' onClick={() => get(row)} />
