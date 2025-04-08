@@ -1,6 +1,10 @@
 import { useContext } from "react";
 import { AuthContext } from "../../utils/context/auth.context.ts";
 import { useTranslation } from "react-i18next";
+import GEN_IMG from "./gen.jpg"
+import TRAX_IMG from "./trax.jpg"
+import PRO_IMG from "./project.png"
+import WALLET_IMG from "./wallet.jpg"
 
 export default function Home() {
 
@@ -10,38 +14,81 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Inicio</h1>
-      <p>Usuario registrado: {user?.name || ''}</p>
-      <p>Rol de usuario: {t(`users.role.${user?.cargo || ''}`)}</p>
-      <div className="card">
-        <div className="row">
-          <div className="col border">
-            <p>Permisos sobre Recursos humanos:</p>
-          </div>
-          <div className="col border">
-              <ul>
-                <li>VER: <strong>{verify({pathname: '/hr'}, "GET") ? "PERMITDO": "BLOQUEADO"}</strong></li>
-                <li>CREAR: <strong>{verify({pathname: '/hr'}, "POST") ? "PERMITDO": "BLOQUEADO"}</strong></li>
-                <li>ACTUALIZAR: <strong>{verify({pathname: '/hr'}, "PUT") ? "PERMITDO": "BLOQUEADO"}</strong></li>
-                <li>ELIMINAR: <strong>{verify({pathname: '/hr'}, "DELETE") ? "PERMITDO": "BLOQUEADO"}</strong></li>
-              </ul>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col border">
-            <p>Permisos sobre Proyectos:</p>
-          </div>
-          <div className="col border">
-              <ul>
-                <li>VER: <strong>{verify({pathname: '/pro'}, "GET") ? "PERMITDO": "BLOQUEADO"}</strong></li>
-                <li>CREAR: <strong>{verify({pathname: '/pro'}, "POST") ? "PERMITDO": "BLOQUEADO"}</strong></li>
-                <li>ACTUALIZAR: <strong>{verify({pathname: '/pro'}, "PUT") ? "PERMITDO": "BLOQUEADO"}</strong></li>
-                <li>ELIMINAR: <strong>{verify({pathname: '/pro'}, "DELETE") ? "PERMITDO": "BLOQUEADO"}</strong></li>
-              </ul>
-          </div>
-        </div>
-      </div>
+      <h1>ROCKAI</h1>
+      <h3>{user?.name || ''}: {t(`users.role.${user?.cargo || ''}`)}</h3>
 
+      <div className="row">
+
+        <div className="col-lg-4 col-md-6 col-sm-12">
+          <div className="card mb-3">
+            <div className="card-header bg-warning"><h5>Vista General</h5></div>
+            <img src={GEN_IMG} class="card-img-top" alt="..." height={120}  />
+            <div class="card-body">
+              <p class="card-text">
+                <ul>
+                  <li>Proyectos en Curso: 3</li>
+                  <li>Proyectos Facturados: 2</li>
+                  <li>Proyecto 3</li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-lg-4 col-md-6 col-sm-12">
+          <div className="card mb-3">
+            <div className="card-header bg-warning"><h5>Proyectos a entregar</h5></div>
+            <img src={PRO_IMG} class="card-img-top" alt="..." height={120}  />
+            <div class="card-body">
+              <p class="card-text">
+                <ul>
+                  <li>Proyecto 1</li>
+                  <li>Proyecto 2</li>
+                  <li>Proyecto 3</li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+
+
+        <div className="col-lg-4 col-md-6 col-sm-12">
+          <div className="card mb-3">
+            <div className="card-header bg-warning"><h5>Ultimas transacciones</h5></div>
+            <img src={TRAX_IMG} class="card-img-top" alt="..." height={120}  />
+            <div class="card-body">
+              <p class="card-text">
+                <ul>
+                  <li>TRAX 1 - Ingreso : &4.500.000</li>
+                  <li>TRAX 2 - Ingreso : &4.500.000</li>
+                  <li>TRAX 3 - Ingreso : &4.500.000</li>
+                  <li>TRAX 3 - Ingreso : &4.500.000</li>
+                  <li>TRAX 3 - Ingreso : &4.500.000</li>
+                  <li>TRAX 3 - Ingreso : &4.500.000</li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-lg-4 col-md-6 col-sm-12">
+          <div className="card mb-3">
+            <div className="card-header bg-warning"><h5>Saldo de Cartera</h5></div>
+            <img src={WALLET_IMG} class="card-img-top" alt="..." height={120}  />
+            <div class="card-body">
+              <p class="card-text">
+                <ul>
+                  <li>Cuenta 1: $4.500.000</li>
+                  <li>Cuenta 2: $4.500.000</li>
+                  <li>Cuenta 3: $4.500.000</li>
+                  <li>Total: $4.500.000</li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }

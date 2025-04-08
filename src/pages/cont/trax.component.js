@@ -17,6 +17,8 @@ export default function Transacciones(props) {
     const [isLoading, setLoading] = useState(false)
     const [alert, setAlert] = useState(false)
     const [modal, setModal] = useState(false)
+    const [traxRelation, selecTraxRelation] = useState(null)
+    const [traxRelationEdit, selecTraxRelationEdit] = useState(null)
     const authContext = useContext(AuthContext)
     const appContext = useContext(AppContext)
     const location = useLocation()
@@ -53,6 +55,9 @@ export default function Transacciones(props) {
             transaccionesoService.get(i.id)
                 .then(res => {
                     setItem(res.data);
+                    if (res.data.cuenta_2) selecTraxRelationEdit('trax')
+                    if (res.data.persona) selecTraxRelationEdit('persona');
+                    if (res.data.proyecto) selecTraxRelationEdit('pro');
                     setModal(true);
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
@@ -136,13 +141,13 @@ export default function Transacciones(props) {
                     res.data
                 ))
                 .catch(error => appContext.errorHandler(error, toast, t))
-                .finally(() =>  toast.dismiss())
+                .finally(() => toast.dismiss())
             else return transaccionesoService.list(1, 9999999)
                 .then(res => (
                     res.data
                 ))
                 .catch(error => appContext.errorHandler(error, toast, t))
-                .finally(() =>  toast.dismiss())
+                .finally(() => toast.dismiss())
         } else {
             toast.warning(t('auth.nopermit'))
         }
@@ -183,6 +188,64 @@ export default function Transacciones(props) {
 
     }
 
+    async function getPairPersonas(search) {
+        if (authContext.verify(location, "GET")) {
+            return transaccionesoService.getPersonas(search)
+                .then(res => {
+                    return res.data;
+                })
+                .catch(error => {
+                    appContext.errorHandler(error, toast, t);
+                    return []
+                })
+        } else {
+            toast.warning(t('auth.nopermit'));
+            return []
+        }
+
+    }
+
+    function getRelation(trax) {
+        if (trax) {
+            if (traxRelationEdit === "trax") return "trax";
+            else if (traxRelationEdit === "persona") return "persona";
+            else if (traxRelationEdit === "pro") return "pro";
+            else return traxRelation;
+        }
+        return traxRelation;
+    }
+
+    function getRelationComponent(trax) {
+        if (trax.cuenta_2) return <>
+            <Tooltip content={t("trax.table.cuenta_1")} placement="top">
+                <><span className={`bp5-icon bp5-icon-bank-account text-primary`} /></>
+            </Tooltip>
+            {` ${trax.cuenta_2}`}
+        </>;
+        if (trax.persona) return <>
+            <Tooltip content={t("trax.table.nombre")} placement="top">
+                <><span className={`bp5-icon bp5-icon-person text-primary`} /></>
+            </Tooltip>
+            {` ${trax.persona}`}
+            { }
+        </>;
+        if (trax.proyecto) return <>
+            <Tooltip content={t("trax.table.proyecto")} placement="top">
+                <><span className={`bp5-icon bp5-icon-projects text-primary`} /></>
+            </Tooltip>
+            {` ${trax.proyecto}`}
+        </>;
+        return '';
+
+    }
+
+    function getRelationText(trax) {
+        if (trax.cuenta_2) return trax.cuenta_2;
+        if (trax.persona) return trax.persona;
+        if (trax.proyecto) return trax.proyecto
+        return '';
+    }
+
     useEffect(() => {
         list();
     }, []);
@@ -193,29 +256,22 @@ export default function Transacciones(props) {
 
     const columns = [
         {
+            name: t("trax.table.id"),
+            value: "id",
+            width: '120px',
+            text: row => row.id
+        },
+        {
             name: t("trax.table.cuenta_1"),
             name_search: t("trax.table.cuenta"),
             value: "cuenta",
             text: row => row.cuenta_1
         },
-        {
-            name: t("trax.table.cuenta_2"),
-            text: row => row.cuenta_2
-        },
-        {
-            name: t("trax.table.proyecto"),
-            value: "proyecto",
-            text: row => row.proyecto,
-        },
+
         {
             name: t("trax.table.descripcion"),
             value: "descripcion",
             text: row => row.descripcion,
-        },
-        {
-            name: t("trax.table.nombre"),
-            value: "nombre",
-            omit: true,
         },
         {
             name: t("trax.table.monto"),
@@ -224,10 +280,11 @@ export default function Transacciones(props) {
                 <Tooltip content={t("general.trax_type." + row.tipo_trax)} placement="top">
                     <><span className={`me-1 bp5-icon bp5-icon-${row.tipo_trax === 'I' ? 'input' : 'output'} text-${row.tipo_trax === 'I' ? 'success' : 'danger'}`} /></>
                 </Tooltip>
-                <Tooltip content={t("general.payment_type." + row.tipo_pago)} placement="top">
-                    <span className={`fw-bold`} >{t('general.payment_type_symnbol.' + row.tipo_pago)}</span>
+                {row.es_prestamo === 1 ? 
+                    <Tooltip content={t("trax.table.es_prestamo")} placement="top">
+                    <><span className={`me-1 bp5-icon bp5-icon-bank-account text-primary`} /></>
                 </Tooltip>
-
+                : null}
                 {` ${appContext.formatCurrency(row.monto)}`}
             </>
 
@@ -237,13 +294,24 @@ export default function Transacciones(props) {
             csvText: row => t("general.trax_type." + row.tipo_trax),
         },
         {
-            name: t("trax.table.tipo_pago"),
-            csvText: row => t("general.payment_type." + row.tipo_pago),
-        },
-        {
             name: t("trax.table.fecha"),
             value: "fecha",
             text: row => row.fecha
+        },
+        {
+            name: t("trax.table.relacion"),
+            component: row => getRelationComponent(row),
+            text: row => getRelationText(row),
+        },
+        {
+            name: t("trax.table.nombre"),
+            value: "nombre",
+            omit: true,
+        },
+        {
+            name: t("trax.table.proyecto"),
+            value: "proyecto",
+            omit: true,
         },
         {
             name: t("actions.action"),
@@ -275,16 +343,21 @@ export default function Transacciones(props) {
             title: t('trax.form.section_1'),
             inputs: [
                 [
+                    { id: "id_cuenta_1", required: true, defaultValue: i?.id_cuenta_1, defaultText: i?.cuenta_1, title: t('trax.form.id_cuenta_1'), placeholder: t('trax.form.id_cuenta_1'), icon: "bank-account", type: 'list', api: getPairCuentas, apiExt: { origin: 1 }, },
                     { id: "monto", required: true, defaultValue: i?.monto, title: t('trax.form.monto'), placeholder: t('trax.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, },
-                    { id: "tipo_pago", required: true, defaultValue: i?.tipo_pago, title: t('trax.form.tipo_pago'), placeholder: t('trax.form.tipo_pago'), icon: "dollar", type: 'select', list: Vars.payment_type.map(i => ({ value: i, text: t(`general.payment_type.${i}`) })) },
+                    { id: "tipo_pago", required: true, defaultValue: i?.tipo_pago, title: t('trax.form.tipo_pago'), placeholder: t('trax.form.tipo_pago'), icon: "dollar", type: 'select', list: Vars.payment_type.map(i => ({ value: i, text: t(`general.payment_type.${i}`) })), hide: true },
                     { id: "descripcion", defaultValue: i?.descripcion, title: t('trax.form.descripcion'), placeholder: t('trax.form.descripcion'), icon: "font", },
                     { id: "fecha", required: true, defaultValue: i?.fecha, title: t('trax.form.fecha'), placeholder: t('trax.form.fecha'), type: 'date', },
-                    { id: "id_proyecto", defaultValue: i?.id_proyecto, defaultText: i?.proyecto, title: t('trax.form.id_proyecto'), placeholder: t('trax.form.id_proyecto'), icon: "projects", type: 'list', api: getPairProyectos },
                 ],
                 [
-                    { id: "id_cuenta_1", required: true, defaultValue: i?.id_cuenta_1, defaultText: i?.cuenta_1, title: t('trax.form.id_cuenta_1'), placeholder: t('trax.form.id_cuenta_1'), icon: "bank-account", type: 'list', api: getPairCuentas, apiExt: { origin: 1 }, },
+
                     { id: "tipo_trax", required: true, defaultValue: i?.tipo_trax, title: t('trax.form.tipo_trax'), placeholder: t('trax.form.tipo_trax'), icon: "tag", type: 'select', list: Vars.trax_type.map(i => ({ value: i, text: t(`general.trax_type.${i}`) })) },
-                    { id: "id_cuenta_2", required: true, defaultValue: i?.id_cuenta_2, defaultText: i?.cuenta_2, title: t('trax.form.id_cuenta_2'), placeholder: t('trax.form.id_cuenta_2'), icon: "bank-account", type: 'list', api: getPairCuentas, apiExt: { origin: null }, },
+                    { id: "relation", required: true, defaultValue: i ? getRelation(i) : traxRelation, title: t('trax.form.relacion_trax'), placeholder: t('trax.form.relacion_trax'), icon: "tag", type: 'select', list: Vars.trax_relations.map(i => ({ value: i, text: t(`trax.form.relation.${i}`) })), onChange: (e) => { selecTraxRelation(e.target.value); selecTraxRelationEdit(null) } },
+
+                    { id: "id_proyecto", required: true, defaultValue: i?.id_proyecto, defaultText: i?.proyecto, title: t('trax.form.id_proyecto'), placeholder: t('trax.form.id_proyecto'), icon: "projects", type: 'list', api: getPairProyectos, hide: getRelation(i) !== "pro", },
+                    { id: "id_cuenta_2", required: true, defaultValue: i?.id_cuenta_2, defaultText: i?.cuenta_2, title: t('trax.form.id_cuenta_2'), placeholder: t('trax.form.id_cuenta_2'), icon: "bank-account", type: 'list', api: getPairCuentas, apiExt: { origin: null }, hide: getRelation(i) !== "trax", },
+                    { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.persona, title: t('trax.form.id_persona'), placeholder: t('trax.form.id_persona'), icon: "person", type: 'list', api: getPairPersonas, hide: getRelation(i) !== "persona", },
+                    { id: "es_prestamo", required: true, defaultValue: i?.es_prestamo, title: t('trax.form.es_prestamo'), placeholder: t('trax.form.es_prestamo'), icon: "bank-account", type: 'select', list: Vars.boolean.map(i => ({ value: i, text: t(`general.boolean.${i}`) })), hide: getRelation(i) !== "persona", },
                 ],
             ]
         },
@@ -292,7 +365,7 @@ export default function Transacciones(props) {
 
 
     const MODAL = (i) => <Dialog
-        title={i ? t('trax.form.edit').replace('%VAR%', i.descripcion) : t('trax.form.new')}
+        title={i ? t('trax.form.edit').replace('%VAR%', `${i.id} - ${i.descripcion}`) : t('trax.form.new')}
         icon={i ? "edit" : "add"}
         isOpen={modal} onClose={() => setModal(false)}
         className='modal-app'>
@@ -350,7 +423,7 @@ export default function Transacciones(props) {
                 reload={list}
                 reloadPag
                 csv
-                csvName={ t("trax.table.csv")}
+                csvName={t("trax.table.csv")}
                 csvApi={list_csv}
             />
 

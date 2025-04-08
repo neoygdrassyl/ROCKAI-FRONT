@@ -23,17 +23,17 @@ export default function Wallet(props) {
         if (authContext.verify(location, "GET")) {
             const field = document.getElementById('Wallet-options').value;
             const value = document.getElementById('Wallet-list-input').value;
-            if(value != null && value !== '') {
+            if (value != null && value !== '') {
                 setLoading(true);
                 transaccionesoService.get_wallet(field, value)
-                .then(res => {
-                    setData(res.data);
+                    .then(res => {
+                        setData(res.data);
 
-                })
-                .catch(error => appContext.errorHandler(error, toast, t))
-                .finally(() => {
-                    setLoading(false);
-                })
+                    })
+                    .catch(error => appContext.errorHandler(error, toast, t))
+                    .finally(() => {
+                        setLoading(false);
+                    })
             }
         } else {
             toast.warning(t('auth.nopermit'))
@@ -80,7 +80,7 @@ export default function Wallet(props) {
     }
 
     useEffect(() => {
-        if(refresh) get_wallet()
+        if (refresh) get_wallet()
     }, [refresh]);
 
 
@@ -90,34 +90,16 @@ export default function Wallet(props) {
             text: row => row.fecha,
         },
         {
-            name: t("wallet.table.codigo"),
-            text: row => row.codigo,
-            component: row => <>
-                {row.estado === 1
-                    ? <Tooltip content={t("wallet.table.shiped")} placement="top">
-                        <><span className={`bp5-icon bp5-icon-thumbs-up text-success`} /></>
-                    </Tooltip>
-                    : null}
-                {row.estado === 0
-                    ? <Tooltip content={t("wallet.table.in_progress")} placement="top">
-                        <><span className={`bp5-icon bp5-icon-build text-danger`} /></>
-                    </Tooltip>
-                    : null}
-
-                {` ${row.codigo || ''}`}
-            </>,
+            name: t("wallet.table.categoria"),
+            text: row => t(`wallet.table.categorias.${row.categoria}`),
         },
         {
             name: t("wallet.table.descriccion"),
-            text: row => row.fecha ? row.descriccion : t(`wallet.table.${row.descriccion}`),
+            text: row => row.descriccion,
         },
         {
             name: t("wallet.table.valor"),
             text: row => row.valor ? appContext.formatCurrency(row.valor) : null,
-        },
-        {
-            name: t("wallet.table.abono"),
-            text: row => row.abono ? appContext.formatCurrency(row.abono) : null,
         },
         {
             name: t("wallet.table.balance"),

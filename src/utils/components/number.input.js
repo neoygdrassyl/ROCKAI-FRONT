@@ -49,7 +49,8 @@ export default function NumberInput(props) {
 
     const onFocusHandler = (e) => {
         const v = e.target.value;
-        if (format && v) document.getElementById(id).value = (v).match(/\d/g)?.join('') || 0;
+        if (v === '0')  document.getElementById(id).value = '';
+        else if (format && v) document.getElementById(id).value = (v).match(/\d/g)?.join('') || 0;
         if (onFocus) onBlur(e);
     }
 

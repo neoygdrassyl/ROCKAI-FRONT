@@ -10,6 +10,7 @@ import FormComponent from '../../utils/components/form.component.js';
 import { AppContext } from '../../utils/context/app.context.js';
 import ProyectoShowMore from './proyectoShow.component.js';
 import Facturas from './facturas.component.js';
+import Vars from "../../utils/json/variables.json"
 
 export default function Proyectos(props) {
     const [data, setData] = useState([])
@@ -129,25 +130,25 @@ export default function Proyectos(props) {
     }
 
     async function list_csv(field = null, value = null) {
-            if (authContext.verify(location, "GET")) {
-                toastInfo(t('actions.procesing'));
-                if (field && value) return proyectosService.search(1, 9999999, field, value)
-                    .then(res => (
-                        res.data
-                    ))
-                    .catch(error => appContext.errorHandler(error, toast, t))
-                    .finally(() =>  toast.dismiss())
-                else return proyectosService.list(1, 9999999)
-                    .then(res => (
-                        res.data
-                    ))
-                    .catch(error => appContext.errorHandler(error, toast, t))
-                    .finally(() =>  toast.dismiss())
-            } else {
-                toast.warning(t('auth.nopermit'))
-            }
-    
+        if (authContext.verify(location, "GET")) {
+            toastInfo(t('actions.procesing'));
+            if (field && value) return proyectosService.search(1, 9999999, field, value)
+                .then(res => (
+                    res.data
+                ))
+                .catch(error => appContext.errorHandler(error, toast, t))
+                .finally(() => toast.dismiss())
+            else return proyectosService.list(1, 9999999)
+                .then(res => (
+                    res.data
+                ))
+                .catch(error => appContext.errorHandler(error, toast, t))
+                .finally(() => toast.dismiss())
+        } else {
+            toast.warning(t('auth.nopermit'))
         }
+
+    }
 
     useEffect(() => {
         list()
@@ -161,13 +162,18 @@ export default function Proyectos(props) {
             text: row => row.codigo,
             component: row => <>
                 {row.estado === 1
-                    ? <Tooltip content={t("pro.table.shiped")} placement="top">
+                    ? <Tooltip content={t("general.pro_states.1")} placement="top">
                         <><span className={`bp5-icon bp5-icon-thumbs-up text-success`} /></>
                     </Tooltip>
                     : null}
                 {row.estado === 0
-                    ? <Tooltip content={t("pro.table.in_progress")} placement="top">
+                    ? <Tooltip content={t("general.pro_states.0")} placement="top">
                         <><span className={`bp5-icon bp5-icon-build text-danger`} /></>
+                    </Tooltip>
+                    : null}
+                  {row.estado === 2
+                    ? <Tooltip content={t("general.pro_states.2")} placement="top">
+                        <><span className={`bp5-icon bp5-icon-remove text-warming`} /></>
                     </Tooltip>
                     : null}
                 {` ${row.codigo}`}
@@ -175,7 +181,7 @@ export default function Proyectos(props) {
         },
         {
             name: t("pro.table.estado"),
-            csvText: row => row.estado === 1 ? t("pro.table.shiped") : t("pro.table.in_progress"),
+            csvText: row => t("general.pro_states."+row.estado),
         },
         {
             name: t("pro.table.nombre"),
@@ -212,14 +218,14 @@ export default function Proyectos(props) {
         },
         {
             name: t("pro.table.cliente_tipo"),
-            csvText: row => t("general.doc_type."+ row.cliente_tipo),
+            csvText: row => t("general.doc_type." + row.cliente_tipo),
         },
         {
             name: t("pro.table.cliente_documento"),
-            csvText: row =>  row.cliente_tipo === 'N' ? appContext.formatId(row.cliente_documento):  appContext.formatNit(row.cliente_documento),
+            csvText: row => row.cliente_tipo === 'N' ? appContext.formatId(row.cliente_documento) : appContext.formatNit(row.cliente_documento),
         },
         {
-            name: t("pro.table.base"), 
+            name: t("pro.table.base"),
             csvText: row => appContext.formatCurrency(row.base),
         },
         {
@@ -266,7 +272,7 @@ export default function Proyectos(props) {
                 [
                     { id: "fecha_inicio", defaultValue: i?.fecha_inicio, title: t('pro.form.fecha_inicio'), placeholder: t('pro.form.fecha_inicio'), type: "date" },
                     { id: "fecha_entrega", defaultValue: i?.fecha_entrega, title: t('pro.form.fecha_entrega'), placeholder: t('pro.form.fecha_entrega'), type: "date" },
-                    { id: "estado", defaultValue: i?.estado, title: t('pro.form.estado'), placeholder: t('pro.form.estado'), icon: "folder-open", hide: !i, type: "select", list: [{ value: 0, text: t('pro.form.open') }, { value: 1, text: t('pro.form.close') }] },
+                    { id: "estado", defaultValue: i?.estado, title: t('pro.form.estado'), placeholder: t('pro.form.estado'), icon: "folder-open", hide: !i, type: "select", list: Vars.pro_states.map(i => ({ value: i, text: t('general.pro_states.' + i) })) },
                 ],
             ]
         },
@@ -330,7 +336,7 @@ export default function Proyectos(props) {
                 reload={list}
                 reloadPag
                 csv
-                csvName={ t("pro.table.csv")}
+                csvName={t("pro.table.csv")}
                 csvApi={list_csv}
             />
 

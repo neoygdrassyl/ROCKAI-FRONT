@@ -88,7 +88,7 @@ export default function Cotizacion() {
     }
 
     function create_proyect(form) {
-        if (authContext.verify({pathname: '/pro'}, "POST")) {
+        if (authContext.verify({ pathname: '/pro' }, "POST")) {
             setModalP(false);
             toastInfo(t('actions.procesing'));
             proyectosService.create(form)
@@ -260,6 +260,19 @@ export default function Cotizacion() {
                     { id: "adm", defaultValue: i?.adm, title: t('cotizacion.form.adm'), placeholder: t('cotizacion.form.adm'), icon: "percentage", type: 'percent', },
                     { id: "imp", defaultValue: i?.imp, title: t('cotizacion.form.imp'), placeholder: t('cotizacion.form.imp'), icon: "percentage", type: 'percent', },
                     { id: "uti", defaultValue: i?.uti, title: t('cotizacion.form.uti'), placeholder: t('cotizacion.form.uti'), icon: "percentage", type: 'percent', },
+                ],
+            ]
+        },
+        {
+            title: t('cotizacion.form.section_2'),
+            multiple: true,
+            hide: i ? false : true,
+            defaultValues: i?.servicios,
+            name:  'servicios',
+            inputs: [
+                [
+                    { id: "nombre", index: 'nombre', title: t('cotizacion.form.nombre'), placeholder: t('cotizacion.form.nombre'), icon: "tag", },
+                    { id: "desc", index: 'desc', title: t('cotizacion.form.desc'), placeholder: t('cotizacion.form.desc'), icon: "tag", },
                 ],
             ]
         },

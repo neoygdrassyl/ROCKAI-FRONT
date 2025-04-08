@@ -278,6 +278,9 @@ export default function HRS() {
                 <p>{t('actions.bodyDelete').replace('%VAR%', item?.nombre)}</p>
             </Alert>
             {MODAL(item)}
+
+            <Personas />
+            
             <h2>{t("hr.title")}</h2>
 
             <TableApp
@@ -295,7 +298,7 @@ export default function HRS() {
 
             />
 
-            <Personas />
+           
         </div>
 
     );

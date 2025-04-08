@@ -15,6 +15,7 @@ export default function Personas() {
     const [isLoading, setLoading] = useState(false)
     const [alert, setAlert] = useState(false)
     const [modal, setModal] = useState(false)
+    const [personType, setPersonType] = useState('N')
     const authContext = useContext(AuthContext)
     const appContext = useContext(AppContext)
     const location = useLocation()
@@ -126,6 +127,10 @@ export default function Personas() {
 
     }
 
+    function onChangePersonType(e) {
+        setPersonType(e.target.value)
+    }
+
     useEffect(() => {
         list()
     }, []);
@@ -189,9 +194,9 @@ export default function Personas() {
             title: t('personas.form.section_1'),
             inputs: [
                 [
-                    { id: "tipo", defaultValue: i?.tipo, title: t('personas.form.tipo'), placeholder: t('personas.form.tipo'), icon: "tag", type: "select", list: [{ value: 'N', text: t('personas.form.N') }, { value: 'J', text: t('personas.form.J') }] },
+                    { id: "tipo", defaultValue: i?.tipo || personType, title: t('personas.form.tipo'), placeholder: t('personas.form.tipo'), icon: "tag", type: "select", list: [{ value: 'N', text: t('personas.form.N') }, { value: 'J', text: t('personas.form.J') }], onChange: onChangePersonType },
                     { id: "name", required: true, defaultValue: i?.nombre, title: t('personas.form.nombre'), placeholder: t('personas.form.nombre'), icon: "person", },
-                    { id: "cedula_nit", required: true, defaultValue: i?.cedula_nit, title: t('personas.form.cedula_nit'), placeholder: t('personas.form.cedula_nit'), icon: "id-number", format: appContext.formatId },
+                    { id: "cedula_nit", required: true, defaultValue: i?.cedula_nit, title: t('personas.form.cedula_nit'), placeholder: t('personas.form.cedula_nit'), icon: "id-number", format: personType === 'N' ? appContext.formatId : appContext.formatNit},
                     { id: "ciudad", defaultValue: i?.ciudad, title: t('personas.form.ciudad'), placeholder: t('personas.form.ciudad'), icon: "home", type: "list", list: appContext.getCityList() },
                     { id: "direccion", defaultValue: i?.direccion, title: t('personas.form.direccion'), placeholder: t('personas.form.direccion'), icon: "home", },
                 ],

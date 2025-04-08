@@ -76,7 +76,7 @@
             "open": "En Proceso",
             "close": "Finalizado"
         },
-        "more":{
+        "more": {
             "title": "Mas información",
             "title_proyecto": "Proyecto: %VAR%",
             "title_cotizacion": "Cotización",
@@ -139,6 +139,7 @@
         },
         "form": {
             "section_1": "Cotizacipon",
+            "section_2": "Servicios",
             "new": "Nueva Cotización",
             "edit": "Actualizar Cotización: %VAR%",
             "descripcion": "Descripción",
@@ -148,13 +149,15 @@
             "iva": "IVA",
             "adm": "Costo Administración",
             "uti": "Costo Utilidad",
-            "imp": "Cost Impuesto"
+            "imp": "Cost Impuesto",
+            "nombre": "Nombre Servicio",
+            "desc": "Descripción Servicio"
         }
     },
     "cuentas": {
-        "title": "Cuentas de Cobro",
+        "title": "Cuentas de Bancarias",
         "table": {
-            "title": "Cuentas de Cobro",
+            "title": "Cuentas de Bancarias",
             "descripcion": "Nombre",
             "is_owned": "Propia",
             "not_owned": "Externa",
@@ -164,11 +167,11 @@
             "action": "Acci",
             "approve": "Aprobadar",
             "bank_account_type": "Tipo de Cuenta",
-            "csv": "Cuentas de Cobro"
+            "csv": "Cuentas de Bancarias"
         },
         "form": {
             "section_1": "Información General",
-            "new": "Añadir nueva Cuenta de Cobro",
+            "new": "Añadir nueva Cuenta Bancaria",
             "edit": "Actualizar Cuenta: %VAR%",
             "tipo": "Tipo de Cuenta",
             "nr_cuenta": "N° Cuenta",
@@ -185,8 +188,8 @@
         "table": {
             "title": "Ingresos / Egresos",
             "cuenta": "Cuenta",
-            "cuenta_1": "Cuenta A",
-            "cuenta_2": "Cuenta B",
+            "cuenta_1": "Cuenta",
+            "cuenta_2": "Cuenta",
             "proyecto": "Proyecto",
             "descripcion": "Descripción",
             "monto": "Monto",
@@ -194,7 +197,10 @@
             "nombre": "Tercero",
             "tipo_trax": "Tipo de Transacción",
             "tipo_pago": "Tipo de Pago",
-            "csv": "Ingresos & Egresos"
+            "csv": "Ingresos & Egresos",
+            "id": "Número",
+            "relacion": "Relación",
+            "es_prestamo": "PRÉSTAMO"
         },
         "form": {
             "section_1": "Información Transacción",
@@ -205,9 +211,19 @@
             "descripcion": "Descripción",
             "fecha": "Fecha",
             "id_proyecto": "Proyecto",
-            "id_cuenta_1": "Cuenta A",
-            "id_cuenta_2": "Cuenta B",
-            "tipo_trax": "Tipo de Transacción"
+            "id_cuenta_1": "Cuenta",
+            "id_cuenta_2": "Cuenta",
+            "tipo_trax": "Tipo de Transacción",
+            "relacion_trax": "Relación de Transacción",
+            "id_persona": "Tercero",
+            "es_prestamo": "Préstamo",
+            "relation": {
+                "0": "Nada",
+                "pro": "Proyecto",
+                "persona": "Tercero",
+                "cuenta": "Cuenta",
+                "trax": "Transacción"
+            }
         }
     },
     "con": {
@@ -238,7 +254,17 @@
             "in_progress": "En Progreso",
             "balance_total": "SALDO TOTAL",
             "balance_shiped": "SALDO PROYECTOS ENTREGADOS",
-            "csv": "Estado de Cartera %VAR%"
+            "csv": "Estado de Cartera %VAR%",
+            "categoria": "Categoria",
+            "categorias": {
+                "10_pro": "Proyecto",
+                "19_pro": "Total Proyectos",
+                "20_abono": "Abono",
+                "29_abono": "Total Abonos",
+                "30_prestamo": "Préstamo",
+                "39_prestamo": "Total Préstamos",
+                 "balance_total": "Total"
+            }
         }
     },
     "sidebar": {
@@ -303,13 +329,19 @@
         "bodyDelete": "¿Esta seguro de eliminar de formar permanente la entrada: %VAR%?",
         "see_more": "Ver mas",
         "csv": "Descargar CSV",
-        "csv_doc_name": "Documento"
+        "csv_doc_name": "Documento",
+        "add": "Añadir",
+        "remove": "Remover"
     },
     "auth": {
         "nopermit": "La sesión de usuario ha caducado, por favor inicie sesión nuevamente.",
         "error_generic": "Un problema a ocurrido, intente nuevamente."
     },
-    "general":{
+    "general": {
+        "boolean": {
+            "0": "No",
+            "1": "Si"
+        },
         "bank_account_type": {
             "S": "Ahorro",
             "N": "Nomina",
@@ -320,16 +352,16 @@
             "N": "(N)",
             "C": "(C)"
         },
-        "trax_type" : {
+        "trax_type": {
             "I": "INGRESO",
             "O": "EGRESO"
         },
-        "payment_type" : {
+        "payment_type": {
             "C": "EFECTIVO",
             "D": "DÉBITO",
             "K": "CHEQUE"
         },
-        "payment_type_symnbol" : {
+        "payment_type_symnbol": {
             "C": "(E)",
             "D": "(D)",
             "K": "(C)"
@@ -337,6 +369,16 @@
         "doc_type": {
             "N": "Cédula",
             "J": "NIT"
+        },
+        "cot_states": {
+            "0": "No Aprobado",
+            "1": "Aprobado",
+            "2": "Suspendido"
+        },
+        "pro_states": {
+            "0": "En proceso",
+            "1": "Finalizado",
+            "2": "Suspendido"
         }
     }
 }

@@ -16,8 +16,9 @@ export const useApp = () => {
     }
 
     function formatNit(nit) {
-        let text = String(nit)
-        return `${nit.substring(0, text.length - 1).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}-${nit.substring(text.length - 1)}`;
+        let text = String(nit);
+        if (text.length > 9) return `${nit.substring(0, text.length - 1).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}-${nit.substring(text.length - 1)}`;
+        return `${nit.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}-`;
     }
 
     function formatPhone(phoneNumberString) {
@@ -30,10 +31,18 @@ export const useApp = () => {
     }
 
     function formatCurrency(ammount) {
-        let value = new Intl.NumberFormat("es-CO", {
+        let value = Math.abs(ammount);
+        if (ammount < 0) {
+            value = new Intl.NumberFormat("es-CO", {
+                style: "currency", currency: "COP", maximumFractionDigits: 0
+            }
+            ).format((value),);
+            value = `(${value})`
+        }
+        else value = new Intl.NumberFormat("es-CO", {
             style: "currency", currency: "COP", maximumFractionDigits: 0
         }
-        ).format((ammount),);
+        ).format((value),);
         return value
     }
 

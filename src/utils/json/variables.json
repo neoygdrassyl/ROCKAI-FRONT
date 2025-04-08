@@ -21,12 +21,16 @@
             "icon": "people"
         }
     },
+    "boolean": [0, 1],
     "roles": [ "SAD", "ADM", "EXT", "EMP", "CLI" ],
     "formRoles": ["EMP", "ADM"],
     "personType":["N", "J"],
     "contracts": [ "I", "P", "F", "O", "A", "R"],
     "bank_account_type": [ "S", "N", "C"],
     "trax_type": [ "I", "O"],
-    "payment_type": [ "C", "D", "K"]
+    "trax_relations": ["0", "pro", "persona"],
+    "payment_type": [ "C", "D", "K"],
+    "cot_states": [0 , 1, 2],
+    "pro_states": [0, 1]
 
 }
