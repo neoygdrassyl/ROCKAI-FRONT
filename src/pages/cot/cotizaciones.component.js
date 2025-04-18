@@ -9,12 +9,15 @@ import cotizacionesService from "../../services/cotizaciones.service.js";
 import proyectosService from "../../services/proyectos.service.js";
 import TableApp from "../../utils/components/table.component.js";
 import FormComponent from "../../utils/components/form.component.js";
+import Servicios_Builder from "./serviciosBuilder.component.js";
+import serviciosService from "../../services/servicios.service.js";
 
 
 export default function Cotizacion() {
     const [data, setData] = useState([])
     const [item, setItem] = useState(null)
     const [isLoading, setLoading] = useState(false)
+    const [isLoadingServices, setLoadingServices] = useState(false)
     const [alert, setAlert] = useState(false)
     const [modal, setModal] = useState(false)
     const [modaP, setModalP] = useState(false)
@@ -150,6 +153,25 @@ export default function Cotizacion() {
 
     }
 
+    function remove_service(id) {
+        if (authContext.verify(location, "DELETE")) {
+            toastInfo(t('actions.procesing'))
+            return serviciosService.delete(id)
+                .then(res => {
+                    if (res.data) {
+                        toast.dismiss();
+                        toast.success(t('actions.deleted'));
+                        get(item);
+                    }
+                })
+                .catch(error => appContext.errorHandler(error, toast, t))
+                .finally(() => true)
+        } else {
+            toast.warning(t('auth.nopermit'))
+        }
+
+    }
+
     async function getPair(search) {
         if (authContext.verify(location, "GET")) {
             return cotizacionesService.getPersonas(search)
@@ -167,15 +189,8 @@ export default function Cotizacion() {
 
     }
 
-    function getFinalPrice(row) {
-        let sum = Number(0);
-        sum += Number(row.monto || 0);
-        sum += (row.monto * Number(row.iva || 0)) / 100.0;
-        sum += (row.monto * Number(row.adm || 0)) / 100.0;
-        sum += (row.monto * Number(row.imp || 0)) / 100.0;
-        sum += (row.monto * Number(row.uti || 0)) / 100.0;
-        return appContext.formatCurrency(sum)
-    }
+    const codRegex = /^COT\.\d\d\d\.\d\d\d\d$/i;
+    const codRegexPro = /^\d\d\d\.\d\d\d\d$/i;
 
     useEffect(() => {
         list();
@@ -183,15 +198,20 @@ export default function Cotizacion() {
 
     const columns = [
         {
-            name: t("cotizacion.table.descripcion"),
-            value: "descripcion",
-            text: row => row.descripcion,
+            name: t("cotizacion.table.codigo"),
+            value: "codigo",
+            text: row => row.codigo,
             component: row => <>
                 <Tooltip content={row.aprobado ? t("cotizacion.table.approved") : t("cotizacion.table.notapproved")} placement="top">
                     <><span className={`bp5-icon bp5-icon-${row.aprobado ? 'thumbs-up' : 'remove'} text-${row.aprobado ? 'success' : 'danger'}`} /></>
                 </Tooltip>
-                {` ${row.descripcion}`}
+                {` ${row.codigo}`}
             </>
+        },
+        {
+            name: t("cotizacion.table.descripcion"),
+            value: "descripcion",
+            text: row => row.descripcion,
         },
         {
             name: t("cotizacion.table.nombre"),
@@ -205,11 +225,15 @@ export default function Cotizacion() {
         },
         {
             name: t("cotizacion.table.monto"),
-            component: row => appContext.formatCurrency(row.monto)
+            component: row => appContext.cotMontoBase(row)
+        },
+        {
+            name: t("cotizacion.table.iva"),
+            component: row => appContext.cotMontoIva(row, true)
         },
         {
             name: t("cotizacion.table.monto_2"),
-            component: row => getFinalPrice(row)
+            component: row => appContext.cotMontoTotal(row)
         },
         {
             name: t("cotizacion.table.action"),
@@ -244,13 +268,13 @@ export default function Cotizacion() {
         },
     ];
 
-
     const FORM = (i) => [
         {
             title: t('cotizacion.form.section_1'),
             inputs: [
                 [
-                    { id: "descripcion", required: true, defaultValue: i?.descripcion, title: t('cotizacion.form.descripcion'), placeholder: t('cotizacion.form.descripcion'), icon: "tag", },
+                    { id: "codigo", required: true, defaultValue: i?.codigo, title: t('cotizacion.form.codigo'), placeholder: t('cotizacion.form.codigo'), icon: "tag", pattern: codRegex, validateText: t('cotizacion.form.codigo_validate') },
+                    { id: "descripcion", defaultValue: i?.descripcion, title: t('cotizacion.form.descripcion'), placeholder: t('cotizacion.form.descripcion'), icon: "tag", },
                     { id: "fecha", required: true, defaultValue: i?.fecha, title: t('cotizacion.form.fecha'), placeholder: t('cotizacion.form.fecha'), type: "date", },
                     { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.nombre, title: t('cotizacion.form.id_persona'), placeholder: t('cotizacion.form.id_persona'), icon: "person", type: 'list', api: getPair },
                 ],
@@ -267,12 +291,15 @@ export default function Cotizacion() {
             title: t('cotizacion.form.section_2'),
             multiple: true,
             hide: i ? false : true,
-            defaultValues: i?.servicios,
-            name:  'servicios',
+            defaultValues: i?.services,
+            name: 'services',
+            deleteApi: remove_service,
+            deleteAllow: authContext.verify(location, "DELETE"),
             inputs: [
                 [
-                    { id: "nombre", index: 'nombre', title: t('cotizacion.form.nombre'), placeholder: t('cotizacion.form.nombre'), icon: "tag", },
-                    { id: "desc", index: 'desc', title: t('cotizacion.form.desc'), placeholder: t('cotizacion.form.desc'), icon: "tag", },
+                    { component: <Servicios_Builder />, index: 'nombre', id: "nombre", },
+                    { id: "monto", index: 'monto', title: t('servicios.form.monto'), placeholder: t('servicios.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, },
+                    { id: "id_tercero", index: 'id_tercero',  text: 'persona', title: t('servicios.form.tercero'), placeholder: t('servicios.form.tercero'), icon: "person", type: 'list', api: getPair },
                 ],
             ]
         },
@@ -283,9 +310,11 @@ export default function Cotizacion() {
             title: t('pro.form.section_1'),
             inputs: [
                 [
-                    { id: "codigo", required: true, title: t('pro.form.codigo'), placeholder: t('pro.form.codigo'), icon: "tag", },
+                    { id: "codigo", required: true, title: t('pro.form.codigo'), placeholder: t('pro.form.codigo'), icon: "tag", pattern: codRegexPro, validateText: t('pro.form.codigo_validate') },
                     { id: "nombre", required: true, defaultValue: i?.descripcion, title: t('pro.form.nombre'), placeholder: t('pro.form.nombre'), icon: "tag", },
                     { id: "id_cotizacion", defaultValue: i?.id, type: 'hidden' },
+                    { id: "propietario", defaultValue: i?.propietario, title: t('pro.form.propietario'), placeholder: t('pro.form.propietario'), icon: "person" },
+                    { id: "curaduria", defaultValue: i?.curaduria, title: t('pro.form.curaduria'), placeholder: t('pro.form.curaduria'), icon: "tag" },
                 ],
                 [
                     { id: "municipio", title: t('pro.form.municipio'), placeholder: t('pro.form.municipio'), icon: "map-marker", type: "list", list: appContext.getCityList() },

@@ -60,7 +60,35 @@ export const useApp = () => {
         else toast.error(t('auth.error_generic'))
     }
 
+    function cotMontoBase(row) {
+        let sum = Number(0);
+        sum += Number(row.monto || 0);
+        // sum += (row.monto * Number(row.iva || 0)) / 100.0;
+        sum += (row.monto * Number(row.adm || 0)) / 100.0;
+        sum += (row.monto * Number(row.imp || 0)) / 100.0;
+        sum += (row.monto * Number(row.uti || 0)) / 100.0;
+        return formatCurrency(sum)
+    }
 
-    return { getCityList, formatId, formatNit, formatPhone, formatCurrency, emailPattern, errorHandler, getBanksList };
+    function cotMontoTotal(row) {
+        let sum = Number(0);
+        sum += Number(row.monto || 0);
+        sum += (row.monto * Number(row.adm || 0)) / 100.0;
+        sum += (row.monto * Number(row.imp || 0)) / 100.0;
+        sum += (row.monto * Number(row.uti || 0)) / 100.0;
+        sum += cotMontoIva(row);
+        return formatCurrency(sum)
+    }
+
+    function cotMontoIva(row, format = false) {
+        let sum = Number(0);
+        if (row.uti > 0) sum = (((row.monto * Number(row.uti || 0)) / 100.0) * Number(row.iva || 0)) / 100.0;
+        else sum = (row.monto * Number(row.iva || 0)) / 100.0;
+        if (format) return formatCurrency(sum);
+        return sum
+    }
+
+
+    return { getCityList, formatId, formatNit, formatPhone, formatCurrency, emailPattern, errorHandler, getBanksList, cotMontoBase, cotMontoTotal, cotMontoIva };
 };
 

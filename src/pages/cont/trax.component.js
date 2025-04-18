@@ -9,6 +9,7 @@ import transaccionesoService from "../../services/transacciones.service..js";
 import TableApp from "../../utils/components/table.component.js";
 import FormComponent from "../../utils/components/form.component.js";
 import Vars from "../../utils/json/variables.json"
+import ProyectoShowMore from "../pro/proyectoShow.component.js";
 
 export default function Transacciones(props) {
     const { refresh, serRefresh } = props
@@ -229,11 +230,8 @@ export default function Transacciones(props) {
             {` ${trax.persona}`}
             { }
         </>;
-        if (trax.proyecto) return <>
-            <Tooltip content={t("trax.table.proyecto")} placement="top">
-                <><span className={`bp5-icon bp5-icon-projects text-primary`} /></>
-            </Tooltip>
-            {` ${trax.proyecto}`}
+        if (trax.id_proyecto) return <>
+            <ProyectoShowMore id={trax.id_proyecto} text={trax.proyecto} icon={'projects'} />
         </>;
         return '';
 
@@ -262,16 +260,20 @@ export default function Transacciones(props) {
             text: row => row.id
         },
         {
-            name: t("trax.table.cuenta_1"),
-            name_search: t("trax.table.cuenta"),
-            value: "cuenta",
-            text: row => row.cuenta_1
+            name: t("trax.table.fecha"),
+            value: "fecha",
+            text: row => row.fecha
         },
-
         {
             name: t("trax.table.descripcion"),
             value: "descripcion",
             text: row => row.descripcion,
+        },
+
+        {
+            name: t("trax.table.relacion"),
+            component: row => getRelationComponent(row),
+            text: row => getRelationText(row),
         },
         {
             name: t("trax.table.monto"),
@@ -280,28 +282,23 @@ export default function Transacciones(props) {
                 <Tooltip content={t("general.trax_type." + row.tipo_trax)} placement="top">
                     <><span className={`me-1 bp5-icon bp5-icon-${row.tipo_trax === 'I' ? 'input' : 'output'} text-${row.tipo_trax === 'I' ? 'success' : 'danger'}`} /></>
                 </Tooltip>
-                {row.es_prestamo === 1 ? 
+                {row.es_prestamo === 1 ?
                     <Tooltip content={t("trax.table.es_prestamo")} placement="top">
-                    <><span className={`me-1 bp5-icon bp5-icon-bank-account text-primary`} /></>
-                </Tooltip>
-                : null}
+                        <><span className={`me-1 bp5-icon bp5-icon-bank-account text-primary`} /></>
+                    </Tooltip>
+                    : null}
                 {` ${appContext.formatCurrency(row.monto)}`}
             </>
-
+        },
+        {
+            name: t("trax.table.cuenta_1"),
+            name_search: t("trax.table.cuenta"),
+            value: "cuenta",
+            text: row => row.cuenta_1
         },
         {
             name: t("trax.table.tipo_trax"),
             csvText: row => t("general.trax_type." + row.tipo_trax),
-        },
-        {
-            name: t("trax.table.fecha"),
-            value: "fecha",
-            text: row => row.fecha
-        },
-        {
-            name: t("trax.table.relacion"),
-            component: row => getRelationComponent(row),
-            text: row => getRelationText(row),
         },
         {
             name: t("trax.table.nombre"),

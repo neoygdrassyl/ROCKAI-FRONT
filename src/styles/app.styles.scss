@@ -55,39 +55,10 @@
   src: url('../../public/fonts/Acumin-Variable-Concept.ttf') format('truetype'); 
 }  
 
-.bp5-select {
-  width: 100%;
-  appearance: none;
-  background: #fff;
-  font-family: 'FontText';
-  border: none;
-  border-radius: 2px;
-  box-shadow: 0 0 0 0 rgba(33, 93, 176, 0), 0 0 0 0 rgba(33, 93, 176, 0), inset 0 0 0 1px rgba(17, 20, 24, .2), inset 0 1px 1px rgba(17, 20, 24, .3);
-  color: #1c2127;
-  font-size: 14px;
-  font-weight: 400;
-  height: 30px;
-  line-height: 30px;
-  outline: none;
-  padding: 0 10px;
-  text-indent:10px;
-
-  background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
-  background-position: calc(100% - 0.75rem) center !important;
-  -moz-appearance: none !important;
-  -webkit-appearance: none !important;
-
-  option {
-    font-family: 'FontText';
-  }
-}
-
-button.bp5-intent-danger{
-  .bp5-button-text {
-    color: $white;
-  }
-}
-
 .table-select {
   width: 180px;
+}
+
+.cLbche:disabled{
+   display: none !important;
 }

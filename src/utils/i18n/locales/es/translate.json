@@ -44,7 +44,7 @@
         "table": {
             "title": "",
             "codigo": "Código",
-            "nombre": "Nombre",
+            "nombre": "Descripción",
             "municipio": "Municipio",
             "direccion": "Dirección",
             "fecha_inicio": "Fecha Inicio",
@@ -56,31 +56,38 @@
             "close": "Finalizado",
             "location": "localización",
             "csv": "Proyectos",
-            "cliente": "Cliente",
+            "cliente": "Tercero",
             "cliente_tipo": "Tipo Documento",
             "cliente_documento": "Documento",
             "base": "Valor Base",
-            "valor": "Valor Total"
+            "valor": "Valor Total",
+            "curaduria": "Radicado Curaduria",
+            "propietario": "Propietario",
+            "propietario_doc": "Propietario Documento"
         },
         "form": {
             "new": "Añadir Proyecto",
             "edit": "Actualizar Proyecto: %VAR%",
             "section_1": "Datos Proyecto",
             "codigo": "Código",
-            "nombre": "Nombre",
+            "nombre": "Descripción",
             "municipio": "Municipio",
             "direccion": "Dirección",
             "fecha_inicio": "Fecha Inicio",
             "fecha_entrega": "Fecha Entrega",
             "estado": "Estado",
             "open": "En Proceso",
-            "close": "Finalizado"
+            "close": "Finalizado",
+            "codigo_validate": "El campo debe tener el patrón nnn.yyyy",
+            "curaduria": "Radicado Curaduria",
+            "propietario": "Propietario",
+            "propietario_doc": "Propietario Documento"
         },
         "more": {
             "title": "Mas información",
             "title_proyecto": "Proyecto: %VAR%",
             "title_cotizacion": "Cotización",
-            "nombre": "Nombre:",
+            "nombre": "Descripción:",
             "localizacion": "localización:",
             "fecha_inicio": "Fecha de Inicio:",
             "fecha_entrega": "Fecha de Entrega:",
@@ -91,7 +98,10 @@
             "cotizador": "Cliente:",
             "contacto": "Contacto:",
             "shiped": "Finalizado",
-            "in_progress": "En Proceso"
+            "in_progress": "En Proceso",
+            "curaduria": "Radicado Curaduria",
+            "propietario": "Propietario",
+            "propietario_doc": "Propietario Documento"
         }
     },
     "personas": {
@@ -128,30 +138,84 @@
         "table": {
             "title": "Cotizaciones",
             "descripcion": "Descripción",
-            "nombre": "Cotizador",
+            "nombre": "Tercero",
             "monto": "Monto Base",
             "monto_2": "Monto Final",
             "action": "Acción",
             "approved": "Aprobado",
             "notapproved": "No Aprobado",
-            "approve": "Aprobadar",
-            "fecha": "Fecha"
+            "approve": "Aprobar",
+            "fecha": "Fecha",
+            "codigo": "Código",
+            "iva": "IVA"
         },
         "form": {
-            "section_1": "Cotizacipon",
+            "section_1": "Cotización",
             "section_2": "Servicios",
             "new": "Nueva Cotización",
             "edit": "Actualizar Cotización: %VAR%",
             "descripcion": "Descripción",
             "fecha": "Fecha",
-            "id_persona": "Cotizador",
+            "id_persona": "Tercero",
             "monto": "Monto Base",
             "iva": "IVA",
             "adm": "Costo Administración",
             "uti": "Costo Utilidad",
-            "imp": "Cost Impuesto",
-            "nombre": "Nombre Servicio",
-            "desc": "Descripción Servicio"
+            "imp": "Cost Imprevisto",
+            "codigo": "Código",
+            "codigo_validate": "El campo debe tener el patrón COT.nnn.yyyy"
+        }
+    },
+    "servicios": {
+        "form": {
+            "nombre": "Código",
+            "desc": "Nombre Entregable",
+            "tercero": "Tercero",
+            "monto": "Monto",
+            "proceso": "Proceso",
+            "clase": "Clase",
+            "comentario": "Comentario",
+            "codigo": "Código"
+        },
+        "procesos": {
+            "TPG": "Topografía",
+            "SUE": "Suelos",
+            "GEO": "Geología",
+            "ARQ": "Arquitectura",
+            "EST": "Estructura",
+            "ELE": "Eléctrico",
+            "ILU": "Iluminación",
+            "COM": "Comunicaciones",
+            "AA": "Aires acondicionados",
+            "HID": "Hidráulico",
+            "SAN": "Sanitario",
+            "PLU": "Pluvial",
+            "GAS": "Gas",
+            "PCI": "Contra Incendios",
+            "ACU": "Acueducto",
+            "ALC": "Alcantarillado",
+            "GMT": "Geométrico",
+            "PAV": "Estr. Pavimento",
+            "TRA": "Tránsito",
+            "SNL": "Señalización",
+            "URB": "Urbanismo",
+            "PMT": "Plan manejo de tránsito",
+            "PMA": "Ambiental y bioseguridad",
+            "PPT": "Presupuesto y cantidades",
+            "ET": "Esp. Técnicas",
+            "MGA": "MGA",
+            "OC": "Obra Civil",
+            "PC": "Proceso constructivo",
+            "LOC": "Localización",
+            "GEN": "General",
+            "NOES": "No estructural"
+        },
+        "clases": {
+            "PLA": "Plano",
+            "MEM": "Memoria",
+            "INF": "Informe",
+            "DOC": "Documento",
+            "AN": "Anexo"
         }
     },
     "cuentas": {
@@ -164,8 +228,8 @@
             "nombre": "Tercero",
             "nr_cuenta": "N° Cuenta",
             "banco": "Banco",
-            "action": "Acci",
-            "approve": "Aprobadar",
+            "action": "Acción",
+            "approve": "Aprobada",
             "bank_account_type": "Tipo de Cuenta",
             "csv": "Cuentas de Bancarias"
         },
@@ -255,7 +319,7 @@
             "balance_total": "SALDO TOTAL",
             "balance_shiped": "SALDO PROYECTOS ENTREGADOS",
             "csv": "Estado de Cartera %VAR%",
-            "categoria": "Categoria",
+            "categoria": "Categoría",
             "categorias": {
                 "10_pro": "Proyecto",
                 "19_pro": "Total Proyectos",
@@ -263,7 +327,9 @@
                 "29_abono": "Total Abonos",
                 "30_prestamo": "Préstamo",
                 "39_prestamo": "Total Préstamos",
-                 "balance_total": "Total"
+                "40_trax": "Transacción",
+                "49_trax": "Total Transacciones",
+                "balance_total": "Total"
             }
         }
     },

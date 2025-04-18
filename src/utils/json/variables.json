@@ -31,6 +31,7 @@
     "trax_relations": ["0", "pro", "persona"],
     "payment_type": [ "C", "D", "K"],
     "cot_states": [0 , 1, 2],
-    "pro_states": [0, 1]
-
+    "pro_states": [0, 1, 2],
+    "servicios_procesos": ["TPG", "SUE", "GEO", "ARQ", "EST", "ELE", "ILU", "COM", "AA", "HID", "SAN", "PLU", "GAS", "PCI", "ACU", "ALC", "GMT", "PAV", "TRA", "SNL", "URB", "PMT", "PMA", "PPT", "ET", "MGA", "OC", "PC", "LOC", "GEN", "NOES" ],
+    "servicios_clases": ["PLA", "MEM", "INF", "DOC", "AN"]
 }

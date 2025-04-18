@@ -1,5 +1,5 @@
-import { Button, ButtonGroup, ControlGroup } from "@blueprintjs/core";
-import { useEffect, useState } from "react";
+import { Button, ButtonGroup, ControlGroup, Tooltip } from "@blueprintjs/core";
+import { cloneElement, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import SelectInput from "./select.input";
@@ -20,6 +20,7 @@ export default function FormComponent(props) {
 
     const [validate, setValidate] = useState([])
     const [multControl, setMult] = useState({})
+    const [isLoading, setLoading] = useState(false)
     const { t } = useTranslation();
 
     function onSubmitHandler() {
@@ -54,7 +55,7 @@ export default function FormComponent(props) {
                             }
                         })
                         const id = group.defaultValues ? group.defaultValues[index]?.id : null;
-                        form[group.name].push({ [index]: { ...localGroup, id }, });
+                        form[group.name].push({ ...localGroup, id });
                     }
                 }
                 else inputs.map(input => {
@@ -85,14 +86,32 @@ export default function FormComponent(props) {
 
     const CONTROL = (rows, n = null) => (
         rows.map(inputs => <ControlGroup fill={true} vertical={false}>
+            {n !== null && inputs[0].deleteAllow ?
+                <Tooltip className="pt-4" content={t('actions.delete')} placement="top">
+                    <Button icon="trash" intent='danger' onClick={() => {
+                        if (inputs[0].itemId) {
+                            setLoading(true);
+                            inputs[0].deleteApi((inputs[0].itemId))
+                        }
+                        else removeMult(inputs[0].group, n);
+                    }} />
+                </Tooltip>
+                : null}
             {inputs.map(input => {
                 const IS_INVALID = validate.includes(input.id);
                 if (n !== null) validate.includes(`${input.id}_${n}`);
                 const INTENT = IS_INVALID ? "danger" : null;
                 const HELP_TEXT = IS_INVALID ? (input.validateText || t('actions.validate')) : null;
                 let PROPS = { ...input, intent: INTENT, helpText: HELP_TEXT }
-                if (n !== null) PROPS = { ...PROPS, id: `${input.id}_${n}`, placeholder: `${input.placeholder} ${n + 1}`, title: `${input.title} ${n + 1}` }
-                if (input.type === "hidden") return <input type="hidden" {...input} />
+                if (n !== null) PROPS = {
+                    ...PROPS,
+                    n: n,
+                    id: `${input.id}_${n}`,
+                    placeholder: `${input.placeholder} ${n + 1}`,
+                    title: `${input.title} ${n + 1}`,
+                }
+                if (input.component) return cloneElement(input.component, { ...PROPS })
+                if (input.type === "hidden") return <input type="hidden" {...PROPS} />
                 if (input.type === "password" && !input.hide) return <PasswordInput {...PROPS} />
                 if (input.type === "date" && !input.hide) return <DateInput {...PROPS} />
                 if (input.type === "number" && !input.hide) return <NumberInput {...PROPS} />
@@ -104,11 +123,28 @@ export default function FormComponent(props) {
         </ControlGroup>))
 
 
-    const CONTROL_MULTIPLE = (inputs, i) => {
+    const CONTROL_MULTIPLE = (group, i) => {
         if (i === null) return;
-        let COMPONENT = [];
+        const COMPONENT = [];
+
         for (let index = 0; index < i; index++) {
-            COMPONENT.push(CONTROL(inputs, index))
+            const INPUTS = group.inputs.map(row => row.map(input => {
+                input.deleteAllow = group.deleteAllow;
+                input.deleteApi = group.deleteApi;
+                input.group = group.title;
+                if (group.defaultValues[index]) {
+                    input.itemId = group.defaultValues[index].id;
+                    input.defaultValue = group.defaultValues[index][input.index];
+                    if (input.type === 'list') input.defaultText = group.defaultValues[index][input.text];
+                } else {
+                    input.itemId = null;
+                    input.defaultValue = null;
+                    if (input.type === 'list') input.defaultText = null;
+                }
+                return { ...input }
+
+            }))
+            COMPONENT.push(CONTROL(INPUTS, index))
         }
 
         return <>{COMPONENT}</>
@@ -117,50 +153,85 @@ export default function FormComponent(props) {
     const addMult = (id) => {
         let newMultControl = multControl;
         newMultControl[id] = newMultControl[id] + 1;
-        setMult({ ...multControl, [newMultControl[id]]: newMultControl[id] });
+        setMult({ ...multControl, [id]: newMultControl[id] });
     }
-    const reoveMult = (id) => {
+
+    const removeMult = (id, n) => {
         let newMultControl = multControl;
         newMultControl[id] = newMultControl[id] - 1;
-        setMult({ ...multControl, [newMultControl[id]]: newMultControl[id] });
+        if (newMultControl[id] === n) setMult({ ...multControl, [id]: newMultControl[id] });
+        else {
+            let inputs = [];
+            groups.map(group => {
+                if (group.title === id) group.inputs.map(row => row.map(input => {
+                    inputs.push(input)
+                }));
+            })
+            inputs.map(input => {
+                for (let start = n; start < newMultControl[id]; start++) {
+                    const next_input = input.id + '_' + (start + 1);
+                    if (document.getElementById(next_input)) {
+                        if (input.type === 'list') {
+                            let value_copy_2 = document.getElementById(next_input + '-ignore').value;
+                            document.getElementById(input.id + '_' + start + '-ignore').value = value_copy_2
+                        }
+                        let value_copy = document.getElementById(next_input).value;
+                        document.getElementById(input.id + '_' + start).value = value_copy
+                    }
+                }
+            })
+            setMult({ ...multControl, [id]: newMultControl[id] });
+        }
     }
 
     useEffect(() => {
         let newMultControl = {}
         groups.map(group => {
-            if (group.multiple) newMultControl[group.title] = 0
+            if (group.multiple) newMultControl[group.title] = group.defaultValues?.length || 0;
         })
         setMult({ ...newMultControl })
     }, []);
 
+    useEffect(() => {
+        let newMultControl = {}
+        groups.map(group => {
+            if (group.multiple) newMultControl[group.title] = group.defaultValues?.length || 0;
+        })
+        setMult({ ...newMultControl })
+        setLoading(false);
+    }, [groups]);
+
+    const LOADING = <div class="text-center">
+        <div class="spinner-border" role="status">
+        </div>
+    </div>
 
     return <div className="form-app">
-        {groups.map(group => <>
-            {group.hide
-                ? null
-                : <>
-                    <div class="row">
-                        <div class="col"><h6><strong>{group.title}</strong> </h6></div>
+        {isLoading ? LOADING :
+            groups.map(group => <>
+                {group.hide
+                    ? null
+                    : <>
+                        <div class="row">
+                            <div class="col"><h6><strong>{group.title}</strong> </h6></div>
+                            {group.multiple
+                                ? <div class="col text-end">
+                                    <ButtonGroup>
+                                        <Button icon={'plus'} intent='primary' text={t('actions.add')} onClick={() => addMult(group.title)} />
+                                    </ButtonGroup>
+                                </div>
+                                : null}
+
+                        </div>
+
                         {group.multiple
-                            ? <div class="col text-end">
-                                <ButtonGroup>
-                                    {multControl[group.title] > 0 ?
-                                        <Button icon={'minus'} intent='primary' text={t('actions.remove')} onClick={() => reoveMult(group.title)} />
-                                        : null}
-                                    <Button icon={'plus'} intent='primary' text={t('actions.add')} onClick={() => addMult(group.title)} />
-                                </ButtonGroup>
-                            </div>
-                            : null}
+                            ? CONTROL_MULTIPLE(group, multControl[group.title])
+                            : CONTROL(group.inputs)}
 
-                    </div>
+                    </>}
 
-                    {group.multiple
-                        ? CONTROL_MULTIPLE(group.inputs, multControl[group.title])
-                        : CONTROL(group.inputs)}
-
-                </>}
-
-        </>)}
+            </>)
+        }
         <hr />
         <div className="row">
             <div className="col text-end">

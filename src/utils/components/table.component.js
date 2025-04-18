@@ -25,15 +25,23 @@ export default function TableApp(props) {
         csv,
         csvName,
         csvApi,
+        csvdata,
 
         // PAGINATION
         onChangePage,
         onChangeRowsPerPage,
         noPag,
+
+        // STYLES
+        conditionalRowStyles,
+
+        //EXPANDABLE ROW
+        expand,
+        expandDisable,
     } = props
     const { t } = useTranslation();
     const [baseData, setBaseData] = useState(data);
-    const [csvData, setCsveData] = useState(data);
+    const [csvData, setCsveData] = useState(csvdata || data);
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(20);
     const [field, setField] = useState(null);
@@ -61,7 +69,7 @@ export default function TableApp(props) {
 
     useEffect(() => {
         setBaseData(data);
-        setCsveData(data);
+        setCsveData(csvdata || data);
     }, [data]);
 
 
@@ -90,7 +98,9 @@ export default function TableApp(props) {
                 const field = document.getElementById(`${id}-search-options`).value;
                 setField(field);
                 setFilter(value);
-                reload(page, size, field, value)
+                setSize(20);
+                setPage(1);
+                reload(undefined, undefined, field, value);
             }
             else {
                 setField(null);
@@ -150,7 +160,7 @@ export default function TableApp(props) {
 
     return (<div className='table-container'>
         <DataTable
-            columns={columns.filter(c => c.text || c.component ).map(c => ({
+            columns={columns.filter(c => c.text || c.component).map(c => ({
                 name: <h5>{c.name}</h5>,
                 selector: c.component || c.text,
                 omit: c.omit,
@@ -218,6 +228,11 @@ export default function TableApp(props) {
             onChangePage={changePageHandler}
             paginationComponentOptions={PAGINATION_LOCALE}
 
+            conditionalRowStyles={conditionalRowStyles}
+
+            expandableRows={expand}
+            expandableRowsComponent={expand}
+            expandableRowDisabled={expandDisable}
 
         />
     </div>

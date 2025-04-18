@@ -8,10 +8,11 @@ import { AppContext } from "../../utils/context/app.context.js";
 import { useLocation } from "react-router";
 import { Button, Tooltip } from "@blueprintjs/core";
 import ListInput from "../../utils/components/list.input.js";
+import ProyectoShowMore from "../pro/proyectoShow.component.js";
 
 export default function Wallet(props) {
     const { refresh } = props
-    const [data, setData] = useState([])
+    const [dataW, setData] = useState([])
     const [find, setFind] = useState('persona')
     const [isLoading, setLoading] = useState(false)
     const authContext = useContext(AuthContext)
@@ -96,6 +97,9 @@ export default function Wallet(props) {
         {
             name: t("wallet.table.descriccion"),
             text: row => row.descriccion,
+            component: row => (row.categoria|| '').includes('10_pro') 
+            ? <ProyectoShowMore id={row.id_proyecto} text={row.descriccion} icon={'projects'} />
+            : row.descriccion
         },
         {
             name: t("wallet.table.valor"),
@@ -136,9 +140,54 @@ export default function Wallet(props) {
         </>
     }
 
+    const conditionalRowStyles = [
+        {
+            when: row => row.es_total,
+            style: {
+                backgroundColor: '#eaecee',
+                color: "#5e4239",
+                '&:hover': {
+                    cursor: 'pointer',
+                },
+                fontWeight: "bold"
+            },
+        },
+    ]
+
+    const expand = ({ data }) => {
+        let total = 0;
+        total = dataW.filter(d => d.es_subitem === 1 && d.id_proyecto === data.id_proyecto).reduce((sum, curr) => sum + Number(curr.valor), 0)
+        return <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{t("wallet.table.fecha")}</th>
+                    <th scope="col">{t("wallet.table.descriccion")}</th>
+                    <th scope="col">{t("wallet.table.valor")}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {dataW.filter(d => d.es_subitem === 1 && d.id_proyecto === data.id_proyecto).map(row => (
+                    <tr>
+                        <th scope="row">{row.id_trax}</th>
+                        <td>{row.fecha}</td>
+                        <td>{row.descriccion}</td>
+                        <td>{appContext.formatCurrency(row.valor)}</td>
+                    </tr>
+                ))}
+                 <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">{t(`wallet.table.categorias.balance_total`)}</th>
+                    <th scope="col">{appContext.formatCurrency(total)}</th>
+                </tr>
+            </tbody>
+        </table>
+    };
+
     return <div>
         <TableApp
-            data={data}
+            data={dataW.filter(d => d.es_subitem === 0)}
             columns={columns}
             loading={isLoading}
             title={t("wallet.table.title")}
@@ -147,7 +196,11 @@ export default function Wallet(props) {
             noPag
             btn={findComponent()}
             csv
+            csvdata={dataW}
             csvName={t("wallet.table.csv").replace('%VAR%', document.getElementById(`Wallet-list-input-ignore`)?.value || '')}
+            conditionalRowStyles={conditionalRowStyles}
+            expand={expand}
+            expandDisable={row => !(row.id_proyecto && row.es_subitem === 0)}
         />
 
     </div>

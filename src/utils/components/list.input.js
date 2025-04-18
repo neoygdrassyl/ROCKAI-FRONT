@@ -85,7 +85,7 @@ export default function ListInput(props) {
                 {api ? <input id={id} type="hidden" /> : null}
                 <input id={api ? id + '-ignore' : id} list={"list-" + id} className="bp5-input" placeholder={placeholder} dir="auto" value={value} defaultValue={api ? defaultText : defaultValue}
                     onclick={onclick} onBlur={onBlur} onFocus={onFocus} onChange={onChangeHandler} disabled={disabled} onKeyDown={handleKeyDown}
-                    search={false}
+                    autocomplete="off"
                 />
                 {right || null}
                 <datalist id={"list-" + id}>

@@ -150,6 +150,8 @@ export default function Proyectos(props) {
 
     }
 
+    const codRegex =  /^\d\d\d\.\d\d\d\d$/i;
+
     useEffect(() => {
         list()
     }, []);
@@ -173,7 +175,7 @@ export default function Proyectos(props) {
                     : null}
                   {row.estado === 2
                     ? <Tooltip content={t("general.pro_states.2")} placement="top">
-                        <><span className={`bp5-icon bp5-icon-remove text-warming`} /></>
+                        <><span className={`bp5-icon bp5-icon-remove text-warning`} /></>
                     </Tooltip>
                     : null}
                 {` ${row.codigo}`}
@@ -189,27 +191,42 @@ export default function Proyectos(props) {
             text: row => row.nombre,
         },
         {
+            name: t("pro.table.cliente"),
+            value: "tercero",
+            text: row => row.cliente,
+        },
+        {
             name: t("pro.table.location"),
             text: row => `${row.municipio ? row.municipio + ',' : ''} ${row.direccion || ''}`,
         },
         {
             name: t("pro.table.municipio"),
-            value: "municipio",
             omit: true
         },
         {
             name: t("pro.table.direccion"),
-            value: "direccion",
             omit: true
         },
         {
+            name: t("pro.table.propietario"),
+            value: "propietario",
+            omit: true,
+            text: row => row.propietario,
+        },
+        {
+            name: t("pro.table.curaduria"),
+            value: "curaduria",
+            omit: true,
+            text: row => row.curaduria,
+        },
+        {
             name: t("pro.table.fecha_inicio"),
-            value: "fecha_inicio",
+            // value: "fecha_inicio",
             text: row => row.fecha_inicio,
         },
         {
             name: t("pro.table.fecha_entrega"),
-            value: "fecha_entrega",
+            // value: "fecha_entrega",
             text: row => row.fecha_entrega,
         },
         {
@@ -264,10 +281,12 @@ export default function Proyectos(props) {
             title: t('pro.form.section_1'),
             inputs: [
                 [
-                    { id: "codigo", required: true, defaultValue: i?.codigo, title: t('pro.form.codigo'), placeholder: t('pro.form.codigo'), icon: "tag", },
+                    { id: "codigo", required: true, defaultValue: i?.codigo, title: t('pro.form.codigo'), placeholder: t('pro.form.codigo'), icon: "tag", pattern: codRegex, validateText:  t('pro.form.codigo_validate') },
                     { id: "nombre", required: true, defaultValue: i?.nombre, title: t('pro.form.nombre'), placeholder: t('pro.form.nombre'), icon: "tag", },
                     { id: "municipio", defaultValue: i?.municipio, title: t('pro.form.municipio'), placeholder: t('pro.form.municipio'), icon: "map-marker", type: "list", list: appContext.getCityList() },
                     { id: "direccion", defaultValue: i?.direccion, title: t('pro.form.direccion'), placeholder: t('pro.form.direccion'), icon: "home", },
+                    { id: "propietario", defaultValue: i?.propietario,  title: t('pro.form.propietario'), placeholder: t('pro.form.propietario'),  icon: "person"},
+                    { id: "curaduria", defaultValue: i?.curaduria,  title: t('pro.form.curaduria'), placeholder: t('pro.form.curaduria'),  icon: "tag"},
                 ],
                 [
                     { id: "fecha_inicio", defaultValue: i?.fecha_inicio, title: t('pro.form.fecha_inicio'), placeholder: t('pro.form.fecha_inicio'), type: "date" },

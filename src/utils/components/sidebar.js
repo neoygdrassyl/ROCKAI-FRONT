@@ -14,10 +14,10 @@ export default function SideBar(props) {
   const location = useLocation();
 
   const menu = {
-    COT: { option: t(vars.mod_map.COT.t), value: vars.mod_map.COT.url, icon: vars.mod_map.COT.icon, order: 1,},
-    PRO: { option: t(vars.mod_map.PRO.t), value: vars.mod_map.PRO.url, icon: vars.mod_map.PRO.icon, order: 2,},
-    CON: { option: t(vars.mod_map.CON.t), value: vars.mod_map.CON.url, icon: vars.mod_map.CON.icon, order: 3,},
-    HRS: { option: t(vars.mod_map.HRS.t), value: vars.mod_map.HRS.url, icon: vars.mod_map.HRS.icon, order: 4,},
+    COT: { option: t(vars.mod_map.COT.t), value: vars.mod_map.COT.url, icon: vars.mod_map.COT.icon, order: 2,},
+    PRO: { option: t(vars.mod_map.PRO.t), value: vars.mod_map.PRO.url, icon: vars.mod_map.PRO.icon, order: 3,},
+    CON: { option: t(vars.mod_map.CON.t), value: vars.mod_map.CON.url, icon: vars.mod_map.CON.icon, order: 4,},
+    HRS: { option: t(vars.mod_map.HRS.t), value: vars.mod_map.HRS.url, icon: vars.mod_map.HRS.icon, order: 1,},
   };
 
   const handleLogout = () => {

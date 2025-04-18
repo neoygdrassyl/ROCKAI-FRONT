@@ -8,7 +8,7 @@ import { AuthContext } from '../../utils/context/auth.context.ts';
 import { useLocation } from 'react-router';
 
 export default function ProyectoShowMore(props) {
-    const { id } = props;
+    const { id, text, icon } = props;
     const [isOpen, setOpen] = useState(false)
     const [item, setItem] = useState(null)
     const [isLoading, setLoading] = useState(false)
@@ -34,16 +34,23 @@ export default function ProyectoShowMore(props) {
     }
 
     const body = (i) => (<div className='m-5'>
-        <h4 className="mx-3">{t("pro.more.title_proyecto").replace('%VAR%', i.codigo)}  {item.estado === 1
-            ? <Tooltip content={t("pro.more.shiped")} placement="top">
-                <><span className={`bp5-icon bp5-icon-thumbs-up text-success`} /></>
-            </Tooltip>
-            : null}
-            {i.estado === 0
-                ? <Tooltip content={t("pro.more.in_progress")} placement="top">
+        <h4 className="mx-3">{`${t("pro.more.title_proyecto").replace('%VAR%', i.codigo)} `}
+            {i.estado === 1
+                ? <Tooltip content={t("general.pro_states.1")} placement="top">
+                    <><span className={`bp5-icon bp5-icon-thumbs-up text-success`} /></>
+                </Tooltip>
+                : null}
+            {item.estado === 0
+                ? <Tooltip content={t("general.pro_states.0")} placement="top">
                     <><span className={`bp5-icon bp5-icon-build text-danger`} /></>
                 </Tooltip>
-                : null}</h4>
+                : null}
+            {i.estado === 2
+                ? <Tooltip content={t("general.pro_states.2")} placement="top">
+                    <><span className={`bp5-icon bp5-icon-remove text-warning`} /></>
+                </Tooltip>
+                : null}
+        </h4>
         <div className='row border p-3'>
             <div className='col'>{t("pro.more.nombre")}</div>
             <div className='col fw-bold'>{i?.nombre}</div>
@@ -55,6 +62,14 @@ export default function ProyectoShowMore(props) {
         <div className='row border p-3'>
             <div className='col'>{t("pro.more.fecha_inicio")}</div>
             <div className='col fw-bold'>{i?.fecha_inicio || ''}</div>
+        </div>
+        <div className='row border p-3'>
+            <div className='col'>{t("pro.more.propietario")}</div>
+            <div className='col fw-bold'>{i?.propietario || ''}</div>
+        </div>
+        <div className='row border p-3'>
+            <div className='col'>{t("pro.more.curaduria")}</div>
+            <div className='col fw-bold'>{i?.curaduria || ''}</div>
         </div>
         <div className='row border p-3'>
             <div className='col'>{t("pro.more.fecha_entrega")}</div>
@@ -71,11 +86,11 @@ export default function ProyectoShowMore(props) {
         </div>
         <div className='row border p-3'>
             <div className='col'>{t("pro.more.base")}</div>
-            <div className='col fw-bold'>{i?.base ? appContext.formatCurrency(i.base) : ''}</div>
+            <div className='col fw-bold'>{appContext.cotMontoBase(i)}</div>
         </div>
         <div className='row border p-3'>
             <div className='col'>{t("pro.more.valor")}</div>
-            <div className='col fw-bold'>{i.valor ? appContext.formatCurrency(i.valor) : ''}</div>
+            <div className='col fw-bold'>{appContext.cotMontoTotal(i)}</div>
         </div>
         <div className='row border p-3'>
             <div className='col'>{t("pro.more.cotizador")}</div>
@@ -83,7 +98,7 @@ export default function ProyectoShowMore(props) {
         </div>
         <div className='row border p-3'>
             <div className='col'>{t("pro.more.contacto")}</div>
-            <div className='col fw-bold'>{i?.correo || ''} - {i?.telefono || ''}</div>
+            <div className='col fw-bold'>{i?.correo || ''} - {i.telefono ? appContext.formatPhone(i.telefono) : ''}</div>
         </div>
     </div>)
 
@@ -104,10 +119,15 @@ export default function ProyectoShowMore(props) {
 
     return (<>
         <Tooltip content={t('actions.see_more')} placement="top">
-            <Button icon="eye-open" intent='primary' onClick={() => {
+            {text ? <div onClick={() => {
                 setOpen(true);
                 view(id)
-            }} />
+            }}><span className={`bp5-icon bp5-icon-${icon || "eye-open"} text-primary`} />{` ${text}`}</div> :
+                <Button icon={icon || "eye-open"} intent='primary' onClick={() => {
+                    setOpen(true);
+                    view(id)
+                }} />
+            }
         </Tooltip>
         <Drawer
             className={'rockai-drawer'}

@@ -279,9 +279,9 @@ export default function HRS() {
             </Alert>
             {MODAL(item)}
 
-            <Personas />
-            
             <h2>{t("hr.title")}</h2>
+
+            <Personas />
 
             <TableApp
                 data={dataEmpleados}
