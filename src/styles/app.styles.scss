@@ -44,7 +44,8 @@
   .modal-app {
     width: 100%;
   }
-  .rockai-drawer{
+
+  .rockai-drawer {
     width: 100% !important;
   }
 
@@ -52,13 +53,19 @@
 
 @font-face {
   font-family: 'FontText';
-  src: url('../../public/fonts/Acumin-Variable-Concept.ttf') format('truetype'); 
-}  
+  src: url('../../public/fonts/Acumin-Variable-Concept.ttf') format('truetype');
+}
 
 .table-select {
   width: 180px;
 }
 
-.cLbche:disabled{
-   display: none !important;
+.cLbche:disabled {
+  display: none !important;
+}
+
+.right-element {
+  float: right;
+  position: absolute;
+  right: 1px;
 }

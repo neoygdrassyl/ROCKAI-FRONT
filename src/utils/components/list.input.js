@@ -62,25 +62,25 @@ export default function ListInput(props) {
             }
             if (search.length > 2) {
                 setLoading(true);
-                const newList = await api(search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(), apiExt || null );
+                const newList = await api(search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(), apiExt || null);
                 setLoading(false);
                 setList(newList);
             }
         }
-        if(onKeyDown) onKeyDown(e)
+        if (onKeyDown) onKeyDown(e)
 
     }
 
 
 
-    return <div className={`bp5-form-group bp5-${fill ? 'fill': ''} ${intent ? 'bp5-intent-' + intent : null} ${disabled ? 'disabled' : null}`}>
+    return <div className={`bp5-form-group bp5-${fill ? 'fill' : ''} ${intent ? 'bp5-intent-' + intent : null} ${disabled ? 'disabled' : null}`}>
         {title ? <label className="bp5-label" for={id}>
             {title}
             {required ? <span className="bp5-text-muted">{t('actions.required')}</span> : null}
             {loading ? <span className="spinner-border spinner-border-sm text-warning ms-1" role="status" aria-hidden="true"></span> : null}
         </label> : null}
         <div className="bp5-form-content">
-            <div className={`bp5-input-group bp5-${fill ? 'fill': ''} ${intent ? 'bp5-intent-' + intent : null}`}>
+            <div className={`bp5-input-group bp5-${fill ? 'fill' : ''} ${intent ? 'bp5-intent-' + intent : null}`}>
                 {icon ? <span className={`bp5-icon bp5-icon-${icon}`}></span> : null}
                 {api ? <input id={id} type="hidden" /> : null}
                 <input id={api ? id + '-ignore' : id} list={"list-" + id} className="bp5-input" placeholder={placeholder} dir="auto" value={value} defaultValue={api ? defaultText : defaultValue}

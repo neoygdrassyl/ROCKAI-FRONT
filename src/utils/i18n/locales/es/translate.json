@@ -163,19 +163,28 @@
             "uti": "Costo Utilidad",
             "imp": "Cost Imprevisto",
             "codigo": "Código",
-            "codigo_validate": "El campo debe tener el patrón COT.nnn.yyyy"
+            "codigo_validate": "El campo debe tener el patrón COT.nnn.yyyy",
+            "intro": "Introducción",
+            "alcance": "Alcance",
+            "requerimientos": "Requerimientos",
+            "tiempo": "Tiempo de Ejecución",
+            "observaciones": "Observaciones"
         }
     },
     "servicios": {
         "form": {
-            "nombre": "Código",
+            "nombre": "Descripción",
             "desc": "Nombre Entregable",
-            "tercero": "Tercero",
-            "monto": "Monto",
+            "tercero": "Proveedor",
+            "monto": "Monto Base",
             "proceso": "Proceso",
             "clase": "Clase",
             "comentario": "Comentario",
-            "codigo": "Código"
+            "codigo": "Código",
+            "cantidad": "Cantidad",
+            "monto_tercero": "Monto Proveedor",
+            "medida": "Metida",
+            "monto_total": "Monto Final"
         },
         "procesos": {
             "TPG": "Topografía",
@@ -329,6 +338,8 @@
                 "39_prestamo": "Total Préstamos",
                 "40_trax": "Transacción",
                 "49_trax": "Total Transacciones",
+                "50_servicio": "Servicio",
+                "59_servicio": "Servicio Total",
                 "balance_total": "Total"
             }
         }
@@ -445,6 +456,13 @@
             "0": "En proceso",
             "1": "Finalizado",
             "2": "Suspendido"
+        },
+        "servicios_medidas": {
+            "L": "Metro Lineal",
+            "C": "Metro Cuadrado",
+            "Q": "Metro Cubico",
+            "U": "Unidad",
+            "G": "Global"
         }
     }
 }

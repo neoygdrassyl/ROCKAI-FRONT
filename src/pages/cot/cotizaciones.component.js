@@ -9,18 +9,19 @@ import cotizacionesService from "../../services/cotizaciones.service.js";
 import proyectosService from "../../services/proyectos.service.js";
 import TableApp from "../../utils/components/table.component.js";
 import FormComponent from "../../utils/components/form.component.js";
-import Servicios_Builder from "./serviciosBuilder.component.js";
 import serviciosService from "../../services/servicios.service.js";
-
+import Vars from "../../utils/json/variables.json"
+import personasService from "../../services/personas.service.js";
 
 export default function Cotizacion() {
     const [data, setData] = useState([])
     const [item, setItem] = useState(null)
     const [isLoading, setLoading] = useState(false)
-    const [isLoadingServices, setLoadingServices] = useState(false)
+    const [personType, setPersonType] = useState('N')
     const [alert, setAlert] = useState(false)
     const [modal, setModal] = useState(false)
     const [modaP, setModalP] = useState(false)
+    const [modalt, setModalt] = useState(false)
     const authContext = useContext(AuthContext)
     const appContext = useContext(AppContext)
     const location = useLocation()
@@ -52,12 +53,12 @@ export default function Cotizacion() {
 
     }
 
-    function get(i) {
+    function get(i, set) {
         if (authContext.verify(location, "GET")) {
             cotizacionesService.get(i.id)
                 .then(res => {
                     setItem(res.data);
-                    setModal(true);
+                    if (set) set(true);
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
@@ -68,6 +69,7 @@ export default function Cotizacion() {
         }
 
     }
+
 
     function create(form) {
         if (authContext.verify(location, "POST")) {
@@ -95,6 +97,27 @@ export default function Cotizacion() {
             setModalP(false);
             toastInfo(t('actions.procesing'));
             proyectosService.create(form)
+                .then(res => {
+                    if (res.data) {
+                        toast.dismiss();
+                        toast.success(t('actions.creaated'));
+                    }
+                })
+                .catch(error => appContext.errorHandler(error, toast, t))
+                .finally(() => {
+                    list();
+                })
+        } else {
+            toast.warning(t('auth.nopermit'));
+        }
+
+    }
+
+    function create_tercero(form) {
+        if (authContext.verify(location, "POST")) {
+            setModalt(false);
+            toastInfo(t('actions.procesing'));
+            personasService.create(form)
                 .then(res => {
                     if (res.data) {
                         toast.dismiss();
@@ -153,7 +176,22 @@ export default function Cotizacion() {
 
     }
 
-    function remove_service(id) {
+    async function remove_service(id, form) {
+        let remaining_services = item.services.filter(i => i.id !== id);
+        let sum = 0;
+        for (let i = 0; i < remaining_services.length; i++) {
+            const service = remaining_services[i]
+            const monto = Number(service.monto);
+            const cantidad = Number(service.cantidad);
+            let monto_base = (monto * cantidad)
+
+            sum += monto_base
+        }
+        let new_form = { ...form }
+        new_form.monto = sum;
+        new_form.services = null;
+        await cotizacionesService.update(new_form, item.id);
+
         if (authContext.verify(location, "DELETE")) {
             toastInfo(t('actions.procesing'))
             return serviciosService.delete(id)
@@ -162,6 +200,7 @@ export default function Cotizacion() {
                         toast.dismiss();
                         toast.success(t('actions.deleted'));
                         get(item);
+                        list();
                     }
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
@@ -189,8 +228,61 @@ export default function Cotizacion() {
 
     }
 
+    function calculate_montos() {
+        let sum = 0;
+        const montos = document.getElementsByName('monto_servicio');
+        const montos_finales = document.getElementsByName('monto_total');
+        const cants = document.getElementsByName('cantidad');
+        for (let i = 0; i < montos.length; i++) {
+            const monto = montos[i].value.replace(/\D/g, '');
+            const cantidad = cants[i].value;
+            let monto_final = (monto * cantidad)
+            sum += monto_final
+            montos_finales[i].value = appContext.formatCurrency(monto_final)
+        }
+        sum = appContext.formatCurrency(sum)
+        document.getElementById('monto').value = sum
+    }
+
+    function defaultValue_monto(...data) {
+        const i = data[1];
+        const groups = data[2];
+        const servicios = groups[2];
+        const input_data = servicios.defaultValues[i];
+        if (!input_data) return '';
+        const monto = input_data.monto;
+        const cantidad = input_data.cantidad;
+        const defaultValue = appContext.formatCurrency(monto * cantidad);
+        return defaultValue;
+    }
+
+    function defaultValue_monto_base(...data) {
+        const groups = data[2];
+        const servicios = groups[2];
+        const input_data = servicios.defaultValues;
+        if (!input_data) return ''
+        let sum = 0;
+        for (let i = 0; i < input_data.length; i++) {
+            const monto = input_data[i].monto;
+            const cantidad = input_data[i].cantidad;
+            let monto_base = (monto * cantidad)
+            sum += monto_base
+        }
+        return sum;
+    }
+
+    function onChangePersonType(e) {
+        setPersonType(e.target.value)
+    }
+
+    const addTerceroBtn = authContext.verify({ pathname: "/hr" }, "POST") ? <Tooltip className="right-element" content={t('actions.new')} placement="top">
+            <Button icon="add" intent='primary' onClick={() => setModalt(true)} />
+        </Tooltip>
+        : null;
+
     const codRegex = /^COT\.\d\d\d\.\d\d\d\d$/i;
     const codRegexPro = /^\d\d\d\.\d\d\d\d$/i;
+    const cantFormat = (x) => Math.abs(Number(x).toFixed(0));
 
     useEffect(() => {
         list();
@@ -243,15 +335,12 @@ export default function Cotizacion() {
                     {authContext.verify(location, "PUT") ? <>
                         {row.aprobado === 0
                             ? <Tooltip content={t('cotizacion.table.approve')} placement="top">
-                                <Button icon="thumbs-up" intent='primary' onClick={() => {
-                                    setItem(row);
-                                    setModalP(true);
-                                }} />
+                                <Button icon="thumbs-up" intent='primary' onClick={() => get(row, setModalP)} />
                             </Tooltip>
                             : null
                         }
                         <Tooltip content={t('actions.edit')} placement="top">
-                            <Button icon="edit" intent='warning' onClick={() => get(row)} />
+                            <Button icon="edit" intent='warning' onClick={() => get(row, setModal)} />
                         </Tooltip>
                     </>
                         : null}
@@ -276,14 +365,32 @@ export default function Cotizacion() {
                     { id: "codigo", required: true, defaultValue: i?.codigo, title: t('cotizacion.form.codigo'), placeholder: t('cotizacion.form.codigo'), icon: "tag", pattern: codRegex, validateText: t('cotizacion.form.codigo_validate') },
                     { id: "descripcion", defaultValue: i?.descripcion, title: t('cotizacion.form.descripcion'), placeholder: t('cotizacion.form.descripcion'), icon: "tag", },
                     { id: "fecha", required: true, defaultValue: i?.fecha, title: t('cotizacion.form.fecha'), placeholder: t('cotizacion.form.fecha'), type: "date", },
-                    { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.nombre, title: t('cotizacion.form.id_persona'), placeholder: t('cotizacion.form.id_persona'), icon: "person", type: 'list', api: getPair },
+                    { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.nombre, title: t('cotizacion.form.id_persona'), placeholder: t('cotizacion.form.id_persona'), icon: "person", type: 'list', api: getPair, right: i ? null : addTerceroBtn },
                 ],
                 [
-                    { id: "monto", required: true, defaultValue: i?.monto, title: t('cotizacion.form.monto'), placeholder: t('cotizacion.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, },
-                    { id: "iva", defaultValue: i?.iva, title: t('cotizacion.form.iva'), placeholder: t('cotizacion.form.iva'), icon: "percentage", type: 'percent', },
-                    { id: "adm", defaultValue: i?.adm, title: t('cotizacion.form.adm'), placeholder: t('cotizacion.form.adm'), icon: "percentage", type: 'percent', },
-                    { id: "imp", defaultValue: i?.imp, title: t('cotizacion.form.imp'), placeholder: t('cotizacion.form.imp'), icon: "percentage", type: 'percent', },
-                    { id: "uti", defaultValue: i?.uti, title: t('cotizacion.form.uti'), placeholder: t('cotizacion.form.uti'), icon: "percentage", type: 'percent', },
+                    { id: "intro", defaultValue: i?.intro, title: t('cotizacion.form.intro'), placeholder: t('cotizacion.form.intro'), type: "textarea" },
+                ],
+                [
+                    { id: "alcance", defaultValue: i?.alcance, title: t('cotizacion.form.alcance'), placeholder: t('cotizacion.form.alcance'), type: "textarea" },
+                ],
+                [
+                    { id: "requerimientos", defaultValue: i?.requerimientos, title: t('cotizacion.form.requerimientos'), placeholder: t('cotizacion.form.requerimientos'), type: "textarea" },
+                ],
+                [
+                    { id: "tiempo", defaultValue: i?.tiempo, title: t('cotizacion.form.tiempo'), placeholder: t('cotizacion.form.tiempo'), type: "textarea" },
+                ],
+            ]
+        },
+        {
+            title: "",
+            hide: i ? false : true,
+            inputs: [
+                [
+                    { id: "monto", defaultValue: defaultValue_monto_base, title: t('cotizacion.form.monto'), placeholder: t('cotizacion.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, hide: i ? false : true, read: true, },
+                    { id: "iva", defaultValue: i?.iva, title: t('cotizacion.form.iva'), placeholder: t('cotizacion.form.iva'), icon: "percentage", type: 'percent', hide: i ? false : true, },
+                    { id: "adm", defaultValue: i?.adm, title: t('cotizacion.form.adm'), placeholder: t('cotizacion.form.adm'), icon: "percentage", type: 'percent', hide: i ? false : true, },
+                    { id: "imp", defaultValue: i?.imp, title: t('cotizacion.form.imp'), placeholder: t('cotizacion.form.imp'), icon: "percentage", type: 'percent', hide: i ? false : true, },
+                    { id: "uti", defaultValue: i?.uti, title: t('cotizacion.form.uti'), placeholder: t('cotizacion.form.uti'), icon: "percentage", type: 'percent', hide: i ? false : true, },
                 ],
             ]
         },
@@ -297,15 +404,28 @@ export default function Cotizacion() {
             deleteAllow: authContext.verify(location, "DELETE"),
             inputs: [
                 [
-                    { component: <Servicios_Builder />, index: 'nombre', id: "nombre", },
-                    { id: "monto", index: 'monto', title: t('servicios.form.monto'), placeholder: t('servicios.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, },
-                    { id: "id_tercero", index: 'id_tercero',  text: 'persona', title: t('servicios.form.tercero'), placeholder: t('servicios.form.tercero'), icon: "person", type: 'list', api: getPair },
+                    // { component: <Servicios_Builder />, index: 'nombre', id: "nombre", },
+                    { id: "nombre", index: 'nombre', title: t('servicios.form.nombre'), placeholder: t('servicios.form.nombre'), icon: "label", },
+                    { id: "medida", index: 'medida', title: t('servicios.form.medida'), placeholder: t('servicios.form.medida'), icon: "cube", type: 'select', list: Vars.servicios_medidas.map(i => ({ value: i, text: t(`general.servicios_medidas.${i}`) })) },
+                    { id: "cantidad", name: 'cantidad', index: 'cantidad', title: t('servicios.form.cantidad'), placeholder: t('servicios.form.cantidad'), icon: "cross", type: 'number', format: cantFormat, defaultValue: Number(1), onBlur: calculate_montos },
+                    { id: "monto", name: 'monto_servicio', index: 'monto', title: t('servicios.form.monto'), placeholder: t('servicios.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, onBlur: calculate_montos },
+                    { id: "monto_total", name: 'monto_total', index: 'monto_total', title: t('servicios.form.monto_total'), placeholder: t('servicios.form.monto_total'), icon: "dollar", read: true, defaultValue: defaultValue_monto },
+                    { id: "id_tercero", index: 'id_tercero', text: 'persona', title: t('servicios.form.tercero'), placeholder: t('servicios.form.tercero'), icon: "person", type: 'list', api: getPair, hide: i?.aprobado == false },
+                    { id: "monto_tercero", index: 'monto_tercero', title: t('servicios.form.monto_tercero'), placeholder: t('servicios.form.monto_tercero'), icon: "dollar", type: 'number', format: appContext.formatCurrency, hide: i?.aprobado == false },
                 ],
             ]
         },
+        {
+            title: "",
+            inputs: [
+                [
+                    { id: "observaciones", defaultValue: i?.observaciones, title: t('cotizacion.form.observaciones'), placeholder: t('cotizacion.form.observaciones'), type: "textarea" },
+                ],
+            ]
+        }
     ]
 
-    const FORM_PROYECT = (i) => [
+    const FORM_PROYECTO = (i) => [
         {
             title: t('pro.form.section_1'),
             inputs: [
@@ -321,6 +441,44 @@ export default function Cotizacion() {
                     { id: "direccion", title: t('pro.form.direccion'), placeholder: t('pro.form.direccion'), icon: "home", },
                     { id: "fecha_inicio", title: t('pro.form.fecha_inicio'), placeholder: t('pro.form.fecha_inicio'), type: "date" },
                     { id: "fecha_entrega", title: t('pro.form.fecha_entrega'), placeholder: t('pro.form.fecha_entrega'), type: "date" },
+                ],
+            ]
+        },
+        {
+            title: t('cotizacion.form.section_2'),
+            multiple: true,
+            fixed: true,
+            defaultValues: i?.services,
+            name: 'services',
+            inputs: [
+                [
+                    { id: "nombre", index: 'nombre', title: t('servicios.form.nombre'), placeholder: t('servicios.form.nombre'), icon: "label", read: true, },
+                    { id: "medida", index: 'medida', title: t('servicios.form.medida'), placeholder: t('servicios.form.medida'), icon: "cube", read: true, type: 'select', list: Vars.servicios_medidas.map(i => ({ value: i, text: t(`general.servicios_medidas.${i}`) })) },
+                    { id: "cantidad", index: 'cantidad', title: t('servicios.form.cantidad'), placeholder: t('servicios.form.cantidad'), icon: "cross", type: 'number', format: cantFormat, read: true, },
+                    { id: "monto", index: 'monto', title: t('servicios.form.monto'), placeholder: t('servicios.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, read: true, },
+                    { id: "id_tercero", index: 'id_tercero', text: 'persona', title: t('servicios.form.tercero'), placeholder: t('servicios.form.tercero'), icon: "person", type: 'list', api: getPair },
+                    { id: "monto_tercero", index: 'monto_tercero', title: t('servicios.form.monto_tercero'), placeholder: t('servicios.form.monto_tercero'), icon: "dollar", type: 'number', format: appContext.formatCurrency, },
+                ],
+            ]
+        },
+    ]
+
+    const FORM_TERCERO = () => [
+        {
+            title: t('personas.form.section_1'),
+            inputs: [
+                [
+                    { id: "tipo", title: t('personas.form.tipo'), placeholder: t('personas.form.tipo'), icon: "tag", type: "select", list: [{ value: 'N', text: t('personas.form.N') }, { value: 'J', text: t('personas.form.J') }], onChange: onChangePersonType },
+                    { id: "name", required: true, title: t('personas.form.nombre'), placeholder: t('personas.form.nombre'), icon: "person", },
+                    { id: "cedula_nit", required: true, title: t('personas.form.cedula_nit'), placeholder: t('personas.form.cedula_nit'), icon: "id-number", format: personType === 'N' ? appContext.formatId : appContext.formatNit },
+                    { id: "ciudad", title: t('personas.form.ciudad'), placeholder: t('personas.form.ciudad'), icon: "home", type: "list", list: appContext.getCityList() },
+                    { id: "direccion", title: t('personas.form.direccion'), placeholder: t('personas.form.direccion'), icon: "home", },
+                ],
+                [
+                    { id: "telefono", title: t('personas.form.telefono'), placeholder: t('personas.form.telefono'), icon: "phone", format: appContext.formatPhone },
+                    { id: "correo", title: t('personas.form.correo'), placeholder: t('personas.form.correo'), icon: "at", pattern: appContext.emailPattern },
+                    { id: "rut", title: t('personas.form.rut'), placeholder: t('personas.form.rut'), icon: "folder-open", disabled: true, },
+                    { id: "cv", title: t('personas.form.cv'), placeholder: t('personas.form.cv'), icon: "folder-open", disabled: true, },
                 ],
             ]
         },
@@ -344,7 +502,7 @@ export default function Cotizacion() {
         </DialogBody>
     </Dialog>
 
-    const MODA_PROYECTL = (i) => <Dialog
+    const MODAL_PROYECTO = (i) => <Dialog
         title={t('pro.form.new')}
         icon={"add"}
         isOpen={modaP} onClose={() => setModalP(false)}
@@ -357,7 +515,25 @@ export default function Cotizacion() {
                 }}
                 onSecondary={() => setModalP(false)}
                 onSubmit={(data) => create_proyect(data)}
-                groups={FORM_PROYECT(i)}
+                groups={FORM_PROYECTO(i)}
+            />
+        </DialogBody>
+    </Dialog>
+
+    const MODAL_TERCERO = () => <Dialog
+        title={t('personas.form.new')}
+        icon={"add"}
+        isOpen={modalt} onClose={() => setModalt(false)}
+        className='modal-app'>
+        <DialogBody useOverflowScrollContainer={true} >
+            <FormComponent
+                actions={{
+                    primary: { icon: "add", text: t('actions.new') },
+                    secondary: { icon: "cross", text: t('actions.close') }
+                }}
+                onSecondary={() => setModalt(false)}
+                onSubmit={(data) => create_tercero(data)}
+                groups={FORM_TERCERO()}
             />
         </DialogBody>
     </Dialog>
@@ -389,7 +565,8 @@ export default function Cotizacion() {
             <ToastContainer theme="colored" />
             {ALERT()}
             {MODAL(item)}
-            {MODA_PROYECTL(item)}
+            {MODAL_PROYECTO(item)}
+            {MODAL_TERCERO(item)}
             <TableApp
                 data={data}
                 columns={columns}
@@ -404,8 +581,6 @@ export default function Cotizacion() {
                 reload={list}
                 reloadPag
             />
-
-
         </div>
     );
 }

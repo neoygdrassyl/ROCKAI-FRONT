@@ -1,8 +1,8 @@
-import { FormGroup, InputGroup } from "@blueprintjs/core";
+import { FormGroup, TextArea } from "@blueprintjs/core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export default function TextInput(props) {
+export default function TextAreaInput(props) {
     const {
         id,  // REQUIRED
         name,
@@ -18,11 +18,8 @@ export default function TextInput(props) {
         onBlur,
         onFocus,
         onChange,
-        icon,
-        right,
         format,
         pattern,
-        max,
         read,
     } = props
     const { t } = useTranslation();
@@ -59,7 +56,7 @@ export default function TextInput(props) {
         disabled={disabled}
         fill
     >
-        <InputGroup
+        <TextArea
             intent={localValidate ? 'danger' : intent}
             id={id}
             name={name}
@@ -70,12 +67,10 @@ export default function TextInput(props) {
             onBlur={onBlurHandler}
             onFocus={onFocusHandler}
             onValueChange={onChange}
-            leftIcon={icon}
-            rightElement={right}
             disabled={disabled}
-            maxlength={max || 127}
             readOnly={read}
             fill
+            autoResize={true}
         />
     </FormGroup>
 }

@@ -4,6 +4,7 @@ export default function PercentInput(props) {
     const {
         id,  // REQUIRED
         value,
+        name,
         defaultValue,
         placeholder,
         disabled,
@@ -48,6 +49,7 @@ export default function PercentInput(props) {
             <input type="number"
                 className={`bp5-input bp5-fill`}
                 id={id}
+                name={name}
                 value={value}
                 defaultValue={defaultValue}
                 placeholder={placeholder}

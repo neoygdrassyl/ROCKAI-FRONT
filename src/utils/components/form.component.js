@@ -9,11 +9,13 @@ import NumberInput from "./number.input";
 import DateInput from "./date.input";
 import PasswordInput from "./password.input";
 import PercentInput from "./percent.input";
+import TextAreaInput from "./textarea.input";
 
 export default function FormComponent(props) {
     const {
         groups,
         onSubmit,
+        onLoad,
         onSecondary,
         actions,
     } = props
@@ -23,10 +25,7 @@ export default function FormComponent(props) {
     const [isLoading, setLoading] = useState(false)
     const { t } = useTranslation();
 
-    function onSubmitHandler() {
-        // VALIDATES FORM
-        let toValidate = []
-        // FILLS THE FORM
+    function getForm(toValidate) {
         let form = {}
         groups.map(group => {
             group.inputs.map(inputs => {
@@ -79,9 +78,23 @@ export default function FormComponent(props) {
             }
             )
         })
+        return form
+    }
+
+    function onSubmitHandler() {
+        // VALIDATES FORM
+        let toValidate = []
+        // FILLS THE FORM
+        let form = getForm(toValidate)
         // console.log(form)
         setValidate(toValidate);
         if (toValidate.length === 0) onSubmit(form ?? {});
+    }
+
+    function onDeleteApi(input) {
+        let toValidate = []
+        let form = getForm(toValidate);
+        input.deleteApi(input.itemId, form)
     }
 
     const CONTROL = (rows, n = null) => (
@@ -91,7 +104,7 @@ export default function FormComponent(props) {
                     <Button icon="trash" intent='danger' onClick={() => {
                         if (inputs[0].itemId) {
                             setLoading(true);
-                            inputs[0].deleteApi((inputs[0].itemId))
+                            onDeleteApi(inputs[0])
                         }
                         else removeMult(inputs[0].group, n);
                     }} />
@@ -102,7 +115,10 @@ export default function FormComponent(props) {
                 if (n !== null) validate.includes(`${input.id}_${n}`);
                 const INTENT = IS_INVALID ? "danger" : null;
                 const HELP_TEXT = IS_INVALID ? (input.validateText || t('actions.validate')) : null;
-                let PROPS = { ...input, intent: INTENT, helpText: HELP_TEXT }
+                let PROPS = {
+                    ...input, intent: INTENT, helpText: HELP_TEXT,
+                    defaultValue: typeof input.defaultValue === 'function' ? input.defaultValue(input, n, groups) : input.defaultValue
+                }
                 if (n !== null) PROPS = {
                     ...PROPS,
                     n: n,
@@ -118,6 +134,7 @@ export default function FormComponent(props) {
                 if (input.type === "percent" && !input.hide) return <PercentInput {...PROPS} />
                 if (input.type === "select" && !input.hide) return <SelectInput {...PROPS} />
                 if (input.type === "list" && !input.hide) return <ListInput {...PROPS} />
+                if (input.type === "textarea" && !input.hide) return <TextAreaInput {...PROPS} />
                 if (!input.type && !input.hide) return <TextInput {...PROPS} />
             })}
         </ControlGroup>))
@@ -126,22 +143,24 @@ export default function FormComponent(props) {
     const CONTROL_MULTIPLE = (group, i) => {
         if (i === null) return;
         const COMPONENT = [];
-
         for (let index = 0; index < i; index++) {
             const INPUTS = group.inputs.map(row => row.map(input => {
-                input.deleteAllow = group.deleteAllow;
-                input.deleteApi = group.deleteApi;
-                input.group = group.title;
+                const new_input = { ...input }
+                new_input.deleteAllow = group.deleteAllow;
+                new_input.deleteApi = group.deleteApi;
+                new_input.group = group.title
                 if (group.defaultValues[index]) {
-                    input.itemId = group.defaultValues[index].id;
-                    input.defaultValue = group.defaultValues[index][input.index];
-                    if (input.type === 'list') input.defaultText = group.defaultValues[index][input.text];
+                    new_input.itemId = group.defaultValues[index].id;
+                    if (typeof new_input.defaultValue === 'function') new_input.defaultValue = new_input.defaultValue(new_input, index, groups)
+                    else new_input.defaultValue = group.defaultValues[index][new_input.index] || new_input.defaultValue;
+                    if (new_input.type === 'list') new_input.defaultText = group.defaultValues[index][new_input.text];
                 } else {
-                    input.itemId = null;
-                    input.defaultValue = null;
-                    if (input.type === 'list') input.defaultText = null;
+                    new_input.itemId = null;
+                    if (typeof new_input.defaultValue === 'function') new_input.defaultValue = new_input.defaultValue(new_input, index, groups)
+                    else new_input.defaultValue = new_input.defaultValue;
+                    if (new_input.type === 'list') new_input.defaultText = null;
                 }
-                return { ...input }
+                return { ...new_input }
 
             }))
             COMPONENT.push(CONTROL(INPUTS, index))
@@ -190,6 +209,7 @@ export default function FormComponent(props) {
             if (group.multiple) newMultControl[group.title] = group.defaultValues?.length || 0;
         })
         setMult({ ...newMultControl })
+        if (onLoad) onLoad()
     }, []);
 
     useEffect(() => {
@@ -214,7 +234,7 @@ export default function FormComponent(props) {
                     : <>
                         <div class="row">
                             <div class="col"><h6><strong>{group.title}</strong> </h6></div>
-                            {group.multiple
+                            {group.multiple && !group.fixed
                                 ? <div class="col text-end">
                                     <ButtonGroup>
                                         <Button icon={'plus'} intent='primary' text={t('actions.add')} onClick={() => addMult(group.title)} />

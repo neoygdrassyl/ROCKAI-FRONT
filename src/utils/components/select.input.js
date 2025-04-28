@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 export default function SelectInput(props) {
     const {
         id,  // REQUIRED
+        name,
         value,
         defaultValue,
         list, // Array[{value, text}]
@@ -16,6 +17,7 @@ export default function SelectInput(props) {
         onFocus,
         onChange,
         icon,
+        read,
         right,
     } = props
     const { t } = useTranslation();
@@ -29,8 +31,16 @@ export default function SelectInput(props) {
         <div className="bp5-form-content bp5-fill">
             <div className={`bp5-input-group bp5-fill ${intent ? 'intent-' + intent : null}`}>
                 {icon ? <span className={`bp5-icon bp5-icon-${icon}`}></span> : null}
-                <select id={id} className="bp5-select" placeholder={placeholder} dir="auto" value={value} defaultValue={defaultValue}
-                    onclick={onclick} onBlur={onBlur} onFocus={onFocus} onChange={onChange}
+                <select 
+                id={id} 
+                name={name}
+                className="bp5-select" 
+                placeholder={placeholder} 
+                dir="auto" 
+                value={value} 
+                defaultValue={defaultValue}
+                disabled={read}
+                onclick={onclick} onBlur={onBlur} onFocus={onFocus} onChange={onChange} 
                 >
                  <span className={`bp5-icon bp5-icon-chevron-down`}></span>
 

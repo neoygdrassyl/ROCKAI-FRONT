@@ -97,9 +97,9 @@ export default function Wallet(props) {
         {
             name: t("wallet.table.descriccion"),
             text: row => row.descriccion,
-            component: row => (row.categoria|| '').includes('10_pro') 
-            ? <ProyectoShowMore id={row.id_proyecto} text={row.descriccion} icon={'projects'} />
-            : row.descriccion
+            component: row => (row.categoria || '').includes('10_pro')
+                ? <ProyectoShowMore id={row.id_proyecto} text={row.descriccion} icon={'projects'} />
+                : row.descriccion
         },
         {
             name: t("wallet.table.valor"),
@@ -167,15 +167,19 @@ export default function Wallet(props) {
                 </tr>
             </thead>
             <tbody>
-                {dataW.filter(d => d.es_subitem === 1 && d.id_proyecto === data.id_proyecto).map(row => (
+                {dataW.filter(d => d.es_subitem === 1 && d.id_proyecto === data.id_proyecto).map((row, n) => (
                     <tr>
-                        <th scope="row">{row.id_trax}</th>
+                        <th scope="row">{n + 1}</th>
                         <td>{row.fecha}</td>
-                        <td>{row.descriccion}</td>
+                        <td>
+                            {row.categoria == "50_servicio" ? t('wallet.table.categorias.50_servicio') : ""}
+                            {row.categoria == "20_abono" ? t('wallet.table.categorias.20_abono') : ""}
+                            {" " + row.descriccion}
+                        </td>
                         <td>{appContext.formatCurrency(row.valor)}</td>
                     </tr>
                 ))}
-                 <tr>
+                <tr>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col">{t(`wallet.table.categorias.balance_total`)}</th>

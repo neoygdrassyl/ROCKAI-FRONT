@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 export default function NumberInput(props) {
     const {
         id,  // REQUIRED
+        name,
         value,
         defaultValue,
         placeholder,
@@ -19,10 +20,7 @@ export default function NumberInput(props) {
         icon,
         format,
         pattern,
-        max,
-        min,
-        readOnly,
-        positiveOnly,
+        read,
     } = props
     const { t } = useTranslation();
     const [localValidate, setLocalValidate] = useState(false);
@@ -30,11 +28,11 @@ export default function NumberInput(props) {
 
     const onBlurHandler = (e) => {
         let v = e.target.value;
-        v = (v).match(/\d/g)?.join('') || 0;
-        if (format) {
+        v = isNaN(v.replace(/\D/g,'')) ? 0 : v.replace(/\D/g,'');
+        if (format && !read) {
             document.getElementById(id).value = format(v);
         }
-        if (pattern) {
+        if (pattern && !read) {
             let isValidPattern = (v).match(pattern);
             if (!isValidPattern) setLocalValidate(true);
             else setLocalValidate(false);
@@ -48,10 +46,12 @@ export default function NumberInput(props) {
     }
 
     const onFocusHandler = (e) => {
-        const v = e.target.value;
-        if (v === '0')  document.getElementById(id).value = '';
-        else if (format && v) document.getElementById(id).value = (v).match(/\d/g)?.join('') || 0;
-        if (onFocus) onBlur(e);
+        if (!read) {
+            const v = e.target.value;
+            if (v === '0')  document.getElementById(id).value = '';
+            else if (format && v ) document.getElementById(id).value = isNaN(v.replace(/\D/g,'')) ? 0 : v;
+            if (onFocus) onBlur(e);
+        }
     }
 
     const getDefaultValue = () => {
@@ -68,9 +68,10 @@ export default function NumberInput(props) {
     <div className="bp5-form-content">
         <div className={`bp5-input-group bp5-fill ${intent ? 'bp5-intent-' + intent : null}`}>
         {icon ? <span className={`bp5-icon bp5-icon-${icon}`}></span> : null}
-            <input type="text" inputmode="numeric" pattern="\d*"
+            <input type="text" inputmode="numeric"
                 className={`bp5-input bp5-fill`}
                 id={id}
+                name={name}
                 value={value}
                 defaultValue={getDefaultValue()}
                 placeholder={placeholder}
@@ -79,7 +80,7 @@ export default function NumberInput(props) {
                 onBlur={onBlurHandler}
                 onclick={onclick}
                 onFocus={onFocusHandler}
-                
+                readOnly={read}
                 // max={max}
                 // min={min}
                 // step={1}

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 export default function PasswordInput(props) {
     const {
         id,  // REQUIRED
+        name,
         value,
         defaultValue,
         placeholder,
@@ -37,6 +38,7 @@ export default function PasswordInput(props) {
         <InputGroup
             intent={intent}
             id={id}
+            name={name}
             placeholder={placeholder}
             value={value}
             defaultValue={defaultValue || ''}

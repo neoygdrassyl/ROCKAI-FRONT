@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 export default function DateInput(props) {
     const {
         id,  // REQUIRED
+        name,
         value,
         defaultValue,
         disabled,
@@ -28,6 +29,7 @@ export default function DateInput(props) {
             <div class={`bp5-input-group bp5-fill ${intent ? 'bp5-intent-' + intent : null}`}>
                 <input type="date" className={`bp5-input bp5-fill`}
                     id={id}
+                    name={name}
                     value={value}
                     defaultValue={defaultValue}
                     disabled={disabled}
