@@ -247,9 +247,10 @@ export default function Cotizacion() {
     function defaultValue_monto(...data) {
         const i = data[1];
         const groups = data[2];
-        const servicios = groups[2];
+        const servicios = groups[1];
+        if (!servicios) return '';
+        if (!servicios.defaultValues[i]) return '';
         const input_data = servicios.defaultValues[i];
-        if (!input_data) return '';
         const monto = input_data.monto;
         const cantidad = input_data.cantidad;
         const defaultValue = appContext.formatCurrency(monto * cantidad);
@@ -258,9 +259,10 @@ export default function Cotizacion() {
 
     function defaultValue_monto_base(...data) {
         const groups = data[2];
-        const servicios = groups[2];
+        const servicios = groups[1];
+        if (!servicios) return false
+        if (!servicios.defaultValues) return false;
         const input_data = servicios.defaultValues;
-        if (!input_data) return ''
         let sum = 0;
         for (let i = 0; i < input_data.length; i++) {
             const monto = input_data[i].monto;
@@ -368,7 +370,7 @@ export default function Cotizacion() {
                     { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.nombre, title: t('cotizacion.form.id_persona'), placeholder: t('cotizacion.form.id_persona'), icon: "person", type: 'list', api: getPair, right: i ? null : addTerceroBtn },
                 ],
                 [
-                    { id: "intro", defaultValue: i?.intro, title: t('cotizacion.form.intro'), placeholder: t('cotizacion.form.intro'), type: "textarea" },
+                    { id: "intro", defaultValue: i?.intro || t('cotizacion.form.intro_dv'), title: t('cotizacion.form.intro'), placeholder: t('cotizacion.form.intro'), type: "textarea" },
                 ],
                 [
                     { id: "alcance", defaultValue: i?.alcance, title: t('cotizacion.form.alcance'), placeholder: t('cotizacion.form.alcance'), type: "textarea" },
@@ -377,21 +379,12 @@ export default function Cotizacion() {
                     { id: "requerimientos", defaultValue: i?.requerimientos, title: t('cotizacion.form.requerimientos'), placeholder: t('cotizacion.form.requerimientos'), type: "textarea" },
                 ],
                 [
+                    { id: "entregables", defaultValue: i?.entregables, title: t('cotizacion.form.entregables'), placeholder: t('cotizacion.form.entregables'), type: "textarea" },
+                ],
+                [
                     { id: "tiempo", defaultValue: i?.tiempo, title: t('cotizacion.form.tiempo'), placeholder: t('cotizacion.form.tiempo'), type: "textarea" },
                 ],
-            ]
-        },
-        {
-            title: "",
-            hide: i ? false : true,
-            inputs: [
-                [
-                    { id: "monto", defaultValue: defaultValue_monto_base, title: t('cotizacion.form.monto'), placeholder: t('cotizacion.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, hide: i ? false : true, read: true, },
-                    { id: "iva", defaultValue: i?.iva, title: t('cotizacion.form.iva'), placeholder: t('cotizacion.form.iva'), icon: "percentage", type: 'percent', hide: i ? false : true, },
-                    { id: "adm", defaultValue: i?.adm, title: t('cotizacion.form.adm'), placeholder: t('cotizacion.form.adm'), icon: "percentage", type: 'percent', hide: i ? false : true, },
-                    { id: "imp", defaultValue: i?.imp, title: t('cotizacion.form.imp'), placeholder: t('cotizacion.form.imp'), icon: "percentage", type: 'percent', hide: i ? false : true, },
-                    { id: "uti", defaultValue: i?.uti, title: t('cotizacion.form.uti'), placeholder: t('cotizacion.form.uti'), icon: "percentage", type: 'percent', hide: i ? false : true, },
-                ],
+              
             ]
         },
         {
@@ -417,7 +410,26 @@ export default function Cotizacion() {
         },
         {
             title: "",
+            hide: i ? false : true,
             inputs: [
+                [
+                    { id: "monto", defaultValue: defaultValue_monto_base || i?.monto, title: t('cotizacion.form.monto'), placeholder: t('cotizacion.form.monto'), icon: "dollar", type: 'number', format: appContext.formatCurrency, hide: i ? false : true, read: true, },
+                    { id: "iva", defaultValue: i?.iva, title: t('cotizacion.form.iva'), placeholder: t('cotizacion.form.iva'), icon: "percentage", type: 'percent', hide: i ? false : true, },
+                    { id: "adm", defaultValue: i?.adm, title: t('cotizacion.form.adm'), placeholder: t('cotizacion.form.adm'), icon: "percentage", type: 'percent', hide: i ? false : true, },
+                    { id: "imp", defaultValue: i?.imp, title: t('cotizacion.form.imp'), placeholder: t('cotizacion.form.imp'), icon: "percentage", type: 'percent', hide: i ? false : true, },
+                    { id: "uti", defaultValue: i?.uti, title: t('cotizacion.form.uti'), placeholder: t('cotizacion.form.uti'), icon: "percentage", type: 'percent', hide: i ? false : true, },
+                ],
+            ]
+        },
+        {
+            title: "",
+            inputs: [
+                [
+                    { id: "pago", defaultValue: i?.pago, title: t('cotizacion.form.pago'), placeholder: t('cotizacion.form.pago'), type: "textarea" },
+                ],
+                [
+                    { id: "validez", defaultValue: i?.validez || t('cotizacion.form.validez_dv'), title: t('cotizacion.form.validez'), placeholder: t('cotizacion.form.validez'), type: "textarea" },
+                ],
                 [
                     { id: "observaciones", defaultValue: i?.observaciones, title: t('cotizacion.form.observaciones'), placeholder: t('cotizacion.form.observaciones'), type: "textarea" },
                 ],

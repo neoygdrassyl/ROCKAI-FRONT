@@ -47,7 +47,7 @@
             "nombre": "Descripción",
             "municipio": "Municipio",
             "direccion": "Dirección",
-            "fecha_inicio": "Fecha Inicio",
+            "fecha_inicio": "Mes Inicio",
             "fecha_entrega": "Fecha Entrega",
             "estado": "Estado",
             "action": "Acción",
@@ -63,7 +63,8 @@
             "valor": "Valor Total",
             "curaduria": "Radicado Curaduria",
             "propietario": "Propietario",
-            "propietario_doc": "Propietario Documento"
+            "propietario_doc": "Propietario Documento",
+            "cotizacion": "Cotización"
         },
         "form": {
             "new": "Añadir Proyecto",
@@ -165,10 +166,15 @@
             "codigo": "Código",
             "codigo_validate": "El campo debe tener el patrón COT.nnn.yyyy",
             "intro": "Introducción",
+            "intro_dv": "De acuerdo con su gentil solicitud de cotización, presentamos a continuación la propuesta económica para los servicios requeridos en el proyecto en cuestión.",
             "alcance": "Alcance",
-            "requerimientos": "Requerimientos",
+            "requerimientos": "Información Requerida",
             "tiempo": "Tiempo de Ejecución",
-            "observaciones": "Observaciones"
+            "observaciones": "Observaciones",
+            "entregables": "Entregables",
+            "pago": "Forma de pago",
+            "validez": "Validez de la oferta",
+            "validez_dv": "30 días calendario."
         }
     },
     "servicios": {

@@ -103,10 +103,18 @@ export default function Wallet(props) {
         },
         {
             name: t("wallet.table.valor"),
+            component: row => <>
+                {row.valor < 0 ? <label className="text-danger">{appContext.formatCurrency(row.valor)}</label> : null}
+                {row.valor > 0 ? <label className="text-success">{appContext.formatCurrency(row.valor)}</label> : null}
+            </>,
             text: row => row.valor ? appContext.formatCurrency(row.valor) : null,
         },
         {
             name: t("wallet.table.balance"),
+            component: row => <>
+                {row.balance < 0 ? <label className="text-danger">{appContext.formatCurrency(row.balance)}</label> : null}
+                {row.balance > 0 ? <label className="text-success">{appContext.formatCurrency(row.balance)}</label> : null}
+            </>,
             text: row => row.balance ? appContext.formatCurrency(row.balance) : null,
         },
     ];
@@ -204,7 +212,7 @@ export default function Wallet(props) {
             csvName={t("wallet.table.csv").replace('%VAR%', document.getElementById(`Wallet-list-input-ignore`)?.value || '')}
             conditionalRowStyles={conditionalRowStyles}
             expand={expand}
-            expandDisable={row => !(row.id_proyecto && row.es_subitem === 0)}
+            expandDisable={row => !(row.categoria === '10_pro')}
         />
 
     </div>

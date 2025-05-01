@@ -150,7 +150,7 @@ export default function Proyectos(props) {
 
     }
 
-    const codRegex =  /^\d\d\d\.\d\d\d\d$/i;
+    const codRegex = /^\d\d\d\.\d\d\d\d$/i;
 
     useEffect(() => {
         list()
@@ -158,6 +158,31 @@ export default function Proyectos(props) {
 
 
     const columns = [
+        {
+            name: t("pro.table.action"),
+            width: '160px',
+            omitCsv: true,
+            component: row => <>
+                <ButtonGroup>
+                    {authContext.verify(location, "GET") ? <ProyectoShowMore id={row.id} /> : null}
+                    {false ? <Facturas id={row.id} /> : null}
+                    {authContext.verify(location, "PUT") ? <>
+                        <Tooltip content={t('actions.edit')} placement="top">
+                            <Button icon="edit" intent='warning' onClick={() => get(row)} />
+                        </Tooltip>
+                    </>
+                        : null}
+                    {authContext.verify(location, "DELETE") ?
+                        <Tooltip content={t('actions.delete')} placement="top">
+                            <Button icon="trash" intent='danger' onClick={() => {
+                                setItem(row);
+                                setAlert(true);
+                            }} />
+                        </Tooltip>
+                        : null}
+                </ButtonGroup>
+            </>,
+        },
         {
             name: t("pro.table.codigo"),
             value: "codigo",
@@ -173,7 +198,7 @@ export default function Proyectos(props) {
                         <><span className={`bp5-icon bp5-icon-build text-danger`} /></>
                     </Tooltip>
                     : null}
-                  {row.estado === 2
+                {row.estado === 2
                     ? <Tooltip content={t("general.pro_states.2")} placement="top">
                         <><span className={`bp5-icon bp5-icon-remove text-warning`} /></>
                     </Tooltip>
@@ -182,8 +207,18 @@ export default function Proyectos(props) {
             </>
         },
         {
+            name: t("pro.table.cotizacion"),
+            value: "cotizacion",
+            text: row => row.cotizacion,
+        },
+        {
+            name: t("pro.table.fecha_inicio"),
+            // value: "fecha_inicio",
+            text: row => (row.fecha_inicio || '').substring(0, 7)
+        },
+        {
             name: t("pro.table.estado"),
-            csvText: row => t("general.pro_states."+row.estado),
+            csvText: row => t("general.pro_states." + row.estado),
         },
         {
             name: t("pro.table.nombre"),
@@ -198,6 +233,7 @@ export default function Proyectos(props) {
         {
             name: t("pro.table.location"),
             text: row => `${row.municipio ? row.municipio + ',' : ''} ${row.direccion || ''}`,
+            omit: true,
         },
         {
             name: t("pro.table.municipio"),
@@ -218,11 +254,6 @@ export default function Proyectos(props) {
             value: "curaduria",
             omit: true,
             text: row => row.curaduria,
-        },
-        {
-            name: t("pro.table.fecha_inicio"),
-            // value: "fecha_inicio",
-            text: row => row.fecha_inicio,
         },
         {
             name: t("pro.table.fecha_entrega"),
@@ -249,31 +280,6 @@ export default function Proyectos(props) {
             name: t("pro.table.valor"),
             csvText: row => appContext.formatCurrency(row.valor),
         },
-        {
-            name: t("pro.table.action"),
-            width: '160px',
-            omitCsv: true,
-            component: row => <>
-                <ButtonGroup>
-                    {authContext.verify(location, "GET") ? <ProyectoShowMore id={row.id} /> : null}
-                    {false ? <Facturas id={row.id} /> : null}
-                    {authContext.verify(location, "PUT") ? <>
-                        <Tooltip content={t('actions.edit')} placement="top">
-                            <Button icon="edit" intent='warning' onClick={() => get(row)} />
-                        </Tooltip>
-                    </>
-                        : null}
-                    {authContext.verify(location, "DELETE") ?
-                        <Tooltip content={t('actions.delete')} placement="top">
-                            <Button icon="trash" intent='danger' onClick={() => {
-                                setItem(row);
-                                setAlert(true);
-                            }} />
-                        </Tooltip>
-                        : null}
-                </ButtonGroup>
-            </>,
-        },
     ];
 
     const FORM = (i) => [
@@ -281,12 +287,12 @@ export default function Proyectos(props) {
             title: t('pro.form.section_1'),
             inputs: [
                 [
-                    { id: "codigo", required: true, defaultValue: i?.codigo, title: t('pro.form.codigo'), placeholder: t('pro.form.codigo'), icon: "tag", pattern: codRegex, validateText:  t('pro.form.codigo_validate') },
+                    { id: "codigo", required: true, defaultValue: i?.codigo, title: t('pro.form.codigo'), placeholder: t('pro.form.codigo'), icon: "tag", pattern: codRegex, validateText: t('pro.form.codigo_validate') },
                     { id: "nombre", required: true, defaultValue: i?.nombre, title: t('pro.form.nombre'), placeholder: t('pro.form.nombre'), icon: "tag", },
                     { id: "municipio", defaultValue: i?.municipio, title: t('pro.form.municipio'), placeholder: t('pro.form.municipio'), icon: "map-marker", type: "list", list: appContext.getCityList() },
                     { id: "direccion", defaultValue: i?.direccion, title: t('pro.form.direccion'), placeholder: t('pro.form.direccion'), icon: "home", },
-                    { id: "propietario", defaultValue: i?.propietario,  title: t('pro.form.propietario'), placeholder: t('pro.form.propietario'),  icon: "person"},
-                    { id: "curaduria", defaultValue: i?.curaduria,  title: t('pro.form.curaduria'), placeholder: t('pro.form.curaduria'),  icon: "tag"},
+                    { id: "propietario", defaultValue: i?.propietario, title: t('pro.form.propietario'), placeholder: t('pro.form.propietario'), icon: "person" },
+                    { id: "curaduria", defaultValue: i?.curaduria, title: t('pro.form.curaduria'), placeholder: t('pro.form.curaduria'), icon: "tag" },
                 ],
                 [
                     { id: "fecha_inicio", defaultValue: i?.fecha_inicio, title: t('pro.form.fecha_inicio'), placeholder: t('pro.form.fecha_inicio'), type: "date" },
