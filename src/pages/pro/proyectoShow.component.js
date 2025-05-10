@@ -33,7 +33,7 @@ export default function ProyectoShowMore(props) {
         }
     }
 
-    const body = (i) => (<div className='m-5'>
+    const PROYECTO = (i) => <>
         <h4 className="mx-3">{`${t("pro.more.title_proyecto").replace('%VAR%', i.codigo)} `}
             {i.estado === 1
                 ? <Tooltip content={t("general.pro_states.1")} placement="top">
@@ -75,6 +75,13 @@ export default function ProyectoShowMore(props) {
             <div className='col'>{t("pro.more.fecha_entrega")}</div>
             <div className='col fw-bold'>{i?.fecha_entrega || ''}</div>
         </div>
+        <div className='row border p-3'>
+            <div className='col'>{t("pro.more.observaciones")}</div>
+            <div className='col fw-bold'>{i?.observaciones || ''}</div>
+        </div>
+    </>
+
+    const COTIZACION = (i) => <>
         <h4 className="m-3">{t("pro.more.title_cotizacion")}</h4>
         <div className='row border p-3'>
             <div className='col'>{t("pro.more.cotizacion")}</div>
@@ -100,6 +107,12 @@ export default function ProyectoShowMore(props) {
             <div className='col'>{t("pro.more.contacto")}</div>
             <div className='col fw-bold'>{i?.correo || ''} - {i.telefono ? appContext.formatPhone(i.telefono) : ''}</div>
         </div>
+    </>
+
+    const body = (i) => (<div className='m-5'>
+        {PROYECTO(i)}
+        {authContext.verify({ pathname: "/cot" }, "GET") ? COTIZACION(i) : null}
+
     </div>)
 
     const LOADING = <div class="text-center mt-5 pt-5">
@@ -138,7 +151,9 @@ export default function ProyectoShowMore(props) {
             size={"default"}
 
         >
-            {isLoading ? LOADING : item ? body(item) : NO_DATA}
+            <div className='app-drawer'>
+                {isLoading ? LOADING : item ? body(item) : NO_DATA}
+            </div>
         </Drawer>
     </>
     );

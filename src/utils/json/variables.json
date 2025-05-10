@@ -19,6 +19,11 @@
             "t": "sidebar.menu.hr",
             "url": "/hr",
             "icon": "people"
+        },
+         "PRS": {
+            "t": "sidebar.menu.hr",
+            "url": "/prs",
+            "icon": "people"
         }
     },
     "boolean": [0, 1],
@@ -32,7 +37,9 @@
     "payment_type": [ "C", "D", "K"],
     "cot_states": [0 , 1, 2],
     "pro_states": [0, 1, 2],
+    "facturas_estado": [ 0, 1],
     "servicios_procesos": ["TPG", "SUE", "GEO", "ARQ", "EST", "ELE", "ILU", "COM", "AA", "HID", "SAN", "PLU", "GAS", "PCI", "ACU", "ALC", "GMT", "PAV", "TRA", "SNL", "URB", "PMT", "PMA", "PPT", "ET", "MGA", "OC", "PC", "LOC", "GEN", "NOES" ],
     "servicios_clases": ["PLA", "MEM", "INF", "DOC", "AN"],
-    "servicios_medidas": ["L", "C", "Q", "U", "G"]
+    "servicios_medidas": ["L", "C", "Q", "U", "G"],
+    "proveedor_type": ["A", "D"]
 }

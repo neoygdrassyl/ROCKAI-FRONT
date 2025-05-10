@@ -292,6 +292,34 @@ export default function Cotizacion() {
 
     const columns = [
         {
+            name: t("cotizacion.table.action"),
+            width: '120px',
+            component: row => <>
+                <ButtonGroup>
+                    {authContext.verify(location, "PUT") ? <>
+                        {row.aprobado === 0
+                            ? <Tooltip content={t('cotizacion.table.approve')} placement="top">
+                                <Button icon="thumbs-up" intent='primary' onClick={() => get(row, setModalP)} />
+                            </Tooltip>
+                            : null
+                        }
+                        <Tooltip content={t('actions.edit')} placement="top">
+                            <Button icon="edit" intent='warning' onClick={() => get(row, setModal)} />
+                        </Tooltip>
+                    </>
+                        : null}
+                    {authContext.verify(location, "DELETE") ?
+                        <Tooltip content={t('actions.delete')} placement="top">
+                            <Button icon="trash" intent='danger' onClick={() => {
+                                setItem(row);
+                                setAlert(true);
+                            }} />
+                        </Tooltip>
+                        : null}
+                </ButtonGroup>
+            </>,
+        },
+        {
             name: t("cotizacion.table.codigo"),
             value: "codigo",
             text: row => row.codigo,
@@ -329,34 +357,7 @@ export default function Cotizacion() {
             name: t("cotizacion.table.monto_2"),
             component: row => appContext.cotMontoTotal(row)
         },
-        {
-            name: t("cotizacion.table.action"),
-            width: '120px',
-            component: row => <>
-                <ButtonGroup>
-                    {authContext.verify(location, "PUT") ? <>
-                        {row.aprobado === 0
-                            ? <Tooltip content={t('cotizacion.table.approve')} placement="top">
-                                <Button icon="thumbs-up" intent='primary' onClick={() => get(row, setModalP)} />
-                            </Tooltip>
-                            : null
-                        }
-                        <Tooltip content={t('actions.edit')} placement="top">
-                            <Button icon="edit" intent='warning' onClick={() => get(row, setModal)} />
-                        </Tooltip>
-                    </>
-                        : null}
-                    {authContext.verify(location, "DELETE") ?
-                        <Tooltip content={t('actions.delete')} placement="top">
-                            <Button icon="trash" intent='danger' onClick={() => {
-                                setItem(row);
-                                setAlert(true);
-                            }} />
-                        </Tooltip>
-                        : null}
-                </ButtonGroup>
-            </>,
-        },
+       
     ];
 
     const FORM = (i) => [
@@ -453,6 +454,9 @@ export default function Cotizacion() {
                     { id: "direccion", title: t('pro.form.direccion'), placeholder: t('pro.form.direccion'), icon: "home", },
                     { id: "fecha_inicio", title: t('pro.form.fecha_inicio'), placeholder: t('pro.form.fecha_inicio'), type: "date" },
                     { id: "fecha_entrega", title: t('pro.form.fecha_entrega'), placeholder: t('pro.form.fecha_entrega'), type: "date" },
+                ],
+                [
+                    { id: "observaciones", defaultValue: i?.observaciones, title: t('pro.form.observaciones'), placeholder: t('pro.form.observaciones'), type: "textarea" },
                 ],
             ]
         },

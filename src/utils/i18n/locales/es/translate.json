@@ -1,138 +1,20 @@
 {
-    "login": {
-        "title": "Log In de Aplicación",
-        "user": "Usuario",
-        "pass": "Contraseña",
-        "btn": "Ingresar",
-        "loading": "Cargando...",
-        "error": "Ha ocurrido un error, verifique las credenciales e intente nuevamente."
+    "auth": {
+        "nopermit": "Acción no permitida",
+        "no_session": "La sesión de usuario ha caducado, por favor inicie sesión nuevamente.",
+        "error_generic": "Un problema a ocurrido, intente nuevamente."
     },
-    "hr": {
-        "title": "Recursos Humanos",
+    "balance": {
+        "title": "Saldos Disponibles",
         "table": {
-            "title": "Empleados",
-            "name": "Nombre",
-            "role": "Cargo",
-            "date_start": "Fecha Inicio",
-            "date_end": "Fecha Fin",
-            "action": "Acción"
-        },
-        "form": {
-            "new": "Añadir Empleado",
-            "edit": "Actualizar Empleado: %VAR%",
-            "section_1": "Datos Personales",
-            "section_2": "Datos Empleados",
-            "nombre": "Nombre",
-            "cedula_nit": "Cédula",
-            "ciudad": "Ciudad",
-            "direccion": "Dirección",
-            "telefono": "Teléfono",
-            "correo": "Correo",
-            "rut": "RUT",
-            "cv": "Hoja de vida / Experiencia",
-            "cargo": "Rol",
-            "salario": "Valor Hora",
-            "contrato": "Contrato",
-            "fecha_inicio": "Fecha Inicio",
-            "fecha_fin": "Fecha Fin",
-            "login": "Nombre de Usuario",
-            "pass": "Contraseña"
+            "title": "Saldos Disponibles",
+            "cuenta": "Cuenta",
+            "balance": "Saldo",
+            "csv": "Balance"
         }
     },
-    "pro": {
-        "title": "Proyectos",
-        "table": {
-            "title": "",
-            "codigo": "Código",
-            "nombre": "Descripción",
-            "municipio": "Municipio",
-            "direccion": "Dirección",
-            "fecha_inicio": "Mes Inicio",
-            "fecha_entrega": "Fecha Entrega",
-            "estado": "Estado",
-            "action": "Acción",
-            "shiped": "Finalizado",
-            "in_progress": "En Proceso",
-            "close": "Finalizado",
-            "location": "localización",
-            "csv": "Proyectos",
-            "cliente": "Tercero",
-            "cliente_tipo": "Tipo Documento",
-            "cliente_documento": "Documento",
-            "base": "Valor Base",
-            "valor": "Valor Total",
-            "curaduria": "Radicado Curaduria",
-            "propietario": "Propietario",
-            "propietario_doc": "Propietario Documento",
-            "cotizacion": "Cotización"
-        },
-        "form": {
-            "new": "Añadir Proyecto",
-            "edit": "Actualizar Proyecto: %VAR%",
-            "section_1": "Datos Proyecto",
-            "codigo": "Código",
-            "nombre": "Descripción",
-            "municipio": "Municipio",
-            "direccion": "Dirección",
-            "fecha_inicio": "Fecha Inicio",
-            "fecha_entrega": "Fecha Entrega",
-            "estado": "Estado",
-            "open": "En Proceso",
-            "close": "Finalizado",
-            "codigo_validate": "El campo debe tener el patrón nnn.yyyy",
-            "curaduria": "Radicado Curaduria",
-            "propietario": "Propietario",
-            "propietario_doc": "Propietario Documento"
-        },
-        "more": {
-            "title": "Mas información",
-            "title_proyecto": "Proyecto: %VAR%",
-            "title_cotizacion": "Cotización",
-            "nombre": "Descripción:",
-            "localizacion": "localización:",
-            "fecha_inicio": "Fecha de Inicio:",
-            "fecha_entrega": "Fecha de Entrega:",
-            "cotizacion": "Cotización:",
-            "fecha_cotizacion": "Fecha de Cotización:",
-            "base": "Valor Base:",
-            "valor": "Valor Total:",
-            "cotizador": "Cliente:",
-            "contacto": "Contacto:",
-            "shiped": "Finalizado",
-            "in_progress": "En Proceso",
-            "curaduria": "Radicado Curaduria",
-            "propietario": "Propietario",
-            "propietario_doc": "Propietario Documento"
-        }
-    },
-    "personas": {
-        "title": "Terceros",
-        "table": {
-            "title": "Terceros",
-            "nombre": "Nombre",
-            "cedula_nit": "Cédula / NIT",
-            "telefono": "Nr. Contacto",
-            "correo": "Correo Electrónico",
-            "action": "Acción",
-            "N": "Natural",
-            "J": "Jurídico"
-        },
-        "form": {
-            "new": "Añadir Tercero",
-            "edit": "Actualizar Tercero: %VAR%",
-            "section_1": "Datos Tercero",
-            "nombre": "Nombre",
-            "cedula_nit": "Cédula / NIT",
-            "telefono": "Nr. Contacto",
-            "correo": "Correo Electrónico",
-            "tipo": "Tipo",
-            "N": "Natural",
-            "J": "Jurídico",
-            "ciudad": "Ciudad",
-            "rut": "RUT",
-            "cv": "Hoja de vida / Experiencia",
-            "direccion": "Dirección"
-        }
+    "con": {
+        "title": "Contabilidad y Registros"
     },
     "cotizacion": {
         "title": "Cotizaciones",
@@ -175,6 +57,203 @@
             "pago": "Forma de pago",
             "validez": "Validez de la oferta",
             "validez_dv": "30 días calendario."
+        }
+    },
+    "cuentas": {
+        "title": "Cuentas de Bancarias",
+        "table": {
+            "title": "Cuentas de Bancarias",
+            "descripcion": "Nombre",
+            "is_owned": "Propia",
+            "not_owned": "Externa",
+            "nombre": "Tercero",
+            "nr_cuenta": "N° Cuenta",
+            "banco": "Banco",
+            "action": "Acción",
+            "approve": "Aprobada",
+            "bank_account_type": "Tipo de Cuenta",
+            "csv": "Cuentas de Bancarias"
+        },
+        "form": {
+            "section_1": "Información General",
+            "new": "Añadir nueva Cuenta Bancaria",
+            "edit": "Actualizar Cuenta: %VAR%",
+            "tipo": "Tipo de Cuenta",
+            "nr_cuenta": "N° Cuenta",
+            "descripcion": "Nombre",
+            "id_persona": "Tercero",
+            "banco": "Banco",
+            "es_propia": "Propia",
+            "yes": "Si",
+            "no": "No"
+        }
+    },
+    "facturas": {
+        "form": {
+            "section": "Facturacíon",
+            "descripcion": "Descripción",
+            "fecha": "Fecha",
+            "estado": "Estado"
+        }
+    },
+    "hr": {
+        "title": "Recursos Humanos",
+        "table": {
+            "title": "Empleados",
+            "name": "Nombre",
+            "role": "Cargo",
+            "date_start": "Fecha Inicio",
+            "date_end": "Fecha Fin",
+            "action": "Acción"
+        },
+        "form": {
+            "new": "Añadir Empleado",
+            "edit": "Actualizar Empleado: %VAR%",
+            "section_1": "Datos Personales",
+            "section_2": "Datos Empleados",
+            "nombre": "Nombre",
+            "cedula_nit": "Cédula",
+            "ciudad": "Ciudad",
+            "direccion": "Dirección",
+            "telefono": "Teléfono",
+            "correo": "Correo",
+            "rut": "RUT",
+            "cv": "Hoja de vida / Experiencia",
+            "cargo": "Rol",
+            "salario": "Valor Hora",
+            "contrato": "Contrato",
+            "fecha_inicio": "Fecha Inicio",
+            "fecha_fin": "Fecha Fin",
+            "login": "Nombre de Usuario",
+            "pass": "Contraseña"
+        }
+    },
+    "login": {
+        "title": "Log In de Aplicación",
+        "user": "Usuario",
+        "pass": "Contraseña",
+        "btn": "Ingresar",
+        "loading": "Cargando...",
+        "error": "Ha ocurrido un error, verifique las credenciales e intente nuevamente."
+    },
+    "personas": {
+        "title": "Terceros",
+        "table": {
+            "title": "Terceros",
+            "nombre": "Nombre",
+            "cedula_nit": "Cédula / NIT",
+            "telefono": "Nr. Contacto",
+            "correo": "Correo Electrónico",
+            "action": "Acción",
+            "N": "Natural",
+            "J": "Jurídico"
+        },
+        "form": {
+            "new": "Añadir Tercero",
+            "edit": "Actualizar Tercero: %VAR%",
+            "section_1": "Datos Tercero",
+            "nombre": "Nombre",
+            "cedula_nit": "Cédula / NIT",
+            "telefono": "Nr. Contacto",
+            "correo": "Correo Electrónico",
+            "tipo": "Tipo",
+            "N": "Natural",
+            "J": "Jurídico",
+            "ciudad": "Ciudad",
+            "rut": "RUT",
+            "cv": "Hoja de vida / Experiencia",
+            "direccion": "Dirección"
+        }
+    },
+    "proveedores": {
+        "form": {
+            "section": "Asignados",
+            "tipo": "Tipo",
+            "tercero": "Empleado"
+        }
+    },
+    "pro": {
+        "title": "Proyectos",
+        "table": {
+            "title": "",
+            "codigo": "Código",
+            "nombre": "Descripción",
+            "municipio": "Municipio",
+            "direccion": "Dirección",
+            "fecha_inicio": "Mes Inicio",
+            "fecha_entrega": "Fecha Entrega",
+            "estado": "Estado",
+            "action": "Acción",
+            "shiped": "Finalizado",
+            "in_progress": "En Proceso",
+            "close": "Finalizado",
+            "location": "localización",
+            "csv": "Proyectos",
+            "cliente": "Tercero",
+            "cliente_tipo": "Tipo Documento",
+            "cliente_documento": "Documento",
+            "base": "Valor Base",
+            "valor": "Valor Total",
+            "curaduria": "Radicado Curaduria",
+            "propietario": "Propietario",
+            "propietario_doc": "Propietario Documento",
+            "cotizacion": "Cotización",
+            "observaciones": "Observaciones"
+        },
+        "form": {
+            "new": "Añadir Proyecto",
+            "edit": "Actualizar Proyecto: %VAR%",
+            "section_1": "Datos Proyecto",
+            "codigo": "Código",
+            "nombre": "Descripción",
+            "municipio": "Municipio",
+            "direccion": "Dirección",
+            "fecha_inicio": "Fecha Inicio",
+            "fecha_entrega": "Fecha Entrega",
+            "estado": "Estado",
+            "open": "En Proceso",
+            "close": "Finalizado",
+            "codigo_validate": "El campo debe tener el patrón nnn.yyyy",
+            "curaduria": "Radicado Curaduria",
+            "propietario": "Propietario",
+            "propietario_doc": "Propietario Documento",
+            "observaciones": "Observaciones"
+        },
+        "more": {
+            "title": "Mas información",
+            "title_proyecto": "Proyecto: %VAR%",
+            "title_cotizacion": "Cotización",
+            "nombre": "Descripción:",
+            "localizacion": "localización:",
+            "fecha_inicio": "Fecha de Inicio:",
+            "fecha_entrega": "Fecha de Entrega:",
+            "cotizacion": "Cotización:",
+            "fecha_cotizacion": "Fecha de Cotización:",
+            "base": "Valor Base:",
+            "valor": "Valor Total:",
+            "cotizador": "Cliente:",
+            "contacto": "Contacto:",
+            "shiped": "Finalizado",
+            "in_progress": "En Proceso",
+            "curaduria": "Radicado Curaduria:",
+            "propietario": "Propietario:",
+            "propietario_doc": "Propietario Documento:",
+            "observaciones": "Observaciones:"
+        }
+    },
+    "prs": {
+        "sale_title": "Ventas",
+        "income_title": "Ingresos",
+        "table": {
+            "sale_fecha": "Fecha",
+            "sale_value": "Valor",
+            "sale_index": "Indice",
+            "sale_n": "Cantidad",
+            "income_fecha": "Fecha",
+            "income_value": "Valor",
+            "income_index": "Indice",
+            "income_n": "Cantidad",
+            "no_fecha": "Indice"
         }
     },
     "servicios": {
@@ -233,33 +312,15 @@
             "AN": "Anexo"
         }
     },
-    "cuentas": {
-        "title": "Cuentas de Bancarias",
-        "table": {
-            "title": "Cuentas de Bancarias",
-            "descripcion": "Nombre",
-            "is_owned": "Propia",
-            "not_owned": "Externa",
-            "nombre": "Tercero",
-            "nr_cuenta": "N° Cuenta",
-            "banco": "Banco",
-            "action": "Acción",
-            "approve": "Aprobada",
-            "bank_account_type": "Tipo de Cuenta",
-            "csv": "Cuentas de Bancarias"
-        },
-        "form": {
-            "section_1": "Información General",
-            "new": "Añadir nueva Cuenta Bancaria",
-            "edit": "Actualizar Cuenta: %VAR%",
-            "tipo": "Tipo de Cuenta",
-            "nr_cuenta": "N° Cuenta",
-            "descripcion": "Nombre",
-            "id_persona": "Tercero",
-            "banco": "Banco",
-            "es_propia": "Propia",
-            "yes": "Si",
-            "no": "No"
+    "sidebar": {
+        "title": "ROCKAI",
+        "exit": "Salir",
+        "menu": {
+            "cot": "Cotizaciones",
+            "pro": "Proyectos",
+            "con": "Contabilidad y Registros",
+            "hr": "Recursos Humanos",
+            "home": "Inicio"
         }
     },
     "trax": {
@@ -305,16 +366,23 @@
             }
         }
     },
-    "con": {
-        "title": "Contabilidad y Registros"
-    },
-    "balance": {
-        "title": "Saldos Disponibles",
-        "table": {
-            "title": "Saldos Disponibles",
-            "cuenta": "Cuenta",
-            "balance": "Saldo",
-            "csv": "Balance"
+    "users": {
+        "role": {
+            "SAD": "SUPER ADMIN",
+            "ADM": "ADMINISTRADOR",
+            "EXT": "EXTERIOR",
+            "EMP": "EMPLEADO",
+            "CLI": "USUARIO",
+            "NA": "OTRO"
+        },
+        "contract": {
+            "I": "INDEFINIDO",
+            "P": "PRESTACIONES",
+            "F": "FIJO",
+            "O": "OBRA LABOR",
+            "A": "APRENDIZAJE",
+            "R": "REEMPLAZO",
+            "NA": "OTRO"
         }
     },
     "wallet": {
@@ -348,36 +416,6 @@
                 "59_servicio": "Servicio Total",
                 "balance_total": "Total"
             }
-        }
-    },
-    "sidebar": {
-        "title": "ROCKAI",
-        "exit": "Salir",
-        "menu": {
-            "cot": "Cotizaciones",
-            "pro": "Proyectos",
-            "con": "Contabilidad y Registros",
-            "hr": "Recursos Humanos",
-            "home": "Inicio"
-        }
-    },
-    "users": {
-        "role": {
-            "SAD": "SUPER ADMIN",
-            "ADM": "ADMINISTRADOR",
-            "EXT": "EXTERIOR",
-            "EMP": "EMPLEADO",
-            "CLI": "USUARIO",
-            "NA": "OTRO"
-        },
-        "contract": {
-            "I": "INDEFINIDO",
-            "P": "PRESTACIONES",
-            "F": "FIJO",
-            "O": "OBRA LABOR",
-            "A": "APRENDIZAJE",
-            "R": "REEMPLAZO",
-            "NA": "OTRO"
         }
     },
     "table": {
@@ -415,10 +453,6 @@
         "csv_doc_name": "Documento",
         "add": "Añadir",
         "remove": "Remover"
-    },
-    "auth": {
-        "nopermit": "La sesión de usuario ha caducado, por favor inicie sesión nuevamente.",
-        "error_generic": "Un problema a ocurrido, intente nuevamente."
     },
     "general": {
         "boolean": {
@@ -469,6 +503,15 @@
             "Q": "Metro Cubico",
             "U": "Unidad",
             "G": "Global"
+        },
+        "facturas_estado": {
+            "0": "No pagada",
+            "1": "Pagada"
+        },
+        "proveedor_type": {
+            "A": "Asignado",
+            "D": "Director",
+            "C": "Cliente"
         }
     }
 }

@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import { Alert, Button, ButtonGroup, Dialog, DialogBody, Tooltip } from '@blueprintjs/core';
 import { useTranslation } from 'react-i18next';
 import proyectosService from '../../services/proyectos.service.js';
+import facturasService from '../../services/facturas.service.js';
+import proveedoresService from '../../services/proveedores.service.js';
 import TableApp from '../../utils/components/table.component.js';
 import { AuthContext } from '../../utils/context/auth.context.ts';
 import FormComponent from '../../utils/components/form.component.js';
@@ -15,6 +17,7 @@ import Vars from "../../utils/json/variables.json"
 export default function Proyectos(props) {
     const [data, setData] = useState([])
     const [item, setItem] = useState(null)
+    const [itemf, setItemf] = useState(null)
     const [isLoading, setLoading] = useState(false)
     const [alert, setAlert] = useState(false)
     const [modal, setModal] = useState(false)
@@ -55,12 +58,23 @@ export default function Proyectos(props) {
             proyectosService.get(i.id)
                 .then(res => {
                     setItem(res.data);
-                    setModal(true);
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
 
                 })
+        } else {
+            toast.warning(t('auth.nopermit'))
+        }
+        if (authContext.verify({ pathname: "/cot" }, "GET")) {
+            if (i.id_factura) facturasService.get(i.id_factura)
+                .then(res => {
+                    setItemf(res.data);
+                    setModal(true);
+                })
+                .catch(error => appContext.errorHandler(error, toast, t))
+                .finally(() => { })
+            else setModal(true);
         } else {
             toast.warning(t('auth.nopermit'))
         }
@@ -87,11 +101,12 @@ export default function Proyectos(props) {
 
     }
 
-    function edit(id, form) {
+    function manage_proyecto(form, id_proyecto, id_factura) {
+
         if (authContext.verify(location, "PUT")) {
             setModal(false);
             toastInfo(t('actions.procesing'))
-            proyectosService.update(form, id)
+            proyectosService.update(form, id_proyecto)
                 .then(res => {
                     if (res.data) {
                         toast.dismiss();
@@ -104,6 +119,25 @@ export default function Proyectos(props) {
                 })
         } else {
             toast.warning(t('auth.nopermit'))
+        }
+
+        if (authContext.verify(location, "PUT")) {
+            const form_factura = {
+                descripcion: form.fac_descripcion,
+                fecha: form.fac_fecha,
+                estado: form.fac_estado,
+                id_proyecto: id_proyecto,
+            };
+            if (id_factura) {
+                facturasService.update(form_factura, id_factura)
+                    .catch(error => appContext.errorHandler(error, toast, t))
+                    .finally(() => { })
+            }
+            else {
+                facturasService.create(form_factura)
+                    .catch(error => appContext.errorHandler(error, toast, t))
+                    .finally(() => { })
+            }
         }
 
     }
@@ -125,6 +159,43 @@ export default function Proyectos(props) {
                 })
         } else {
             toast.warning(t('auth.nopermit'))
+        }
+
+    }
+
+    async function remove_proovedor(id, form) {
+        if (authContext.verify(location, "DELETE")) {
+            toastInfo(t('actions.procesing'))
+            return proveedoresService.delete(id)
+                .then(res => {
+                    if (res.data) {
+                        toast.dismiss();
+                        toast.success(t('actions.deleted'));
+                        get(item);
+                        list();
+                    }
+                })
+                .catch(error => appContext.errorHandler(error, toast, t))
+                .finally(() => true)
+        } else {
+            toast.warning(t('auth.nopermit'))
+        }
+
+    }
+
+    async function getPairWorkers(search) {
+        if (authContext.verify(location, "GET")) {
+            return proyectosService.getWorkers(search)
+                .then(res => {
+                    return res.data;
+                })
+                .catch(error => {
+                    appContext.errorHandler(error, toast, t);
+                    return []
+                })
+        } else {
+            toast.warning(t('auth.nopermit'));
+            return []
         }
 
     }
@@ -168,7 +239,7 @@ export default function Proyectos(props) {
                     {false ? <Facturas id={row.id} /> : null}
                     {authContext.verify(location, "PUT") ? <>
                         <Tooltip content={t('actions.edit')} placement="top">
-                            <Button icon="edit" intent='warning' onClick={() => get(row)} />
+                            <Button icon="helper-management" intent='warning' onClick={() => get(row)} />
                         </Tooltip>
                     </>
                         : null}
@@ -282,7 +353,7 @@ export default function Proyectos(props) {
         },
     ];
 
-    const FORM = (i) => [
+    const FORM = (i, f) => [
         {
             title: t('pro.form.section_1'),
             inputs: [
@@ -299,12 +370,42 @@ export default function Proyectos(props) {
                     { id: "fecha_entrega", defaultValue: i?.fecha_entrega, title: t('pro.form.fecha_entrega'), placeholder: t('pro.form.fecha_entrega'), type: "date" },
                     { id: "estado", defaultValue: i?.estado, title: t('pro.form.estado'), placeholder: t('pro.form.estado'), icon: "folder-open", hide: !i, type: "select", list: Vars.pro_states.map(i => ({ value: i, text: t('general.pro_states.' + i) })) },
                 ],
+                [
+                    { id: "observaciones", defaultValue: i?.observaciones, title: t('pro.form.observaciones'), placeholder: t('pro.form.observaciones'), type: "textarea" },
+                ],
+            ]
+        },
+        {
+            title: t('facturas.form.section'),
+            hide: !authContext.verify(location, "PUT"),
+            inputs: [
+                [
+                    { id: "fac_descripcion", defaultValue: f?.descripcion, title: t('facturas.form.descripcion'), placeholder: t('facturas.form.descripcion'), icon: "tag" },
+                    { id: "fac_fecha", defaultValue: f?.fecha, title: t('facturas.form.fecha'), placeholder: t('facturas.form.fecha'), type: "date" },
+                    { id: "fac_estado", defaultValue: f?.estado, title: t('facturas.form.estado'), placeholder: t('facturas.form.estado'), icon: "dollar", type: 'select', list: Vars.facturas_estado.map(i => ({ value: i, text: t(`general.facturas_estado.${i}`) })) },
+
+                ]
+            ]
+        },
+        {
+            title: t('proveedores.form.section'),
+            hide: !authContext.verify(location, "PUT"),
+            multiple: true,
+            defaultValues: i?.proveedores,
+            name: 'proveedores',
+            deleteApi: remove_proovedor,
+            deleteAllow: authContext.verify(location, "DELETE"),
+            inputs: [
+                [
+                    { id: "tipo", index: 'tipo', title: t('proveedores.form.tipo'), placeholder: t('proveedores.form.tipo'), icon: "tag", type: 'select', list: Vars.proveedor_type.map(i => ({ value: i, text: t(`general.proveedor_type.${i}`) })) },
+                    { id: "id_tercero", index: 'id_tercero', text: 'persona', title: t('proveedores.form.tercero'), placeholder: t('proveedores.form.tercero'), icon: "person", type: 'list', api: getPairWorkers },
+                ],
             ]
         },
     ]
 
-    const MODAL = (i) => <Dialog
-        title={i ? t('pro.form.edit').replace('%VAR%', i.nombre) : t('pro.form.new')}
+    const MODAL = (i, f) => <Dialog
+        title={i ? t('pro.form.edit').replace('%VAR%', i.codigo) : t('pro.form.new')}
         icon={i ? "edit" : "add"}
         isOpen={modal} onClose={() => setModal(false)}
         className='modal-app'>
@@ -315,8 +416,8 @@ export default function Proyectos(props) {
                     secondary: { icon: "cross", text: t('actions.close') }
                 }}
                 onSecondary={() => setModal(false)}
-                onSubmit={(data) => i ? edit(i.id, data) : create(data)}
-                groups={FORM(i)}
+                onSubmit={(data) => manage_proyecto(data, i.id, f.id)}
+                groups={FORM(i, f)}
             />
         </DialogBody>
     </Dialog>
@@ -345,7 +446,7 @@ export default function Proyectos(props) {
     return (
         <div>
             {ALERT()}
-            {MODAL(item)}
+            {MODAL(item, itemf)}
             <TableApp
                 data={data}
                 columns={columns}

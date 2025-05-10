@@ -31,10 +31,11 @@ export const useAuth = () => {
     const MODULE = location.pathname
 
     const MODULES = {
-      [vars.mod_map.COT.url]: "COT",
-      [vars.mod_map.PRO.url]: "PRO",
-      [vars.mod_map.CON.url]: "CON",
-      [vars.mod_map.HRS.url]: "HRS",
+      [vars.mod_map.COT.url]: "COT", // MODULO DE COTIZACIONES
+      [vars.mod_map.PRO.url]: "PRO", // MODULO DE PROYECTOS
+      [vars.mod_map.CON.url]: "CON", // MODULO DE CONTABILIDAD
+      [vars.mod_map.HRS.url]: "HRS", // MODULO DE RECURSOS HUMANOS
+      [vars.mod_map.PRS.url]: "PRS", // PROCESOS VARIOS, START PAGE ETC...
     };
 
     const ACTIONS = {

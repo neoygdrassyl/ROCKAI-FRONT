@@ -180,6 +180,29 @@ export default function Cuentas(props) {
 
     const columns = [
         {
+            name: t("actions.action"),
+            width: '120px',
+            omitCsv: true,
+            component: row => <>
+                <ButtonGroup>
+                    {authContext.verify(location, "PUT") ? <>
+                        <Tooltip content={t('actions.edit')} placement="top">
+                            <Button icon="edit" intent='warning' onClick={() => get(row)} />
+                        </Tooltip>
+                    </>
+                        : null}
+                    {authContext.verify(location, "DELETE") ?
+                        <Tooltip content={t('actions.delete')} placement="top">
+                            <Button icon="trash" intent='danger' onClick={() => {
+                                setItem(row);
+                                setAlert(true);
+                            }} />
+                        </Tooltip>
+                        : null}
+                </ButtonGroup>
+            </>,
+        },
+        {
             name: t("cuentas.table.descripcion"),
             value: "descripcion",
             text: row => row.descripcion,
@@ -214,29 +237,7 @@ export default function Cuentas(props) {
             name: t("cuentas.table.banco"),
             text: row => row.banco
         },
-        {
-            name: t("actions.action"),
-            width: '120px',
-            omitCsv: true,
-            component: row => <>
-                <ButtonGroup>
-                    {authContext.verify(location, "PUT") ? <>
-                        <Tooltip content={t('actions.edit')} placement="top">
-                            <Button icon="edit" intent='warning' onClick={() => get(row)} />
-                        </Tooltip>
-                    </>
-                        : null}
-                    {authContext.verify(location, "DELETE") ?
-                        <Tooltip content={t('actions.delete')} placement="top">
-                            <Button icon="trash" intent='danger' onClick={() => {
-                                setItem(row);
-                                setAlert(true);
-                            }} />
-                        </Tooltip>
-                        : null}
-                </ButtonGroup>
-            </>,
-        },
+       
     ];
 
     const FORM = (i) => [

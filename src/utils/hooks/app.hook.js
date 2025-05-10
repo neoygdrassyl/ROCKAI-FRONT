@@ -56,7 +56,7 @@ export const useApp = () => {
     function errorHandler(error, toast, t) {
         console.error(error);
         toast.dismiss();
-        if (error.status === 403) toast.warning(t('auth.nopermit'))
+        if (error.status === 403) toast.warning(t('auth.no_session'))
         else toast.error(t('auth.error_generic'))
     }
 

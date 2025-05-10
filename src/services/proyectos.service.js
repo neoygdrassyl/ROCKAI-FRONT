@@ -22,13 +22,17 @@ class ProyectoService {
     create(data) {
         return http().post(`/${route}/`, data).then(cb);
     }
-    
+
     update(data, id) {
         return http().put(`/${route}/${id}`, data).then(cb);
     }
 
     delete(id) {
         return http().delete(`/${route}/${id}`).then(cb);
+    }
+
+    getWorkers(search) {
+        return http().get(`/${route}/workers/${search}`).then(cb);
     }
 
 }
