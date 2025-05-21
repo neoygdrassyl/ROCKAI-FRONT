@@ -12,6 +12,7 @@ import FormComponent from "../../utils/components/form.component.js";
 import serviciosService from "../../services/servicios.service.js";
 import Vars from "../../utils/json/variables.json"
 import personasService from "../../services/personas.service.js";
+import TerceroShowMore from "../hr/personaShow.component.js";
 
 export default function Cotizacion() {
     const [data, setData] = useState([])
@@ -278,8 +279,8 @@ export default function Cotizacion() {
     }
 
     const addTerceroBtn = authContext.verify({ pathname: "/hr" }, "POST") ? <Tooltip className="right-element" content={t('actions.new')} placement="top">
-            <Button icon="add" intent='primary' onClick={() => setModalt(true)} />
-        </Tooltip>
+        <Button icon="add" intent='primary' onClick={() => setModalt(true)} />
+    </Tooltip>
         : null;
 
     const codRegex = /^COT\.\d\d\d\.\d\d\d\d$/i;
@@ -339,6 +340,8 @@ export default function Cotizacion() {
             name: t("cotizacion.table.nombre"),
             value: "nombre",
             text: row => row.nombre,
+            component: row => row.id_tercero ?
+                <TerceroShowMore id={row.id_tercero} text={row.nombre} /> : row.nombre
         },
         {
             name: t("cotizacion.table.fecha"),
@@ -357,7 +360,7 @@ export default function Cotizacion() {
             name: t("cotizacion.table.monto_2"),
             component: row => appContext.cotMontoTotal(row)
         },
-       
+
     ];
 
     const FORM = (i) => [
@@ -385,7 +388,7 @@ export default function Cotizacion() {
                 [
                     { id: "tiempo", defaultValue: i?.tiempo, title: t('cotizacion.form.tiempo'), placeholder: t('cotizacion.form.tiempo'), type: "textarea" },
                 ],
-              
+
             ]
         },
         {

@@ -10,6 +10,7 @@ import TableApp from "../../utils/components/table.component.js";
 import FormComponent from "../../utils/components/form.component.js";
 import Vars from "../../utils/json/variables.json"
 import ProyectoShowMore from "../pro/proyectoShow.component.js";
+import TerceroShowMore from "../hr/personaShow.component.js";
 
 export default function Transacciones(props) {
     const { refresh, serRefresh } = props
@@ -56,9 +57,10 @@ export default function Transacciones(props) {
             transaccionesoService.get(i.id)
                 .then(res => {
                     setItem(res.data);
-                    if (res.data.cuenta_2) selecTraxRelationEdit('trax')
-                    if (res.data.persona) selecTraxRelationEdit('persona');
-                    if (res.data.proyecto) selecTraxRelationEdit('pro');
+                    if (res.data.persona && res.data.proyecto) selecTraxRelationEdit('doble');
+                    else if (res.data.cuenta_2) selecTraxRelationEdit('trax')
+                    else if (res.data.persona) selecTraxRelationEdit('persona');
+                    else if (res.data.proyecto) selecTraxRelationEdit('pro');
                     setModal(true);
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
@@ -211,6 +213,7 @@ export default function Transacciones(props) {
             if (traxRelationEdit === "trax") return "trax";
             else if (traxRelationEdit === "persona") return "persona";
             else if (traxRelationEdit === "pro") return "pro";
+            else if (traxRelationEdit === "doble") return "doble";
             else return traxRelation;
         }
         return traxRelation;
@@ -223,12 +226,16 @@ export default function Transacciones(props) {
             </Tooltip>
             {` ${trax.cuenta_2}`}
         </>;
+        if (trax.id_persona && trax.id_proyecto) return <>
+            <TerceroShowMore id={trax.id_persona} text={trax.persona} icon={"person"} />
+            {" | "}
+            <ProyectoShowMore id={trax.id_proyecto} text={trax.proyecto} icon={'projects'} />
+
+        </>;
         if (trax.persona) return <>
-            <Tooltip content={t("trax.table.nombre")} placement="top">
-                <><span className={`bp5-icon bp5-icon-person text-primary`} /></>
-            </Tooltip>
-            {` ${trax.persona}`}
-            { }
+            {trax.id_persona ?
+                <TerceroShowMore id={trax.id_persona} text={trax.persona} icon={"person"} /> : trax.persona}
+
         </>;
         if (trax.id_proyecto) return <>
             <ProyectoShowMore id={trax.id_proyecto} text={trax.proyecto} icon={'projects'} />
@@ -238,10 +245,11 @@ export default function Transacciones(props) {
     }
 
     function getRelationText(trax) {
-        if (trax.cuenta_2) return trax.cuenta_2;
-        if (trax.persona) return trax.persona;
-        if (trax.proyecto) return trax.proyecto
-        return '';
+        let text = "";
+        if (trax.cuenta_2) text += trax.cuenta_2 + " ";
+        if (trax.persona) text += trax.persona + " ";
+        if (trax.proyecto) text += trax.proyecto
+        return text;
     }
 
     useEffect(() => {
@@ -351,9 +359,9 @@ export default function Transacciones(props) {
                     { id: "tipo_trax", required: true, defaultValue: i?.tipo_trax, title: t('trax.form.tipo_trax'), placeholder: t('trax.form.tipo_trax'), icon: "tag", type: 'select', list: Vars.trax_type.map(i => ({ value: i, text: t(`general.trax_type.${i}`) })) },
                     { id: "relation", required: true, defaultValue: i ? getRelation(i) : traxRelation, title: t('trax.form.relacion_trax'), placeholder: t('trax.form.relacion_trax'), icon: "tag", type: 'select', list: Vars.trax_relations.map(i => ({ value: i, text: t(`trax.form.relation.${i}`) })), onChange: (e) => { selecTraxRelation(e.target.value); selecTraxRelationEdit(null) } },
 
-                    { id: "id_proyecto", required: true, defaultValue: i?.id_proyecto, defaultText: i?.proyecto, title: t('trax.form.id_proyecto'), placeholder: t('trax.form.id_proyecto'), icon: "projects", type: 'list', api: getPairProyectos, hide: getRelation(i) !== "pro", },
+                    { id: "id_proyecto", required: true, defaultValue: i?.id_proyecto, defaultText: i?.proyecto, title: t('trax.form.id_proyecto'), placeholder: t('trax.form.id_proyecto'), icon: "projects", type: 'list', api: getPairProyectos, hide: getRelation(i) !== "pro" && getRelation(i) !== "doble", },
                     { id: "id_cuenta_2", required: true, defaultValue: i?.id_cuenta_2, defaultText: i?.cuenta_2, title: t('trax.form.id_cuenta_2'), placeholder: t('trax.form.id_cuenta_2'), icon: "bank-account", type: 'list', api: getPairCuentas, apiExt: { origin: null }, hide: getRelation(i) !== "trax", },
-                    { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.persona, title: t('trax.form.id_persona'), placeholder: t('trax.form.id_persona'), icon: "person", type: 'list', api: getPairPersonas, hide: getRelation(i) !== "persona", },
+                    { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.persona, title: t('trax.form.id_persona'), placeholder: t('trax.form.id_persona'), icon: "person", type: 'list', api: getPairPersonas, hide: getRelation(i) !== "persona" && getRelation(i) !== "doble", },
                     { id: "es_prestamo", required: true, defaultValue: i?.es_prestamo, title: t('trax.form.es_prestamo'), placeholder: t('trax.form.es_prestamo'), icon: "bank-account", type: 'select', list: Vars.boolean.map(i => ({ value: i, text: t(`general.boolean.${i}`) })), hide: getRelation(i) !== "persona", },
                 ],
             ]

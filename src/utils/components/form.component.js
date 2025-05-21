@@ -1,7 +1,8 @@
 import { Button, ButtonGroup, ControlGroup, Tooltip } from "@blueprintjs/core";
-import { cloneElement, useEffect, useState } from "react";
+import { cloneElement, useEffect, useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
-
+import documentosService from "../../services/documentos.service";
+import { AuthContext } from '../../utils/context/auth.context.ts';
 import SelectInput from "./select.input";
 import TextInput from "./text.input";
 import ListInput from "./list.input";
@@ -10,6 +11,7 @@ import DateInput from "./date.input";
 import PasswordInput from "./password.input";
 import PercentInput from "./percent.input";
 import TextAreaInput from "./textarea.input";
+import FileInput from "./file.input";
 
 export default function FormComponent(props) {
     const {
@@ -20,12 +22,13 @@ export default function FormComponent(props) {
         actions,
     } = props
 
+    const authContext = useContext(AuthContext)
     const [validate, setValidate] = useState([])
     const [multControl, setMult] = useState({})
     const [isLoading, setLoading] = useState(false)
     const { t } = useTranslation();
 
-    function getForm(toValidate) {
+    function getForm(toValidate, toUpload) {
         let form = {}
         groups.map(group => {
             group.inputs.map(inputs => {
@@ -46,10 +49,14 @@ export default function FormComponent(props) {
                                     if (!match) toValidate.push(data.id)
                                 }
                                 if (value !== '') {
-
                                     if (data.format && data.type !== "number") localGroup[input.index] = (value).replace(/\D/g, "");
                                     else if (data.format && data.type === "number") localGroup[input.index] = (value).match(/\d|\-/g).join('');
                                     else localGroup[input.index] = value;
+
+                                    if (data.type === "file") {
+                                        var input_element = document.getElementById(`${data.id}_${index}`)
+                                        toUpload.push(input_element.files[0])
+                                    }
                                 }
                             }
                         })
@@ -61,6 +68,7 @@ export default function FormComponent(props) {
                     let data = input;
                     if (!data.hide) {
                         let value;
+
                         value = document.getElementById(data.id).value;
 
                         if (data.required && (value === '' || value === null || value === undefined)) toValidate.push(data.id)
@@ -72,6 +80,10 @@ export default function FormComponent(props) {
                             if (data.format && data.type !== "number") form[data.id] = (value).replace(/\D/g, "");
                             else if (data.format && data.type === "number") form[data.id] = (value).match(/\d|\-/g).join('');
                             else form[data.id] = value;
+                            if (data.type === "file") {
+                                var input_element = document.getElementById(data.id)
+                                toUpload.push(input_element.files[0])
+                            }
                         }
                     }
                 })
@@ -81,14 +93,29 @@ export default function FormComponent(props) {
         return form
     }
 
-    function onSubmitHandler() {
+    async function onSubmitHandler() {
         // VALIDATES FORM
         let toValidate = []
+        let toUpload = []
         // FILLS THE FORM
-        let form = getForm(toValidate)
+        let form = getForm(toValidate, toUpload)
         // console.log(form)
         setValidate(toValidate);
-        if (toValidate.length === 0) onSubmit(form ?? {});
+        if (toValidate.length === 0) {
+
+            if (toUpload.length > 0) {
+                for (let i = 0; i < toUpload.length; i++) {
+                    const file = toUpload[i];
+                    let formData = new FormData();
+                    formData.append('file', file, file.name);
+                    await documentosService.upload(formData)
+                        .then(res => console.log(res))
+                        .catch(err => console.error(err))
+                }
+            }
+
+            onSubmit(form ?? {});
+        }
     }
 
     function onDeleteApi(input) {
@@ -135,6 +162,7 @@ export default function FormComponent(props) {
                 if (input.type === "select" && !input.hide) return <SelectInput {...PROPS} />
                 if (input.type === "list" && !input.hide) return <ListInput {...PROPS} />
                 if (input.type === "textarea" && !input.hide) return <TextAreaInput {...PROPS} />
+                if (input.type === "file" && !input.hide) return <FileInput {...PROPS} />
                 if (!input.type && !input.hide) return <TextInput {...PROPS} />
             })}
         </ControlGroup>))
@@ -256,7 +284,7 @@ export default function FormComponent(props) {
         <div className="row">
             <div className="col text-end">
                 <ButtonGroup>
-                    <Button icon={actions.primary?.icon || null} intent='primary' text={actions.primary?.text || null} onClick={onSubmitHandler} />
+                    <Button icon={actions.primary?.icon || null} intent='primary' text={actions.primary?.text || null} onClick={async () => await onSubmitHandler()} />
                     <Button icon={actions.secondary?.icon || null} text={actions.secondary?.text || null} onClick={onSecondary} />
                 </ButtonGroup>
             </div>

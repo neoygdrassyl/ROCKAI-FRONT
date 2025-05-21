@@ -36,6 +36,8 @@ export const useAuth = () => {
       [vars.mod_map.CON.url]: "CON", // MODULO DE CONTABILIDAD
       [vars.mod_map.HRS.url]: "HRS", // MODULO DE RECURSOS HUMANOS
       [vars.mod_map.PRS.url]: "PRS", // PROCESOS VARIOS, START PAGE ETC...
+      [vars.mod_map.EXP.url]: "EXP", // EJECUTABLES DE UN PROYECTO
+      [vars.mod_map.ENP.url]: "ENP", // ENTREGABLES DE UN PROYECTO
     };
 
     const ACTIONS = {

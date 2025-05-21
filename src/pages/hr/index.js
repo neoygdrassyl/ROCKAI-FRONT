@@ -211,8 +211,8 @@ export default function HRS() {
                 [
                     { id: "telefono", defaultValue: i?.telefono, title: t('hr.form.telefono'), placeholder: t('hr.form.telefono'), icon: "phone", format: appContext.formatPhone },
                     { id: "correo", defaultValue: i?.correo, title: t('hr.form.correo'), placeholder: t('hr.form.correo'), icon: "at", pattern: appContext.emailPattern },
-                    { id: "rut", defaultValue: i?.rut, title: t('hr.form.rut'), placeholder: t('hr.form.rut'), icon: "folder-open", disabled: true, },
-                    { id: "cv", defaultValue: i?.cv, title: t('hr.form.cv'), placeholder: t('hr.form.cv'), icon: "folder-open", disabled: true, },
+                    { id: "rut", title: t('hr.form.rut'), placeholder: t('hr.form.rut'), icon: "folder-open", type: 'file', onChange: (e) => {} },
+                    { id: "cv", title: t('hr.form.cv'), placeholder: t('hr.form.cv'), icon: "folder-open", type: 'file', },
                 ],
             ]
         },

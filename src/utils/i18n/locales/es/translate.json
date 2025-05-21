@@ -126,6 +126,15 @@
             "fecha_fin": "Fecha Fin",
             "login": "Nombre de Usuario",
             "pass": "Contraseña"
+        },
+        "more": {
+            "title": "Mas información",
+            "persona": "Tercero",
+            "cedula_nit": "Cédula / NIT",
+            "telefono": "Teléfono",
+            "correo": "Correo",
+            "ciudad": "Ciudad",
+            "direccion": "Dirección"
         }
     },
     "login": {
@@ -239,7 +248,8 @@
             "propietario": "Propietario:",
             "propietario_doc": "Propietario Documento:",
             "observaciones": "Observaciones:"
-        }
+        },
+        "entregables": "Ejecución & Entregables"
     },
     "prs": {
         "sale_title": "Ventas",
@@ -362,7 +372,8 @@
                 "pro": "Proyecto",
                 "persona": "Tercero",
                 "cuenta": "Cuenta",
-                "trax": "Transacción"
+                "trax": "Transacción",
+                "doble": "Proyecto y Persona"
             }
         }
     },

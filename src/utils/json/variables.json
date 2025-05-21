@@ -20,26 +20,132 @@
             "url": "/hr",
             "icon": "people"
         },
-         "PRS": {
+        "PRS": {
             "t": "sidebar.menu.hr",
             "url": "/prs",
             "icon": "people"
+        },
+        "EXP": {
+            "t": "sidebar.menu.hr",
+            "url": "/documentos",
+            "icon": "people"
+        },
+        "ENP": {
+            "t": "sidebar.menu.hr",
+            "url": "/documentos",
+            "icon": "people"
         }
     },
-    "boolean": [0, 1],
-    "roles": [ "SAD", "ADM", "EXT", "EMP", "CLI" ],
-    "formRoles": ["EMP", "ADM"],
-    "personType":["N", "J"],
-    "contracts": [ "I", "P", "F", "O", "A", "R"],
-    "bank_account_type": [ "S", "N", "C"],
-    "trax_type": [ "I", "O"],
-    "trax_relations": ["0", "pro", "persona"],
-    "payment_type": [ "C", "D", "K"],
-    "cot_states": [0 , 1, 2],
-    "pro_states": [0, 1, 2],
-    "facturas_estado": [ 0, 1],
-    "servicios_procesos": ["TPG", "SUE", "GEO", "ARQ", "EST", "ELE", "ILU", "COM", "AA", "HID", "SAN", "PLU", "GAS", "PCI", "ACU", "ALC", "GMT", "PAV", "TRA", "SNL", "URB", "PMT", "PMA", "PPT", "ET", "MGA", "OC", "PC", "LOC", "GEN", "NOES" ],
-    "servicios_clases": ["PLA", "MEM", "INF", "DOC", "AN"],
-    "servicios_medidas": ["L", "C", "Q", "U", "G"],
-    "proveedor_type": ["A", "D"]
+    "boolean": [
+        0,
+        1
+    ],
+    "roles": [
+        "SAD",
+        "ADM",
+        "EXT",
+        "EMP",
+        "CLI"
+    ],
+    "formRoles": [
+        "EMP",
+        "ADM"
+    ],
+    "personType": [
+        "N",
+        "J"
+    ],
+    "contracts": [
+        "I",
+        "P",
+        "F",
+        "O",
+        "A",
+        "R"
+    ],
+    "bank_account_type": [
+        "S",
+        "N",
+        "C"
+    ],
+    "trax_type": [
+        "I",
+        "O"
+    ],
+    "trax_relations": [
+        "0",
+        "pro",
+        "persona",
+        "doble"
+    ],
+    "payment_type": [
+        "C",
+        "D",
+        "K"
+    ],
+    "cot_states": [
+        0,
+        1,
+        2
+    ],
+    "pro_states": [
+        0,
+        1,
+        2
+    ],
+    "facturas_estado": [
+        0,
+        1
+    ],
+    "servicios_procesos": [
+        "TPG",
+        "SUE",
+        "GEO",
+        "ARQ",
+        "EST",
+        "ELE",
+        "ILU",
+        "COM",
+        "AA",
+        "HID",
+        "SAN",
+        "PLU",
+        "GAS",
+        "PCI",
+        "ACU",
+        "ALC",
+        "GMT",
+        "PAV",
+        "TRA",
+        "SNL",
+        "URB",
+        "PMT",
+        "PMA",
+        "PPT",
+        "ET",
+        "MGA",
+        "OC",
+        "PC",
+        "LOC",
+        "GEN",
+        "NOES"
+    ],
+    "servicios_clases": [
+        "PLA",
+        "MEM",
+        "INF",
+        "DOC",
+        "AN"
+    ],
+    "servicios_medidas": [
+        "L",
+        "C",
+        "Q",
+        "U",
+        "G"
+    ],
+    "proveedor_type": [
+        "A",
+        "D"
+    ]
 }

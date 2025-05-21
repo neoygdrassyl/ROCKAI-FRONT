@@ -13,6 +13,8 @@ import ProyectoShowMore from "../pro/proyectoShow.component.js";
 export default function Wallet(props) {
     const { refresh } = props
     const [dataW, setData] = useState([])
+    const [dataT, setDataT] = useState([])
+    const [short, setShort] = useState(false)
     const [find, setFind] = useState('persona')
     const [isLoading, setLoading] = useState(false)
     const authContext = useContext(AuthContext)
@@ -28,7 +30,22 @@ export default function Wallet(props) {
                 setLoading(true);
                 transaccionesoService.get_wallet(field, value)
                     .then(res => {
-                        setData(res.data);
+
+                        let data2 = res.data
+                        let data = res.data
+                        let has_pro = data.find(d => d.categoria === "10_pro");
+
+                       
+                        if (!has_pro) {
+                            setShort(true)
+                        }
+                        else {
+                            data2 = res.data.filter(d => d.es_subitem === 0);
+                            setShort(false)
+                        }
+                        data2 = data2.filter(d => Number(d.valor) !== 0 || d.categoria === "balance_total");
+                        setData(data);
+                        setDataT(data2);
 
                     })
                     .catch(error => appContext.errorHandler(error, toast, t))
@@ -163,6 +180,7 @@ export default function Wallet(props) {
     ]
 
     const expand = ({ data }) => {
+        if (short) return null
         let total = 0;
         total = dataW.filter(d => d.es_subitem === 1 && d.id_proyecto === data.id_proyecto).reduce((sum, curr) => sum + Number(curr.valor), 0)
         return <table class="table table-sm">
@@ -199,7 +217,7 @@ export default function Wallet(props) {
 
     return <div>
         <TableApp
-            data={dataW.filter(d => d.es_subitem === 0)}
+            data={dataT}
             columns={columns}
             loading={isLoading}
             title={t("wallet.table.title")}

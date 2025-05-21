@@ -13,6 +13,8 @@ import { AppContext } from '../../utils/context/app.context.js';
 import ProyectoShowMore from './proyectoShow.component.js';
 import Facturas from './facturas.component.js';
 import Vars from "../../utils/json/variables.json"
+import ProyectoEntregables from './emtregables.component.js';
+import TerceroShowMore from '../hr/personaShow.component.js';
 
 export default function Proyectos(props) {
     const [data, setData] = useState([])
@@ -53,9 +55,9 @@ export default function Proyectos(props) {
 
     }
 
-    function get(i) {
+    async function get(i) {
         if (authContext.verify(location, "GET")) {
-            proyectosService.get(i.id)
+            await proyectosService.get(i.id)
                 .then(res => {
                     setItem(res.data);
                 })
@@ -239,10 +241,13 @@ export default function Proyectos(props) {
                     {false ? <Facturas id={row.id} /> : null}
                     {authContext.verify(location, "PUT") ? <>
                         <Tooltip content={t('actions.edit')} placement="top">
-                            <Button icon="helper-management" intent='warning' onClick={() => get(row)} />
+                            <Button icon="helper-management" intent='warning' onClick={async () => await get(row)} />
                         </Tooltip>
                     </>
                         : null}
+                    { 
+                        // authContext.verify({ pathname: "/documentos" }, "GET")  && ( row.asignado || row.director ) ? <ProyectoEntregables  proyecto={row}/> : null
+                    }
                     {authContext.verify(location, "DELETE") ?
                         <Tooltip content={t('actions.delete')} placement="top">
                             <Button icon="trash" intent='danger' onClick={() => {
@@ -300,6 +305,8 @@ export default function Proyectos(props) {
             name: t("pro.table.cliente"),
             value: "tercero",
             text: row => row.cliente,
+            component: row => row.id_cliente ?
+            <TerceroShowMore id={row.id_cliente} text={row.cliente} />: row.cliente
         },
         {
             name: t("pro.table.location"),
@@ -330,10 +337,6 @@ export default function Proyectos(props) {
             name: t("pro.table.fecha_entrega"),
             // value: "fecha_entrega",
             text: row => row.fecha_entrega,
-        },
-        {
-            name: t("pro.table.cliente"),
-            csvText: row => row.cliente,
         },
         {
             name: t("pro.table.cliente_tipo"),
@@ -416,7 +419,7 @@ export default function Proyectos(props) {
                     secondary: { icon: "cross", text: t('actions.close') }
                 }}
                 onSecondary={() => setModal(false)}
-                onSubmit={(data) => manage_proyecto(data, i.id, f.id)}
+                onSubmit={(data) => manage_proyecto(data, i.id, f?.id)}
                 groups={FORM(i, f)}
             />
         </DialogBody>

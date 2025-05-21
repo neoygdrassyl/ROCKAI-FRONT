@@ -35,7 +35,7 @@ export default function PRS_INCOME() {
     }
 
     useEffect(() => {
-        getSales()
+         if (authContext.verify({ pathname: "/prs" }, "GET")) getSales()
     }, []);
 
 
