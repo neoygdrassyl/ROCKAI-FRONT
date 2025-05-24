@@ -18,6 +18,7 @@ export default function TextInput(props) {
         onBlur,
         onFocus,
         onChange,
+        onLoad,
         icon,
         right,
         format,
@@ -76,6 +77,7 @@ export default function TextInput(props) {
             maxlength={max || 127}
             readOnly={read}
             fill
+            onLoad={onLoad ? (e) => onLoad(e): null}
         />
     </FormGroup>
 }

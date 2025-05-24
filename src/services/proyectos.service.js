@@ -18,6 +18,9 @@ class ProyectoService {
     view(id) {
         return http().get(`/${route}/view/${id}`).then(cb);
     }
+    getLastID() {
+        return http().get(`/${route}/codigo/get`).then(cb);
+    }
 
     create(data) {
         return http().post(`/${route}/`, data).then(cb);

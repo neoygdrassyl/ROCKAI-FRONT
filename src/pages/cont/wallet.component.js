@@ -9,12 +9,12 @@ import { useLocation } from "react-router";
 import { Button, Tooltip } from "@blueprintjs/core";
 import ListInput from "../../utils/components/list.input.js";
 import ProyectoShowMore from "../pro/proyectoShow.component.js";
+import TerceroShowMore from "../hr/personaShow.component.js";
 
 export default function Wallet(props) {
     const { refresh } = props
     const [dataW, setData] = useState([])
     const [dataT, setDataT] = useState([])
-    const [short, setShort] = useState(false)
     const [find, setFind] = useState('persona')
     const [isLoading, setLoading] = useState(false)
     const authContext = useContext(AuthContext)
@@ -30,19 +30,9 @@ export default function Wallet(props) {
                 setLoading(true);
                 transaccionesoService.get_wallet(field, value)
                     .then(res => {
-
                         let data2 = res.data
                         let data = res.data
-                        let has_pro = data.find(d => d.categoria === "10_pro");
-
-                       
-                        if (!has_pro) {
-                            setShort(true)
-                        }
-                        else {
-                            data2 = res.data.filter(d => d.es_subitem === 0);
-                            setShort(false)
-                        }
+                        data2 = res.data.filter(d => d.es_subitem === 0);
                         data2 = data2.filter(d => Number(d.valor) !== 0 || d.categoria === "balance_total");
                         setData(data);
                         setDataT(data2);
@@ -97,6 +87,22 @@ export default function Wallet(props) {
         setFind(e.target.value)
     }
 
+    function getRelationComponent(row) {
+        if (row.id_persona && row.id_proyecto) return <>
+            <TerceroShowMore id={row.id_persona} text={t('wallet.table.persona')} icon={"person"} />
+            {" | "}
+            <ProyectoShowMore id={row.id_proyecto} text={t('wallet.table.proyecto')} icon={'projects'} />
+        </>;
+        if (row.id_persona) return <>
+            <TerceroShowMore id={row.id_persona} text={t('wallet.table.persona')} icon={"person"} />
+        </>;
+        if (row.id_proyecto) return <>
+            <ProyectoShowMore id={row.id_proyecto} text={t('wallet.table.proyecto')} icon={'projects'} />
+        </>;
+        return '';
+
+    }
+
     useEffect(() => {
         if (refresh) get_wallet()
     }, [refresh]);
@@ -106,25 +112,31 @@ export default function Wallet(props) {
         {
             name: t("wallet.table.fecha"),
             text: row => row.fecha,
+            width: "150px",
         },
         {
             name: t("wallet.table.categoria"),
             text: row => t(`wallet.table.categorias.${row.categoria}`),
         },
         {
+            name: t("wallet.table.relacion"),
+            text: row => null,
+            component: row => getRelationComponent(row),
+            omitCsv: true,
+        },
+        {
             name: t("wallet.table.descriccion"),
             text: row => row.descriccion,
-            component: row => (row.categoria || '').includes('10_pro')
-                ? <ProyectoShowMore id={row.id_proyecto} text={row.descriccion} icon={'projects'} />
-                : row.descriccion
         },
         {
             name: t("wallet.table.valor"),
-            component: row => <>
-                {row.valor < 0 ? <label className="text-danger">{appContext.formatCurrency(row.valor)}</label> : null}
-                {row.valor > 0 ? <label className="text-success">{appContext.formatCurrency(row.valor)}</label> : null}
-            </>,
             text: row => row.valor ? appContext.formatCurrency(row.valor) : null,
+            width: "150px",
+        },
+        {
+            name: t("wallet.table.abonos"),
+            text: row => row.abonos ? appContext.formatCurrency(row.abonos) : null,
+            width: "150px",
         },
         {
             name: t("wallet.table.balance"),
@@ -133,6 +145,7 @@ export default function Wallet(props) {
                 {row.balance > 0 ? <label className="text-success">{appContext.formatCurrency(row.balance)}</label> : null}
             </>,
             text: row => row.balance ? appContext.formatCurrency(row.balance) : null,
+            width: "150px",
         },
     ];
 
@@ -180,9 +193,15 @@ export default function Wallet(props) {
     ]
 
     const expand = ({ data }) => {
-        if (short) return null
         let total = 0;
-        total = dataW.filter(d => d.es_subitem === 1 && d.id_proyecto === data.id_proyecto).reduce((sum, curr) => sum + Number(curr.valor), 0)
+        let local_data = []
+        if (data.categoria === "50_servicio")
+            local_data = [...dataW.filter(d => d.es_subitem === 1 && d.id_proyecto === data.id_proyecto && d.id_persona === data.id_persona)];
+        else if (data.categoria === "20_pro")
+            local_data = [...dataW.filter(d => d.es_subitem === 1 && d.id_proyecto === data.id_proyecto)];
+        else return
+        total = [...local_data].reduce((sum, curr) => sum + Number(curr.valor), 0);
+        if (total === 0) return
         return <table class="table table-sm">
             <thead>
                 <tr>
@@ -193,14 +212,12 @@ export default function Wallet(props) {
                 </tr>
             </thead>
             <tbody>
-                {dataW.filter(d => d.es_subitem === 1 && d.id_proyecto === data.id_proyecto).map((row, n) => (
+                {local_data.map((row, n) => (
                     <tr>
                         <th scope="row">{n + 1}</th>
                         <td>{row.fecha}</td>
                         <td>
-                            {row.categoria == "50_servicio" ? t('wallet.table.categorias.50_servicio') : ""}
-                            {row.categoria == "20_abono" ? t('wallet.table.categorias.20_abono') : ""}
-                            {" " + row.descriccion}
+                            {t('wallet.table.trax') + " " + row.descriccion}
                         </td>
                         <td>{appContext.formatCurrency(row.valor)}</td>
                     </tr>
@@ -230,7 +247,7 @@ export default function Wallet(props) {
             csvName={t("wallet.table.csv").replace('%VAR%', document.getElementById(`Wallet-list-input-ignore`)?.value || '')}
             conditionalRowStyles={conditionalRowStyles}
             expand={expand}
-            expandDisable={row => !(row.categoria === '10_pro')}
+            expandDisable={row => !(row.categoria === '20_pro' || row.categoria === '50_servicio')}
         />
 
     </div>

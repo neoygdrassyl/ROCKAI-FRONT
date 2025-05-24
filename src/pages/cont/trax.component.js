@@ -57,10 +57,9 @@ export default function Transacciones(props) {
             transaccionesoService.get(i.id)
                 .then(res => {
                     setItem(res.data);
-                    if (res.data.persona && res.data.proyecto) selecTraxRelationEdit('doble');
-                    else if (res.data.cuenta_2) selecTraxRelationEdit('trax')
-                    else if (res.data.persona) selecTraxRelationEdit('persona');
-                    else if (res.data.proyecto) selecTraxRelationEdit('pro');
+                    if (res.data.persona && res.data.proyecto) selecTraxRelationEdit('servicio');
+                    else if (res.data.persona) selecTraxRelationEdit('prestamo');
+                    else if (res.data.proyecto) selecTraxRelationEdit('abono');
                     setModal(true);
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
@@ -210,10 +209,9 @@ export default function Transacciones(props) {
 
     function getRelation(trax) {
         if (trax) {
-            if (traxRelationEdit === "trax") return "trax";
-            else if (traxRelationEdit === "persona") return "persona";
-            else if (traxRelationEdit === "pro") return "pro";
-            else if (traxRelationEdit === "doble") return "doble";
+            if (traxRelationEdit === "servicio") return "servicio";
+            else if (traxRelationEdit === "prestamo") return "prestamo";
+            else if (traxRelationEdit === "abono") return "abono";
             else return traxRelation;
         }
         return traxRelation;
@@ -260,6 +258,15 @@ export default function Transacciones(props) {
         if (refresh) list()
     }, [refresh]);
 
+
+    useEffect(() => {
+        if (traxRelation) {
+            if (traxRelation == "abono") document.getElementById("tipo_trax").value = "I"
+            if (traxRelation == "servicio") document.getElementById("tipo_trax").value = "O"
+        }
+    }, [traxRelation]);
+
+    
     const columns = [
         {
             name: t("actions.action"),
@@ -355,14 +362,12 @@ export default function Transacciones(props) {
                     { id: "fecha", required: true, defaultValue: i?.fecha, title: t('trax.form.fecha'), placeholder: t('trax.form.fecha'), type: 'date', },
                 ],
                 [
-
-                    { id: "tipo_trax", required: true, defaultValue: i?.tipo_trax, title: t('trax.form.tipo_trax'), placeholder: t('trax.form.tipo_trax'), icon: "tag", type: 'select', list: Vars.trax_type.map(i => ({ value: i, text: t(`general.trax_type.${i}`) })) },
                     { id: "relation", required: true, defaultValue: i ? getRelation(i) : traxRelation, title: t('trax.form.relacion_trax'), placeholder: t('trax.form.relacion_trax'), icon: "tag", type: 'select', list: Vars.trax_relations.map(i => ({ value: i, text: t(`trax.form.relation.${i}`) })), onChange: (e) => { selecTraxRelation(e.target.value); selecTraxRelationEdit(null) } },
 
-                    { id: "id_proyecto", required: true, defaultValue: i?.id_proyecto, defaultText: i?.proyecto, title: t('trax.form.id_proyecto'), placeholder: t('trax.form.id_proyecto'), icon: "projects", type: 'list', api: getPairProyectos, hide: getRelation(i) !== "pro" && getRelation(i) !== "doble", },
-                    { id: "id_cuenta_2", required: true, defaultValue: i?.id_cuenta_2, defaultText: i?.cuenta_2, title: t('trax.form.id_cuenta_2'), placeholder: t('trax.form.id_cuenta_2'), icon: "bank-account", type: 'list', api: getPairCuentas, apiExt: { origin: null }, hide: getRelation(i) !== "trax", },
-                    { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.persona, title: t('trax.form.id_persona'), placeholder: t('trax.form.id_persona'), icon: "person", type: 'list', api: getPairPersonas, hide: getRelation(i) !== "persona" && getRelation(i) !== "doble", },
-                    { id: "es_prestamo", required: true, defaultValue: i?.es_prestamo, title: t('trax.form.es_prestamo'), placeholder: t('trax.form.es_prestamo'), icon: "bank-account", type: 'select', list: Vars.boolean.map(i => ({ value: i, text: t(`general.boolean.${i}`) })), hide: getRelation(i) !== "persona", },
+                    { id: "tipo_trax", required: true, defaultValue: i?.tipo_trax, title: t('trax.form.tipo_trax'), placeholder: t('trax.form.tipo_trax'), icon: "tag", type: 'select', list: Vars.trax_type.map(i => ({ value: i, text: t(`general.trax_type.${i}`) })), read: getRelation(i) === "abono" || getRelation(i) === "servicio"},                    
+                    { id: "id_proyecto", required: true, defaultValue: i?.id_proyecto, defaultText: i?.proyecto, title: t('trax.form.id_proyecto'), placeholder: t('trax.form.id_proyecto'), icon: "projects", type: 'list', api: getPairProyectos, hide: getRelation(i) !== "abono" && getRelation(i) !== "servicio", },
+                    { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.persona, title: t('trax.form.id_persona'), placeholder: t('trax.form.id_persona'), icon: "person", type: 'list', api: getPairPersonas, hide: getRelation(i) !== "prestamo" && getRelation(i) !== "servicio", },
+                    { id: "es_prestamo", required: true, defaultValue: 1, title: t('trax.form.es_prestamo'), placeholder: t('trax.form.es_prestamo'), icon: "bank-account", type: 'select', list: Vars.boolean.map(i => ({ value: i, text: t(`general.boolean.${i}`) })), hide: getRelation(i) !== "prestamo", read: true},
                 ],
             ]
         },

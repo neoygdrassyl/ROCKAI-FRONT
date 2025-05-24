@@ -369,8 +369,9 @@
             "es_prestamo": "Préstamo",
             "relation": {
                 "0": "Nada",
-                "pro": "Proyecto",
-                "persona": "Tercero",
+                "abono": "Abono Proyecto",
+                "servicio": "Abono Servicio",
+                "prestamo": "Préstamo",
                 "cuenta": "Cuenta",
                 "trax": "Transacción",
                 "doble": "Proyecto y Persona"
@@ -414,17 +415,22 @@
             "balance_shiped": "SALDO PROYECTOS ENTREGADOS",
             "csv": "Estado de Cartera %VAR%",
             "categoria": "Categoría",
+            "trax": "Transacción",
+            "abonos": "Abonos",
+            "relacion": "Relación",
             "categorias": {
-                "10_pro": "Proyecto",
-                "19_pro": "Total Proyectos",
-                "20_abono": "Abono",
-                "29_abono": "Total Abonos",
+                "20_pro": "Proyecto",
+                "29_pro": "Total Proyectos",
+                "10_abono": "Abono Proyecto",
+                "15_abono": "Abono Servicio",
+                "19_abono": "Total Abonos Proyectos",
                 "30_prestamo": "Préstamo",
                 "39_prestamo": "Total Préstamos",
                 "40_trax": "Transacción",
                 "49_trax": "Total Transacciones",
                 "50_servicio": "Servicio",
-                "59_servicio": "Servicio Total",
+                "58_servicio": "Total Servicios Abonos",
+                "59_servicio": "Total Servicios",
                 "balance_total": "Total"
             }
         }

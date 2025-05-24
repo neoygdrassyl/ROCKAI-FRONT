@@ -54,12 +54,14 @@ export default function Cotizacion() {
 
     }
 
-    function get(i, set) {
+    async function get(i, set) {
         if (authContext.verify(location, "GET")) {
-            cotizacionesService.get(i.id)
+            await cotizacionesService.get(i.id)
                 .then(res => {
                     setItem(res.data);
-                    if (set) set(true);
+                    if (set) {
+                        set(true);
+                    }
                 })
                 .catch(error => appContext.errorHandler(error, toast, t))
                 .finally(() => {
@@ -71,6 +73,27 @@ export default function Cotizacion() {
 
     }
 
+    async function getLastId() {
+        if (authContext.verify(location, "GET")) {
+            await cotizacionesService.getLastID()
+                .then(res => {
+                    document.getElementById('codigo').value = res.data[0].codigo
+                })
+                .catch(error => console.error(error))
+
+        }
+    }
+
+    async function getLastIdPro() {
+        if (authContext.verify({ pathname: "/pro" }, "GET")) {
+            await proyectosService.getLastID()
+                .then(res => {
+                    document.getElementById('codigo').value = res.data[0].codigo
+                })
+                .catch(error => console.error(error))
+
+        }
+    }
 
     function create(form) {
         if (authContext.verify(location, "POST")) {
@@ -291,6 +314,11 @@ export default function Cotizacion() {
         list();
     }, []);
 
+
+    useEffect(() => {
+        if (modaP) getLastIdPro();
+    }, [modaP]);
+
     const columns = [
         {
             name: t("cotizacion.table.action"),
@@ -300,7 +328,9 @@ export default function Cotizacion() {
                     {authContext.verify(location, "PUT") ? <>
                         {row.aprobado === 0
                             ? <Tooltip content={t('cotizacion.table.approve')} placement="top">
-                                <Button icon="thumbs-up" intent='primary' onClick={() => get(row, setModalP)} />
+                                <Button icon="thumbs-up" intent='primary' onClick={async () => {
+                                    await get(row, setModalP);
+                                }} />
                             </Tooltip>
                             : null
                         }
@@ -314,6 +344,7 @@ export default function Cotizacion() {
                             <Button icon="trash" intent='danger' onClick={() => {
                                 setItem(row);
                                 setAlert(true);
+
                             }} />
                         </Tooltip>
                         : null}
@@ -368,7 +399,7 @@ export default function Cotizacion() {
             title: t('cotizacion.form.section_1'),
             inputs: [
                 [
-                    { id: "codigo", required: true, defaultValue: i?.codigo, title: t('cotizacion.form.codigo'), placeholder: t('cotizacion.form.codigo'), icon: "tag", pattern: codRegex, validateText: t('cotizacion.form.codigo_validate') },
+                    { id: "codigo", required: true, defaultValue: i?.codigo, title: t('cotizacion.form.codigo'), placeholder: t('cotizacion.form.codigo'), icon: "tag", pattern: codRegex, validateText: t('cotizacion.form.codigo_validate'), },
                     { id: "descripcion", defaultValue: i?.descripcion, title: t('cotizacion.form.descripcion'), placeholder: t('cotizacion.form.descripcion'), icon: "tag", },
                     { id: "fecha", required: true, defaultValue: i?.fecha, title: t('cotizacion.form.fecha'), placeholder: t('cotizacion.form.fecha'), type: "date", },
                     { id: "id_persona", required: true, defaultValue: i?.id_persona, defaultText: i?.nombre, title: t('cotizacion.form.id_persona'), placeholder: t('cotizacion.form.id_persona'), icon: "person", type: 'list', api: getPair, right: i ? null : addTerceroBtn },
@@ -593,9 +624,10 @@ export default function Cotizacion() {
                 title={null}
                 id="cotizacion"
                 search
-                btn={authContext.verify(location, "POST") ? <Button icon="add" text={t('actions.new')} intent="primary" onClick={() => {
+                btn={authContext.verify(location, "POST") ? <Button icon="add" text={t('actions.new')} intent="primary" onClick={async () => {
                     setItem(null);
                     setModal(true);
+                    await getLastId();
                 }} /> : null}
                 reload={list}
                 reloadPag

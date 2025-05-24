@@ -74,9 +74,9 @@
     ],
     "trax_relations": [
         "0",
-        "pro",
-        "persona",
-        "doble"
+        "abono",
+        "servicio",
+        "prestamo"
     ],
     "payment_type": [
         "C",

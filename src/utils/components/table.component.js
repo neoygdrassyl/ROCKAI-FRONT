@@ -136,15 +136,15 @@ export default function TableApp(props) {
             await csvApi(field, filter).then(data => {
                 rows = data.map(d =>
                     columns.filter(c => !c.omit && !c.omitCsv).map(c => {
-                        if (c.csvText) return (String(c.csvText(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "") ?? '')).replace(/[\n\r]+ */g, ' ')
-                        else if (c.text) return (String(c.text(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "") ?? '')).replace(/[\n\r]+ */g, ' ')
+                        if (c.csvText && c.csvText(d)) return (String(c.csvText(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "") ?? '')).replace(/[\n\r]+ */g, ' ')
+                        else if (c.text && c.text(d)) return (String(c.text(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "") ?? '')).replace(/[\n\r]+ */g, ' ')
                     }));
             })
         } else {
             rows = csvData.map(d =>
                 columns.filter(c => !c.omit && !c.omitCsv).map(c => {
-                    if (c.csvText) return (String(c.csvText(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "") ?? '')).replace(/[\n\r]+ */g, ' ')
-                    else if (c.text) return (String(c.text(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "") ?? '')).replace(/[\n\r]+ */g, ' ')
+                    if (c.csvText &&  c.csvText(d)) return (String(c.csvText(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "") ?? '')).replace(/[\n\r]+ */g, ' ')
+                    else if (c.text &&  c.text(d)) return (String(c.text(d).normalize("NFD").replace(/[\u0300-\u036f]/g, "") ?? '')).replace(/[\n\r]+ */g, ' ')
                 }));
         }
         rows.unshift(headRows);

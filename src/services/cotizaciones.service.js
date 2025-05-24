@@ -18,6 +18,9 @@ class CotizacionesService {
     getPersonas(search) {
         return http().get(`/${route}/personas/${search}`).then(cb);
     }
+    getLastID() {
+        return http().get(`/${route}/codigo/get`).then(cb);
+    }
 
     create(data) {
         return http().post(`/${route}/`, data).then(cb);
